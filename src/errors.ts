@@ -293,3 +293,30 @@ export class FlowCreatePlanError extends FlowError {
     this.name = 'FlowCreatePlanError';
   }
 }
+/**
+ * Error cuando hay problemas al tratar de obtener una suscripción
+ */
+export class FlowGetPlanError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener el plan: ${message}`);
+    this.name = 'FlowGetPlanError';
+  }
+}
+/**
+ * Error cuando hay problemas al tratar de editar una suscripción
+ */
+export class FlowEditPlanError extends FlowError {
+  constructor(message: string) {
+    super(`Error al editar el plan: ${message}`);
+    this.name = 'FlowEditPlanError';
+  }
+}
+/**
+ * Error cuando hay problemas al tratar de eliminar una suscripción
+ */
+export class FlowListPlansError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar los planes: ${message}`);
+    this.name = 'FlowListPlansError';
+  }
+}

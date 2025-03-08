@@ -1877,6 +1877,388 @@ type FlowCreatePlanResponse = {
    */
   public: number;
 };
+
+type FlowGetPlanResponse = {
+  /**
+   * Identificador del plan
+   */
+  planId: string;
+
+  /**
+   * Nombre del plan
+   */
+  name: string;
+
+  /**
+   * Moneda del plan
+   */
+  currency: string;
+
+  /**
+   * Monto del plan
+   */
+  amount: number;
+
+  /**
+   * Define la frecuencia de cobro del plan:
+   * 1 = diaria
+   * 2 = semanal
+   * 3 = mensual
+   * 4 = anual
+   */
+  interval: number;
+
+  /**
+   * Número de intervalos de la frecuencia de cobro del plan. Ejemplo:
+   * interval = 2 y interval_count = 2 → plan quincenal.
+   */
+  interval_count: number;
+
+  /**
+   * Fecha de creación del plan en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Número de días de prueba (trial)
+   */
+  trial_period_days: number;
+
+  /**
+   * Número de días pasados, después de generar un importe, para considerarlo vencido.
+   */
+  days_until_due: number;
+
+  /**
+   * Número de períodos de duración del plan.
+   * Si el plan es indefinido, el valor será 0.
+   */
+  periods_number: number;
+
+  /**
+   * URL donde Flow notificará al comercio los pagos efectuados por este plan.
+   */
+  urlCallback: string;
+
+  /**
+   * Número de reintentos de cargo. Por omisión es 3.
+   */
+  charges_retries_number: number;
+
+  /**
+   * Si hay conversión de moneda, en qué momento se hará:
+   * 1 = al pago
+   * 2 = al importe (invoice)
+   */
+  currency_convert_option: number;
+
+  /**
+   * Estado del plan:
+   * 1 = activo
+   * 0 = eliminado
+   */
+  status: 0 | 1;
+
+  /**
+   * Visibilidad del plan:
+   * 0 = privado
+   * 1 = público
+   */
+  public: number;
+};
+
+type FlowEditPlanRequest = {
+  /**
+   * Identificador del Plan (requerido)
+   */
+  planId: string;
+
+  /**
+   * Nombre del Plan (opcional)
+   */
+  name?: string;
+
+  /**
+   * Moneda del Plan (opcional)
+   */
+  currency?: string;
+
+  /**
+   * Monto del Plan (opcional)
+   */
+  amount?: number;
+
+  /**
+   * Especifica la frecuencia de cobros (opcional)
+   * 1 = diario
+   * 2 = semanal
+   * 3 = mensual
+   * 4 = anual
+   */
+  interval?: 1 | 2 | 3 | 4;
+
+  /**
+   * Número de intervalos de frecuencia de cobros (opcional)
+   * Ejemplo: interval = 2 y interval_count = 2 → frecuencia quincenal.
+   * El valor por omisión es 1.
+   */
+  interval_count?: number;
+
+  /**
+   * Número de días de prueba (trial) (opcional)
+   * El valor por omisión es 0.
+   */
+  trial_period_days?: number;
+
+  /**
+   * Número de días pasados, después de generar un importe, para considerarlo vencido (opcional)
+   */
+  days_until_due?: number;
+
+  /**
+   * Número de períodos de duración del plan (opcional)
+   * Si el plan tiene vencimiento, especificarlo aquí.
+   */
+  periods_number?: number;
+
+  /**
+   * URL donde Flow notificará al comercio los pagos efectuados por este plan (opcional)
+   */
+  urlCallback?: string;
+
+  /**
+   * Número de reintentos de cargo (opcional)
+   * Por omisión es 3.
+   */
+  charges_retries_number?: number;
+
+  /**
+   * Opción de conversión de moneda (opcional)
+   * 1 = al pago (default)
+   * 2 = al importe (invoice)
+   */
+  currency_convert_option?: any;
+};
+
+type FlowEditPlanResponse = {
+  /**
+   * Identificador del plan
+   */
+  planId: string;
+
+  /**
+   * Nombre del plan
+   */
+  name: string;
+
+  /**
+   * Moneda del plan
+   */
+  currency: string;
+
+  /**
+   * Monto del plan
+   */
+  amount: number;
+
+  /**
+   * Define la frecuencia de cobro del plan:
+   * 1 = diaria
+   * 2 = semanal
+   * 3 = mensual
+   * 4 = anual
+   */
+  interval: 1 | 2 | 3 | 4;
+
+  /**
+   * Número de intervalos de la frecuencia de cobro del plan. Ejemplo:
+   * interval = 2 y interval_count = 2 → plan quincenal.
+   */
+  interval_count: number;
+
+  /**
+   * Fecha de creación del plan en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Número de días de prueba (trial)
+   */
+  trial_period_days: number;
+
+  /**
+   * Número de días pasados, después de generar un importe, para considerarlo vencido.
+   */
+  days_until_due: number;
+
+  /**
+   * Número de períodos de duración del plan.
+   * Si el plan es indefinido, el valor será 0.
+   */
+  periods_number: number;
+
+  /**
+   * URL donde Flow notificará al comercio los pagos efectuados por este plan.
+   */
+  urlCallback: string;
+
+  /**
+   * Número de reintentos de cargo. Por omisión es 3.
+   */
+  charges_retries_number: number;
+
+  /**
+   * Si hay conversión de moneda, en qué momento se hará:
+   * 1 = al pago
+   * 2 = al importe (invoice)
+   */
+  currency_convert_option: 1 | 2;
+
+  /**
+   * Estado del plan:
+   * 1 = activo
+   * 0 = eliminado
+   */
+  status: 0 | 1;
+
+  /**
+   * Visibilidad del plan:
+   * 0 = privado
+   * 1 = público
+   */
+  public: 0 | 1;
+};
+
+type FlowDeletePlanResponse = {
+  /**
+   * Identificador del plan
+   */
+  planId: string;
+
+  /**
+   * Nombre del plan
+   */
+  name: string;
+
+  /**
+   * Moneda del plan
+   */
+  currency: string;
+
+  /**
+   * Monto del plan
+   */
+  amount: number;
+
+  /**
+   * Define la frecuencia de cobro del plan:
+   * 1 = diaria
+   * 2 = semanal
+   * 3 = mensual
+   * 4 = anual
+   */
+  interval: 1 | 2 | 3 | 4;
+
+  /**
+   * Número de intervalos de la frecuencia de cobro del plan. Ejemplo:
+   * interval = 2 y interval_count = 2 → plan quincenal.
+   */
+  interval_count: number;
+
+  /**
+   * Fecha de creación del plan en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Número de días de prueba (trial)
+   */
+  trial_period_days: number;
+
+  /**
+   * Número de días pasados, después de generar un importe, para considerarlo vencido.
+   */
+  days_until_due: number;
+
+  /**
+   * Número de períodos de duración del plan.
+   * Si el plan es indefinido, el valor será 0.
+   */
+  periods_number: number;
+
+  /**
+   * URL donde Flow notificará al comercio los pagos efectuados por este plan.
+   */
+  urlCallback: string;
+
+  /**
+   * Número de reintentos de cargo. Por omisión es 3.
+   */
+  charges_retries_number: number;
+
+  /**
+   * Si hay conversión de moneda, en qué momento se hará:
+   * 1 = al pago
+   * 2 = al importe (invoice)
+   */
+  currency_convert_option: number;
+
+  /**
+   * Estado del plan:
+   * 1 = activo
+   * 0 = eliminado
+   */
+  status: 0 | 1;
+
+  /**
+   * Visibilidad del plan:
+   * 0 = privado
+   * 1 = público
+   */
+  public: 0 | 1;
+};
+
+type FlowListPlansRequest = {
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start?: number;
+
+  /**
+   * Número de registros por página. Si se omite el valor por omisión es 10. El valor máximo es de 100 registros por página.
+   */
+  limit?: number;
+
+  /**
+   * Filtro por el nombre del Plan (opcional)
+   */
+  filter?: string;
+
+  /**
+   * Filtro por el estado del Plan: 1 = Activo, 0 = Eliminado (opcional)
+   */
+  status?: number;
+};
+
+type FlowListPlansResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+
+  /**
+   * Indica si existen más páginas de resultados.
+   * 1 si hay más páginas disponibles, 0 si es la última página.
+   */
+  hasMore: 0 | 1;
+
+  /**
+   * Arreglo de registros de la página actual.
+   * Ejemplo: [{item list 1}{item list 2}{item list n..}]
+   */
+  data: string;
+};
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -1925,4 +2307,10 @@ export type {
   FlowListPaginatedSubscriptionsResponse,
   FlowCreatePlanRequest,
   FlowCreatePlanResponse,
+  FlowGetPlanResponse,
+  FlowEditPlanRequest,
+  FlowEditPlanResponse,
+  FlowDeletePlanResponse,
+  FlowListPlansRequest,
+  FlowListPlansResponse,
 };
