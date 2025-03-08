@@ -12,6 +12,7 @@ import {
   FlowMassiveChargeCardStatusError,
   FlowRegisterCardError,
   FlowRegisterCardStatusError,
+  FlowReverseChargeCardError,
   FlowSendChargeCardError,
   FlowSendMassiveChargeCardError,
 } from '../errors';
@@ -35,6 +36,8 @@ import {
   FlowSendMassiveChargeCardRequest,
   FlowSendMassiveChargeCardResponse,
   FlowMassiveChargeCardStatusResponse,
+  FlowReverseChargeCardRequest,
+  FlowReverseChargeCardResponse,
 } from '../types/flow';
 import { generateFormData, getPaymentMethod } from '../utils/flow.utils';
 
@@ -152,6 +155,27 @@ export default class FlowCustomers {
       sendMassiveCharge: (
         data: FlowSendMassiveChargeCardRequest,
       ) => Promise<FlowSendMassiveChargeCardResponse>;
+      /**
+       * Este servicio permite consultar el estado de un lote de cobros enviados por medio del servicio batchCollect.
+       * @param token Token del lote de cobros.
+       * @returns Promise<FlowMassiveChargeCardStatusResponse> Objeto con la información del estado del lote de cobros.
+       * @throws FlowMassiveChargeCardStatusError Si hay problemas al ver el estado del lote de cobros.
+       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       */
+      massiveChargeStatus: (
+        token: string,
+      ) => Promise<FlowMassiveChargeCardStatusResponse>;
+      /**
+       * Este servicio permite reversar un cargo previamente efectuado a un cliente. Para que el cargo se reverse, este servicio debe ser invocado dentro de las 24 horas siguientes a efectuado el cargo, las 24 horas rigen desde las 14:00 hrs, es decir, si el cargo se efectuó a las 16:00 hrs, este puede reversarse hasta las 14:00 hrs del día siguiente.\n\n Puede enviar como parámetros el commerceOrder o el flowOrder.
+       * @param data FlowReverseChargeCardRequest Datos de la petición de reversa.
+       * @returns Promise<FlowReverseChargeCardResponse> Objeto con la información de la reversa.
+       * @throws FlowReverseChargeCardError Si hay problemas al realizar la reversa.
+       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       *
+       */
+      reverseCharge: (
+        data: FlowReverseChargeCardRequest,
+      ) => Promise<FlowReverseChargeCardResponse>;
     };
   };
 
@@ -190,6 +214,8 @@ export default class FlowCustomers {
         charge: this.chargeCard.bind(this),
         sendCharge: this.sendChargeCard.bind(this),
         sendMassiveCharge: this.sendMassiveChargeCard.bind(this),
+        massiveChargeStatus: this.massiveChargeCardStatus.bind(this),
+        reverseCharge: this.reverseChargeCard.bind(this),
       },
     };
   }
@@ -455,6 +481,10 @@ export default class FlowCustomers {
   }
   /**
    * Este servicio permite consultar el estado de un lote de cobros enviados por medio del servicio batchCollect.
+   * @param token Token del lote de cobros.
+   * @returns Promise<FlowMassiveChargeCardStatusResponse> Objeto con la información del estado del lote de cobros.
+   * @throws FlowMassiveChargeCardStatusError Si hay problemas al ver el estado del lote de cobros.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
    */
   private async massiveChargeCardStatus(
     token: string,
@@ -465,6 +495,26 @@ export default class FlowCustomers {
       'get',
       (e) => {
         throw new FlowMassiveChargeCardStatusError((e as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio permite reversar un cargo previamente efectuado a un cliente. Para que el cargo se reverse, este servicio debe ser invocado dentro de las 24 horas siguientes a efectuado el cargo, las 24 horas rigen desde las 14:00 hrs, es decir, si el cargo se efectuó a las 16:00 hrs, este puede reversarse hasta las 14:00 hrs del día siguiente.\n\n Puede enviar como parámetros el commerceOrder o el flowOrder.
+   * @param data FlowReverseChargeCardRequest Datos de la petición de reversa.
+   * @returns Promise<FlowReverseChargeCardResponse> Objeto con la información de la reversa.
+   * @throws FlowReverseChargeCardError Si hay problemas al realizar la reversa.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   *
+   */
+  private async reverseChargeCard(
+    data: FlowReverseChargeCardRequest,
+  ): Promise<FlowReverseChargeCardResponse> {
+    return await this.request<FlowReverseChargeCardResponse>(
+      '/reverseCharge',
+      data,
+      'post',
+      (e) => {
+        throw new FlowReverseChargeCardError((e as Error).message);
       },
     );
   }

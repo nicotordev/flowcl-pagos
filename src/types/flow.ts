@@ -1483,7 +1483,9 @@ type FlowSendMassiveChargeCardResponse = {
     errorMsg: string;
   }>;
 };
-
+/**
+ * Representa la API response de Flow del estado del cobro masivo de tarjetas de crédito.
+ */
 type FlowMassiveChargeCardStatusResponse = {
   /**
    * hash token identificador del lote recibido
@@ -1549,6 +1551,30 @@ type FlowMassiveChargeCardStatusResponse = {
   }>;
 };
 
+type FlowReverseChargeCardRequest = {
+  /**
+   * Identificador de la orden del comercio
+   */
+  commerceOrder: string;
+  /**
+   * Identificador de la orden de Flow
+   */
+  flowOrder: number;
+};
+
+type FlowReverseChargeCardResponse = {
+  /**
+   * Estado de la reversa:
+   * 0 Reversa no efectuada
+   * 1 Reversa efectuada
+   */
+  status: 0 | 1;
+  /**
+   * Mensaje resultado de la reversa
+   */
+  message: string;
+};
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -1587,4 +1613,6 @@ export type {
   FlowSendMassiveChargeCardRequest,
   FlowSendMassiveChargeCardResponse,
   FlowMassiveChargeCardStatusResponse,
+  FlowReverseChargeCardRequest,
+  FlowReverseChargeCardResponse,
 };

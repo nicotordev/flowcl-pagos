@@ -245,3 +245,13 @@ export class FlowMassiveChargeCardStatusError extends FlowError {
     this.name = 'FlowMassiveChargeCardStatusError';
   }
 }
+
+/**
+ *  Error cuando hay problemas al tratar de hacer reversa en un cargo efectuado en la tarjeta de un cliente
+ */
+export class FlowReverseChargeCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al hacer reversa de un cargo en la tarjeta: ${message}`);
+    this.name = 'FlowReverseChargeCardError';
+  }
+}
