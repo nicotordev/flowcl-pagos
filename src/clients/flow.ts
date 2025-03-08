@@ -1,6 +1,7 @@
 import { FlowAuthenticationError } from '../errors';
 import FlowCustomers from './flow.customers';
 import FlowPayments from './flow.payments';
+import FlowPlans from './flow.plans';
 import FlowRefunds from './flow.refunds';
 /**
  * Cliente para interactuar con la API de Flow.
@@ -19,6 +20,10 @@ class Flow {
    * Objecto que proporciona métodos para interactuar con los clientes en Flow.
    */
   public customers: FlowCustomers;
+  /**
+   * Objecto que proporciona métodos para interactuar con los planes en Flow.
+   */
+  public plans: FlowPlans;
 
   /**
    * Constructor de la clase FlowClient.
@@ -44,6 +49,7 @@ class Flow {
     this.payments = new FlowPayments(apiKey, secretKey, baseURL);
     this.refunds = new FlowRefunds(apiKey, secretKey, baseURL);
     this.customers = new FlowCustomers(apiKey, secretKey, baseURL);
+    this.plans = new FlowPlans(apiKey, secretKey, baseURL);
   }
 }
 

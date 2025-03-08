@@ -141,10 +141,10 @@ export default class FlowPayments {
 
   /**
    * Constructor de la clase FlowClient.
-   * @param apiKey Clave de API proporcionada por Flow.
-   * @param secretKey Clave secreta proporcionada por Flow.
-   * @param baseURL URL base de la API de Flow.
-   * @throws FlowAuthenticationError Si no se proporciona apiKey o secretKey.
+   * @param {string} apiKey Clave de API proporcionada por Flow.
+   * @param {string} secretKey Clave secreta proporcionada por Flow.
+   * @param  {string}baseURL URL base de la API de Flow.
+   * @throws {FlowAuthenticationError} Si no se proporciona apiKey o secretKey.
    */
   constructor(apiKey: string, secretKey: string, baseURL: string) {
     if (!apiKey || !secretKey) {
