@@ -1,39 +1,43 @@
 {
   "compilerOptions": {
     /* 🌎 Configuración del Entorno */
-    "target": "ES2020",           /* Versión de ECMAScript a compilar */
-    "module": "CommonJS",         /* Formato de módulos compatible con Node.js */
-    "lib": ["ES2020"],            /* Librerías estándar de ECMAScript disponibles */
+    "target": "ES2020" /* Versión de ECMAScript a compilar */,
+    "module": "CommonJS" /* Formato de módulos compatible con Node.js */,
+    "lib": ["ES2020"] /* Librerías estándar de ECMAScript disponibles */,
 
     /* 📂 Configuración de Directorios */
-    "rootDir": "src",             /* Carpeta donde se encuentran los archivos fuente */
-    "outDir": "dist",             /* Carpeta donde se generarán los archivos compilados */
-    "declaration": true,          /* Genera archivos .d.ts para compatibilidad con otros proyectos */
-    "declarationMap": true,       /* Genera mapas de declaraciones para depuración */
-    "sourceMap": true,            /* Habilita la generación de mapas de origen */
+    "rootDir": "src" /* Carpeta donde se encuentran los archivos fuente */,
+    "outDir": "dist" /* Carpeta donde se generarán los archivos compilados */,
+    "declaration": true /* Genera archivos .d.ts para compatibilidad con otros proyectos */,
+    "declarationMap": true /* Genera mapas de declaraciones para depuración */,
+    "sourceMap": true /* Habilita la generación de mapas de origen */,
 
     /* ✅ Reglas de Interoperabilidad */
-    "esModuleInterop": true,      /* Permite importar módulos CommonJS sin problemas */
-    "resolveJsonModule": true,    /* Permite importar archivos JSON */
-    "forceConsistentCasingInFileNames": true, /* Evita problemas de mayúsculas y minúsculas */
+    "esModuleInterop": true /* Permite importar módulos CommonJS sin problemas */,
+    "resolveJsonModule": true /* Permite importar archivos JSON */,
+    "forceConsistentCasingInFileNames": true /* Evita problemas de mayúsculas y minúsculas */,
 
     /* 🔒 Configuración de Estricticidad */
-    "strict": true,               /* Habilita todas las comprobaciones estrictas */
-    "noImplicitAny": true,        /* No permite el uso de `any` implícito */
-    "strictNullChecks": true,     /* No permite valores `null` en tipos estrictos */
-    "strictFunctionTypes": true,  /* Verifica compatibilidad de funciones */
-    "strictPropertyInitialization": true, /* Obliga a inicializar todas las propiedades */
+    "strict": true /* Habilita todas las comprobaciones estrictas */,
+    "noImplicitAny": true /* No permite el uso de `any` implícito */,
+    "strictNullChecks": true /* No permite valores `null` en tipos estrictos */,
+    "strictFunctionTypes": true /* Verifica compatibilidad de funciones */,
+    "strictPropertyInitialization": true /* Obliga a inicializar todas las propiedades */,
 
     /* 🧹 Limpieza y Control de Código */
-    "noUnusedLocals": true,       /* Advierte sobre variables locales no utilizadas */
-    "noUnusedParameters": true,   /* Advierte sobre parámetros de funciones no utilizados */
-    "noImplicitReturns": true,    /* Obliga a que todas las funciones devuelvan un valor */
-    "noFallthroughCasesInSwitch": true, /* Evita errores en declaraciones `switch` */
+    "noUnusedLocals": true /* Advierte sobre variables locales no utilizadas */,
+    "noUnusedParameters": true /* Advierte sobre parámetros de funciones no utilizados */,
+    "noImplicitReturns": true /* Obliga a que todas las funciones devuelvan un valor */,
+    "noFallthroughCasesInSwitch": true /* Evita errores en declaraciones `switch` */,
 
     /* 🏎️ Optimización */
-    "skipLibCheck": true,         /* Omite la verificación de bibliotecas para reducir tiempo de compilación */
-    "incremental": true           /* Habilita compilación incremental para mejorar rendimiento */
+    "skipLibCheck": true /* Omite la verificación de bibliotecas para reducir tiempo de compilación */,
+    "incremental": true /* Habilita compilación incremental para mejorar rendimiento */
   },
-  "include": ["src"],             /* Especifica los archivos a compilar */
-  "exclude": ["node_modules", "dist", "tests"] /* Excluye carpetas innecesarias */
+  "include": ["src", "jest.config.cjs"] /* Especifica los archivos a compilar */,
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests"
+  ] /* Excluye carpetas innecesarias */
 }
