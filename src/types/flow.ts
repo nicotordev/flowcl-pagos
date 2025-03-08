@@ -149,6 +149,47 @@ export interface FlowPaymentStatusResponse {
 }
 
 /**
+ * Datos requeridos para consultar los pagos recibidos por una fecha específica.
+ *
+ */
+export interface FlowPaymentsReceivedByDateRequest {
+  /**
+   * Fecha de los pagos a consultar.
+   * Formato: YYYY-MM-DD
+   */
+  date: string | Date;
+  /**
+   * Número de página de inicio.
+   */
+  start?: number;
+  /**
+   * Límite de resultados por página.
+   */
+  limit?: number;
+}
+
+/**
+ * Tipo que representa la respuesta de la API al obtener el listado de pagos recibidos en un día.
+ */
+export type FlowPaymentsReceivedByDateResponse = {
+  /**
+   * El número total de registros encontrados.
+   */
+  total: number;
+
+  /**
+   * Indica si existen más páginas de resultados.
+   * `true` si hay más páginas disponibles, `false` si es la última página.
+   */
+  hasMore: boolean;
+
+  /**
+   * Arreglo de registros de la página actual.
+   */
+  data: Array<Record<string, any>>;
+};
+
+/**
  * Métodos de pago admitidos en Flow.
  */
 export type PaymentMethods =
