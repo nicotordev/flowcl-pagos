@@ -147,7 +147,7 @@ type FlowCreatePaymentByEmailRequest = {
    * Si no se especifica, Flow presentará una página para seleccionar el medio de pago.
    * Para indicar todos los medios de pago, utilice el identificador: 9.
    */
-  paymentMethod?: number;
+  paymentMethod?: FlowPaymentMethods;
 
   /**
    * URL de confirmación de pago donde Flow confirmará la transacción (obligatorio)
@@ -1064,6 +1064,300 @@ type FlowDeleteCardResponse = {
    */
   registerDate: string;
 };
+/**
+ * Representa la información de cuando cobramos a una tarjeta de crédito.
+ */
+type FlowChargeCardRequest = {
+  /**
+   * Identificador único del cliente en Flow.
+   */
+  customerId: string;
+  /**
+   * El monto del cargo
+   */
+  amount: number;
+  /**
+   * Descripción del cargo
+   */
+  subject: string;
+  /**
+   * Identificador de la orden del comercio
+   */
+  commerceOrder: string;
+  /**
+   * Moneda del cargo (CLP, UF)
+   * Por defecto es CLP
+   */
+  currency?: string;
+  /**
+   * Datos opcionales en formato JSON clave=valor (opcional).
+   */
+  optionals?: string;
+};
+/**
+ * Representa la respuesta de la API de Flow del cargo a la tarjeta de crédito registrada.
+ */
+type FlowChargeCardResponse = {
+  /**
+   * El número de la orden de Flow
+   */
+  flowOrder: number;
+
+  /**
+   * El número de la orden del comercio
+   */
+  commerceOrder: string;
+
+  /**
+   * La fecha de creación de la orden (formato: yyyy-mm-dd hh:mm:ss)
+   */
+  requestDate: string;
+
+  /**
+   * El estado de la orden:
+   * 1 - Pendiente de pago
+   * 2 - Pagada
+   * 3 - Rechazada
+   * 4 - Anulada
+   */
+  status: 1 | 2 | 3 | 4;
+
+  /**
+   * El concepto de la orden
+   */
+  subject: string;
+
+  /**
+   * La moneda
+   */
+  currency: string;
+
+  /**
+   * El monto de la orden
+   */
+  amount: number;
+
+  /**
+   * El email del pagador
+   */
+  payer: string;
+
+  /**
+   * Datos opcionales enviados por el comercio en formato JSON (puede ser nulo)
+   */
+  optional?: string | null;
+
+  /**
+   * Información para un pago pendiente cuando se generó un cupón de pago.
+   * Si no existen datos, es que no se generó un cupón de pago.
+   */
+  pending_info?: Record<string, unknown>;
+
+  /**
+   * Los datos del pago
+   */
+  paymentData?: Record<string, unknown>;
+
+  /**
+   * ID de comercio asociado (solo aplica si el usuario es un comercio integrador, puede ser nulo)
+   */
+  merchantId?: string | null;
+};
+/**
+ * Representa la información de cuando cobramos a una tarjeta de crédito.
+ */
+type FlowSendChargeRequest = {
+  /**
+   * Identificador único del cliente en Flow.
+   */
+  customerId: string;
+  /**
+   * El número de la orden del comercio
+   */
+  commerceOrder: string;
+  /**
+   * El motivo del cobro
+   */
+  subject: string;
+  /**
+   * El monto del cobro
+   */
+  amount: number;
+  /**
+   * url callbak del comercio donde Flow confirmará el pago
+   */
+  urlConfirmation: string;
+  /**
+   * url de retorno al comercio donde Flow redirigirá al pagador tras el pago
+   */
+  urlReturn: string;
+  /**
+   * Moneda del cobro (CLP, UF)
+   * Por defecto es CLP
+   * */
+  currency?: string;
+  /**
+   * Metodo de pago
+   */
+  paymentMethod?: FlowPaymentMethods;
+  /**
+   * Si se desea que Flow envíe cobros por email, este parámetro debe enviarse con valor 1
+   */
+  byEmail?: 1;
+  /**
+   * Número de días posteriores al envío del cobro para enviar una nueva notificación de persistencia si la orden no está pagada.
+   */
+  forward_days_after?: number;
+  /**
+   * Número de veces de envío de mail de persistencia.
+   */
+  forward_times?: number;
+  /**
+   * Si se envía este parámetro con valor 1 entonces ignora el método de cargo automático aunque el cliente tenga registrada una tarjeta de crédito
+   */
+  ignore_auto_charging?: 1;
+  /**
+   * Datos opcionales en formato JSON clave=valor (opcional).
+   */
+  optionals?: string;
+  /**
+   * Tiempo en segundos para que una orden expire después de ser creada (opcional)
+   * Si no se envía este parámetro, la orden no expirará y estará vigente indefinidamente.
+   *  */
+  timeout?: number;
+};
+/**
+ * Representa la respuesta de la API de Flow del cargo a la tarjeta de crédito registrada.
+ */
+type FlowSendChargeResponse = {
+  /**
+   * Tipo de cobro:
+   * 1 Cobro automático
+   * 2 Cobro normal (link de pago)
+   * 3 Cobro por email
+   */
+  type: 1 | 2 | 3;
+  /**
+   * El número de la orden del comercio
+   */
+  commerceOrder: string;
+  /**
+   * El número de la orden de Flow
+   */
+  flowOrder: number;
+  /**
+   * URL ha redireccionar. Los cargos automaticos no tienen url por ser síncronos. Para formar el link de pago a esta URL se debe concatenar el token de la siguiente manera: url + "?token=" + token
+   */
+  url: string;
+  /**
+   * token de la transacción
+   */
+  token: string;
+  /**
+   * Estado de emisión del cobro, es decir si se emitió el cobro, no indica si hubo pago:
+   * 0 Cobro no emitido (uncollected
+   * 1 Cobro emitido (collected)
+   */
+  status: 0 | 1;
+  /**
+   * Objeto que representa un cobro y si está pagado su correspondiente pago
+   */
+  paymentResult: {
+    /**
+     * El número de la orden de Flow
+     */
+    flowOrder: number;
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+    /**
+     * La fecha de creación de la orden (<yyyy-mm-dd hh:mm:ss>)
+     */
+    requestDate: string;
+    /**
+     * El estado de la order
+     * 1 pendiente de pago
+     * 2 pagada
+     * 3 rechazada
+     * 4 anulada
+     */
+    status: 1 | 2 | 3 | 4;
+    /**
+     * El concepto de la orden
+     */
+    subject: string;
+    /**
+     * La moneda de la orden (CLP, UF)
+     */
+    currency: string;
+    /**
+     * El monto de la orden
+     */
+    amount: number;
+    /**
+     * El email del pagador
+     */
+    payer: string;
+    /**
+     * Datos opcionales enviados por el comercio en formato JSON (puede ser nulo)
+     */
+    optional?: string;
+    /**
+     * Información para un pago pendiente cuando se generó un cupón de pago. Si no existen datos es que no se generó un cupón de pago.
+     */
+    pending_info: {
+      /**
+       * El medio de pago utilizado para emitir el cupón de pago
+       */
+      media: string | null;
+      /**
+       * La fecha de emisión del cupón de pago
+       */
+      date: string | null;
+    };
+    paymentData: {
+      /**
+       * La fecha de pago
+       */
+      date: string | null;
+      /**
+       * El medio de pago utilizado
+       */
+      media: string | null;
+      /**
+       * La fecha de conversión de la moneda
+       */
+      conversionDate: string | null;
+      /**
+       * La tasa de conversión.
+       */
+      conversionRate: number | null;
+      /**
+       * El monto pagado
+       */
+      amount: number | null;
+      /**
+       * La moneda con que se pagó
+       */
+      currency: string | null;
+      /**
+       * El costo del servicio
+       */
+      fee: number | null;
+      /**
+       * El saldo a depositar
+       */
+      balance: number | null;
+      /**
+       * La fecha de transferencia de los fondos a su cuenta bancaria.
+
+       */
+      transferDate: string | null;
+    };
+    merchantId: string;
+  } | null;
+};
 
 export type {
   FlowCreatePaymentRequest,
@@ -1096,4 +1390,8 @@ export type {
   FlowRegisterCardResponse,
   FlowRegisterCardStatusResponse,
   FlowDeleteCardResponse,
+  FlowChargeCardRequest,
+  FlowChargeCardResponse,
+  FlowSendChargeRequest,
+  FlowSendChargeResponse,
 };
