@@ -1,6 +1,6 @@
 {
   "name": "@nicotordev/flowcl-pagos",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "SDK en TypeScript para integrar pagos con la API de Flow.cl de manera sencilla y segura.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
