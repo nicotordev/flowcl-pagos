@@ -92,10 +92,21 @@ export class FlowStatusExtendedError extends FlowError {
     this.name = 'FlowStatusExtendedError';
   }
 }
-
+/**
+ * Error cuando hay problemas al obtener el estado de un pago por email.
+ */
 export class FlowCreatePaymentByEmailError extends FlowError {
   constructor(message: string) {
     super(`Error al crear el pago por email: ${message}`);
     this.name = 'FlowCreatePaymentByEmailError';
+  }
+}
+/**
+ * Error cuando hay problemas al obtener el estado de un reembolso.
+ */
+export class FlowCreateRefundError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear el reembolso: ${message}`);
+    this.name = 'FlowCreateRefundError';
   }
 }
