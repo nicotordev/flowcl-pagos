@@ -110,10 +110,21 @@ export class FlowCreateRefundError extends FlowError {
     this.name = 'FlowCreateRefundError';
   }
 }
-
+/**
+ * Error cuando hay problemas al cancelar un reembolso.
+ */
 export class FlowCancelRefundError extends FlowError {
   constructor(message: string) {
     super(`Error al cancelar el reembolso: ${message}`);
     this.name = 'FlowCancelRefundError';
+  }
+}
+/**
+ * Error cuando hay problemas al obtener el estado de un reembolso.
+ */
+export class FlowRefundStatusError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener el estado del reembolso: ${message}`);
+    this.name = 'FlowRefundStatusError';
   }
 }

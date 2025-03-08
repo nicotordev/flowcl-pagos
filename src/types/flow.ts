@@ -1,4 +1,34 @@
 /**
+ * Métodos de pago admitidos en Flow.
+ */
+type FlowPaymentMethods =
+  | 'webpay-plus'
+  | 'mach'
+  | 'khipu'
+  | 'redpay'
+  | 'onepay'
+  | 'flow';
+
+/**
+ * Estados de pago posibles en Flow.
+ */
+type FlowPaymentStatus = 'Pendiente' | 'Pagada' | 'Rechazada' | 'Anulada';
+
+/**
+ * Constantes relacionadas con Flow.
+ */
+type FlowConstants = {
+  /**
+   * Mapeo de métodos de pago a sus respectivos códigos numéricos.
+   */
+  FLOW_PAYMENT_METHOD_CODES: Record<FlowPaymentMethods, number>;
+  /**
+   * Mapeo de códigos de estado de pago a su representación en texto.
+   */
+  FLOW_PAYMENT_STATUS_CODES: Record<number, FlowPaymentStatus>;
+};
+
+/**
  * Datos requeridos para crear una orden de pago en Flow.
  * Basado en la documentación oficial de Flow.cl.
  */
@@ -461,6 +491,16 @@ type FlowCreateRefundRequest = {
 };
 
 /**
+ * Representa el estado de un reembolso en Flow.
+ */
+type FlowRefundStatus =
+  | 'created'
+  | 'accepted'
+  | 'rejected'
+  | 'refunded'
+  | 'canceled';
+
+/**
  * Tipo que representa la respuesta de una solicitud de reembolso en Flow.
  */
 type FlowCreateRefundResponse = {
@@ -487,7 +527,7 @@ type FlowCreateRefundResponse = {
    * - refunded: Reembolso reembolsado
    * - canceled: Reembolso cancelado
    */
-  status: 'created' | 'accepted' | 'rejected' | 'refunded' | 'canceled';
+  status: FlowRefundStatus;
 
   /**
    * Monto del reembolso.
@@ -526,7 +566,7 @@ type FlowCancelRefundResponse = {
    * - `refunded`: Reembolso completado.
    * - `canceled`: Reembolso cancelado.
    */
-  status: 'created' | 'accepted' | 'rejected' | 'refunded' | 'canceled';
+  status: FlowRefundStatus;
 
   /**
    * Monto total del reembolso.
@@ -538,35 +578,45 @@ type FlowCancelRefundResponse = {
    */
   fee: number;
 };
-
 /**
- * Métodos de pago admitidos en Flow.
+ * Representa la información de un reembolso en la plataforma Flow.cl.
  */
-type FlowPaymentMethods =
-  | 'webpay-plus'
-  | 'mach'
-  | 'khipu'
-  | 'redpay'
-  | 'onepay'
-  | 'flow';
-
-/**
- * Estados de pago posibles en Flow.
- */
-type FlowPaymentStatus = 'Pendiente' | 'Pagada' | 'Rechazada' | 'Anulada';
-
-/**
- * Constantes relacionadas con Flow.
- */
-type FlowConstants = {
+type FlowRefundStatusResponse = {
   /**
-   * Mapeo de métodos de pago a sus respectivos códigos numéricos.
+   * Token único del reembolso.
    */
-  FLOW_PAYMENT_METHOD_CODES: Record<FlowPaymentMethods, number>;
+  token: string;
+
   /**
-   * Mapeo de códigos de estado de pago a su representación en texto.
+   * Número de orden de reembolso asignado por Flow.
    */
-  FLOW_PAYMENT_STATUS_CODES: Record<number, FlowPaymentStatus>;
+  flowRefundOrder: string;
+
+  /**
+   * Fecha de solicitud del reembolso en formato "yyyy-mm-dd hh:mm:ss".
+   */
+  date: string;
+
+  /**
+   * Estado actual del reembolso.
+   *
+   * - `created`: Solicitud creada.
+   * - `accepted`: Reembolso aceptado.
+   * - `rejected`: Reembolso rechazado.
+   * - `refunded`: Reembolso completado.
+   * - `canceled`: Reembolso cancelado.
+   */
+  status: FlowRefundStatus;
+
+  /**
+   * Monto del reembolso en unidades monetarias (por ejemplo, CLP).
+   */
+  amount: number;
+
+  /**
+   * Costo del servicio de reembolso cobrado por Flow.
+   */
+  fee: number;
 };
 
 export type {
@@ -586,4 +636,5 @@ export type {
   FlowCreateRefundRequest,
   FlowCreateRefundResponse,
   FlowCancelRefundResponse,
+  FlowRefundStatusResponse,
 };

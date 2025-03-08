@@ -4,11 +4,13 @@ import {
   FlowAuthenticationError,
   FlowCancelRefundError,
   FlowCreateRefundError,
+  FlowRefundStatusError,
 } from '../errors';
 import {
   FlowCancelRefundResponse,
   FlowCreateRefundRequest,
   FlowCreateRefundResponse,
+  FlowRefundStatusResponse,
 } from '../types/flow';
 import { generateSignature } from '../utils/flow.utils';
 
@@ -43,6 +45,20 @@ export default class FlowRefunds {
      * @throws FlowCancelRefundError Si hay un error al cancelar el reembolso.
      */
     cancelRefund: (token: string) => Promise<FlowCancelRefundResponse>;
+
+    /**
+     * Este servicio permite obtener el estado de un reembolso.
+     */
+    status: {
+      /**
+       * Permite obtener el estado de un reembolso solicitado. Este servicio se debe invocar desde la página del comercio que se señaló en el parámetro urlCallback del servicio refund/create.
+       * @param token Token de la orden de reembolso
+       * @returns Promise<FlowRefundStatusResponse> con la respuesta de Flow.
+       * @throws FlowAPIError Si hay un error en la respuesta de la API.
+       * @throws FlowRefundStatusError Si hay un error al obtener el estado del reembolso.
+       */
+      byToken: (token: string) => Promise<FlowRefundStatusResponse>;
+    };
   };
 
   /**
@@ -79,6 +95,9 @@ export default class FlowRefunds {
     this.refunds = {
       createRefund: this.createRefund.bind(this),
       cancelRefund: this.cancelRefund.bind(this),
+      status: {
+        byToken: this.getRefundStatus.bind(this),
+      },
     };
   }
   /**
@@ -103,7 +122,7 @@ export default class FlowRefunds {
       });
 
       // Realizar la petición POST a la API de Flow
-      const response = await this.axiosInstance.get<FlowCreateRefundResponse>(
+      const response = await this.axiosInstance.post<FlowCreateRefundResponse>(
         '/create?' + formData.toString(),
       );
 
@@ -135,7 +154,7 @@ export default class FlowRefunds {
       });
 
       // Realizar la petición POST a la API de Flow
-      const response = await this.axiosInstance.get<FlowCreateRefundResponse>(
+      const response = await this.axiosInstance.post<FlowCreateRefundResponse>(
         '/cancel?' + formData.toString(),
       );
 
@@ -145,6 +164,40 @@ export default class FlowRefunds {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
       throw new FlowCancelRefundError((error as Error).message);
+    }
+  }
+  /**
+   * Permite obtener el estado de un reembolso solicitado. Este servicio se debe invocar desde la página del comercio que se señaló en el parámetro urlCallback del servicio refund/create.
+   * @param token Token de la orden de reembolso
+   * @returns Promise<FlowRefundStatusResponse> con la respuesta de Flow.
+   * @throws FlowAPIError Si hay un error en la respuesta de la API.
+   * @throws FlowRefundStatusError Si hay un error al obtener el estado del reembolso.
+   */
+  private async getRefundStatus(
+    token: string,
+  ): Promise<FlowRefundStatusResponse> {
+    try {
+      const allData = { token, apiKey: this.apiKey } as unknown as Record<
+        string,
+        string
+      >;
+      const signature = generateSignature(allData, this.secretKey); // Generar firma
+      const formData = new URLSearchParams({
+        ...allData,
+        s: signature, // Agregar firma a los datos enviados
+      });
+
+      // Realizar la petición POST a la API de Flow
+      const response = await this.axiosInstance.get<FlowCreateRefundResponse>(
+        '/getStatus?' + formData.toString(),
+      );
+
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowRefundStatusError((error as Error).message);
     }
   }
 }
