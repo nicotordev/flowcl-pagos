@@ -499,6 +499,45 @@ type FlowCreateRefundResponse = {
    */
   fee: number;
 };
+/**
+ * Tipo que representa la respuesta de una solicitud de cancelación de reembolso en Flow.
+ */
+type FlowCancelRefundResponse = {
+  /**
+   * Token único del reembolso.
+   */
+  token: string;
+
+  /**
+   * Número de orden asociado al reembolso.
+   */
+  flowRefundOrder: string;
+
+  /**
+   * Fecha de solicitud de reembolso en formato yyyy-mm-dd hh:mm.ss.
+   */
+  date: string;
+
+  /**
+   * Estado del reembolso. Puede ser uno de los siguientes valores:
+   * - `created`: Solicitud creada.
+   * - `accepted`: Reembolso aceptado.
+   * - `rejected`: Reembolso rechazado.
+   * - `refunded`: Reembolso completado.
+   * - `canceled`: Reembolso cancelado.
+   */
+  status: 'created' | 'accepted' | 'rejected' | 'refunded' | 'canceled';
+
+  /**
+   * Monto total del reembolso.
+   */
+  amount: number;
+
+  /**
+   * Costo del servicio de reembolso.
+   */
+  fee: number;
+};
 
 /**
  * Métodos de pago admitidos en Flow.
@@ -546,4 +585,5 @@ export type {
   FlowConstants,
   FlowCreateRefundRequest,
   FlowCreateRefundResponse,
+  FlowCancelRefundResponse,
 };

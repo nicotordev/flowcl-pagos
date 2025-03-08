@@ -2,9 +2,11 @@ import axios, { AxiosInstance } from 'axios';
 import {
   FlowAPIError,
   FlowAuthenticationError,
+  FlowCancelRefundError,
   FlowCreateRefundError,
 } from '../errors';
 import {
+  FlowCancelRefundResponse,
   FlowCreateRefundRequest,
   FlowCreateRefundResponse,
 } from '../types/flow';
@@ -33,6 +35,14 @@ export default class FlowRefunds {
     createRefund: (
       data: FlowCreateRefundRequest,
     ) => Promise<FlowCreateRefundResponse>;
+    /**
+     * Este servicio permite cancelar una orden de reembolso pendiente
+     * @param token Token de la orden de reembolso
+     * @returns Promise<FlowCancelRefundResponse> con la respuesta de Flow.
+     * @throws FlowAPIError Si hay un error en la respuesta de la API.
+     * @throws FlowCancelRefundError Si hay un error al cancelar el reembolso.
+     */
+    cancelRefund: (token: string) => Promise<FlowCancelRefundResponse>;
   };
 
   /**
@@ -68,6 +78,7 @@ export default class FlowRefunds {
 
     this.refunds = {
       createRefund: this.createRefund.bind(this),
+      cancelRefund: this.cancelRefund.bind(this),
     };
   }
   /**
@@ -102,6 +113,38 @@ export default class FlowRefunds {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
       throw new FlowCreateRefundError((error as Error).message);
+    }
+  }
+  /**
+   * Este servicio permite cancelar una orden de reembolso pendiente
+   * @param token Token de la orden de reembolso
+   * @returns Promise<FlowCancelRefundResponse> con la respuesta de Flow.
+   * @throws FlowAPIError Si hay un error en la respuesta de la API.
+   * @throws FlowCancelRefundError Si hay un error al cancelar el reembolso.
+   */
+  private async cancelRefund(token: string): Promise<FlowCancelRefundResponse> {
+    try {
+      const allData = { token, apiKey: this.apiKey } as unknown as Record<
+        string,
+        string
+      >;
+      const signature = generateSignature(allData, this.secretKey); // Generar firma
+      const formData = new URLSearchParams({
+        ...allData,
+        s: signature, // Agregar firma a los datos enviados
+      });
+
+      // Realizar la petición POST a la API de Flow
+      const response = await this.axiosInstance.get<FlowCreateRefundResponse>(
+        '/cancel?' + formData.toString(),
+      );
+
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowCancelRefundError((error as Error).message);
     }
   }
 }

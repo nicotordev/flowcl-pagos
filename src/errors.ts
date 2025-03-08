@@ -110,3 +110,10 @@ export class FlowCreateRefundError extends FlowError {
     this.name = 'FlowCreateRefundError';
   }
 }
+
+export class FlowCancelRefundError extends FlowError {
+  constructor(message: string) {
+    super(`Error al cancelar el reembolso: ${message}`);
+    this.name = 'FlowCancelRefundError';
+  }
+}
