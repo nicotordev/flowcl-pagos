@@ -1,4 +1,5 @@
 import { FlowAuthenticationError } from '../errors';
+import FlowCustomers from './flow.customers';
 import FlowPayments from './flow.payments';
 import FlowRefunds from './flow.refunds';
 /**
@@ -13,6 +14,11 @@ class Flow {
    * Objeto que proporciona métodos para interactuar con los reembolsos en Flow.
    */
   public refunds: FlowRefunds;
+
+  /**
+   * Objecto que proporciona métodos para interactuar con los clientes en Flow.
+   */
+  public customers: FlowCustomers;
 
   /**
    * Constructor de la clase FlowClient.
@@ -30,8 +36,14 @@ class Flow {
       throw new FlowAuthenticationError();
     }
 
-    this.payments = new FlowPayments(apiKey, secretKey, enviroment);
-    this.refunds = new FlowRefunds(apiKey, secretKey, enviroment);
+    const baseURL =
+      enviroment === 'sandbox'
+        ? 'https://sandbox.flow.cl/api'
+        : 'https://www.flow.cl/api';
+
+    this.payments = new FlowPayments(apiKey, secretKey, baseURL);
+    this.refunds = new FlowRefunds(apiKey, secretKey, baseURL);
+    this.customers = new FlowCustomers(apiKey, secretKey, baseURL);
   }
 }
 

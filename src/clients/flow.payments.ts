@@ -23,13 +23,13 @@ import {
   FlowTransactionsReceivedByDateError,
 } from '../errors';
 import {
-  generateSignature,
+  generateFormData,
   getPaymentStatus,
   isValidPaymentReceivedByDate,
 } from '../utils/flow.utils';
 
 /**
- * Cliente para interactuar con la API de Flow.
+ * Cliente para interactuar con la API de pagos de Flow.
  * Permite crear órdenes de pago y consultar su estado.
  * Implementa un sistema de errores personalizados para un mejor manejo de fallos.
  */
@@ -147,28 +147,20 @@ export default class FlowPayments {
    * Constructor de la clase FlowClient.
    * @param apiKey Clave de API proporcionada por Flow.
    * @param secretKey Clave secreta proporcionada por Flow.
-   * @param enviroment Entorno de Flow ('sandbox' o 'production').
+   * @param baseURL URL base de la API de Flow.
    * @throws FlowAuthenticationError Si no se proporciona apiKey o secretKey.
    */
-  constructor(
-    apiKey: string,
-    secretKey: string,
-    enviroment: 'sandbox' | 'production' = 'sandbox',
-  ) {
+  constructor(apiKey: string, secretKey: string, baseURL: string) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
     this.secretKey = secretKey;
-    const baseURL =
-      enviroment === 'sandbox'
-        ? 'https://sandbox.flow.cl/api'
-        : 'https://www.flow.cl/api';
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
-      baseURL: `${baseURL}`,
+      baseURL: `${baseURL}/payment`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -206,12 +198,7 @@ export default class FlowPayments {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey); // Generar firma
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature, // Agregar firma a los datos enviados
-      });
-
+      const formData = generateFormData(allData, this.secretKey);
       // Enviar solicitud GET a la API de Flow para obtener el estado del pago
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentStatusResponse, 'statusStr'>
@@ -244,11 +231,7 @@ export default class FlowPayments {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentStatusResponse, 'statusStr'>
@@ -280,11 +263,7 @@ export default class FlowPayments {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentStatusResponse, 'statusStr'>
@@ -325,11 +304,7 @@ export default class FlowPayments {
         date: validatedDate,
       } as unknown as Record<string, string>;
 
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response =
         await this.axiosInstance.get<FlowPaymentsReceivedByDateResponse>(
@@ -360,11 +335,7 @@ export default class FlowPayments {
         string
       >;
 
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentsStatusExtendedResponse, 'statusStr'>
@@ -398,11 +369,7 @@ export default class FlowPayments {
         string
       >;
 
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentsStatusExtendedResponse, 'statusStr'>
@@ -443,11 +410,7 @@ export default class FlowPayments {
         apiKey: this.apiKey,
       } as unknown as Record<string, string>;
 
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response =
         await this.axiosInstance.get<FlowTransactionsReceivedByDateResponse>(
@@ -477,11 +440,7 @@ export default class FlowPayments {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response = await this.axiosInstance.post<
         Omit<FlowCreatePaymentResponse, 'redirectUrl'>
@@ -512,11 +471,7 @@ export default class FlowPayments {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey);
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature,
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       const response = await this.axiosInstance.post<
         Omit<FlowCreatePaymentByEmailResponse, 'redirectUrl'>

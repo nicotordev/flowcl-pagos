@@ -63,9 +63,29 @@ function generateSignature(
   return CryptoJS.HmacSHA256(toSign, secretKey).toString(); // Generar firma
 }
 
+/**
+ * Genera un objeto con los datos a enviar y la firma HMAC-SHA256.
+ * @param data Recibe un objeto con los datos a enviar
+ * @param secretKey Recibe la clave secreta para firmar los datos
+ * @returns Retorna un objeto con los datos y la firma
+ */
+function generateFormData<T extends Record<string, string>>(
+  data: T,
+  secretKey: string,
+) {
+  const signature = generateSignature(data, secretKey); // Generar firma
+  const formData = new URLSearchParams({
+    ...data,
+    s: signature, // Agregar firma a los datos enviados
+  });
+
+  return formData;
+}
+
 export {
   getPaymentMethod,
   getPaymentStatus,
   isValidPaymentReceivedByDate,
   generateSignature,
+  generateFormData,
 };

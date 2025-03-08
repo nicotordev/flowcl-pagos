@@ -12,10 +12,10 @@ import {
   FlowCreateRefundResponse,
   FlowRefundStatusResponse,
 } from '../types/flow';
-import { generateSignature } from '../utils/flow.utils';
+import { generateFormData } from '../utils/flow.utils';
 
 /**
- * Cliente para interactuar con la API de Flow.
+ * Cliente para interactuar con la API de reembolsos de Flow.
  * Permite realizar reembolsos en Flow.
  */
 export default class FlowRefunds {
@@ -65,24 +65,16 @@ export default class FlowRefunds {
    * Constructor de la clase FlowClient.
    * @param apiKey Clave de API proporcionada por Flow.
    * @param secretKey Clave secreta proporcionada por Flow.
-   * @param enviroment Entorno de Flow ('sandbox' o 'production').
+   * @param baseURL URL base de la API de Flow.
    * @throws FlowAuthenticationError Si no se proporciona apiKey o secretKey.
    */
-  constructor(
-    apiKey: string,
-    secretKey: string,
-    enviroment: 'sandbox' | 'production' = 'sandbox',
-  ) {
+  constructor(apiKey: string, secretKey: string, baseURL: string) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
     this.secretKey = secretKey;
-    const baseURL =
-      enviroment === 'sandbox'
-        ? 'https://sandbox.flow.cl/api'
-        : 'https://www.flow.cl/api';
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
@@ -115,11 +107,7 @@ export default class FlowRefunds {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey); // Generar firma
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature, // Agregar firma a los datos enviados
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       // Realizar la petición POST a la API de Flow
       const response = await this.axiosInstance.post<FlowCreateRefundResponse>(
@@ -147,11 +135,7 @@ export default class FlowRefunds {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey); // Generar firma
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature, // Agregar firma a los datos enviados
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       // Realizar la petición POST a la API de Flow
       const response = await this.axiosInstance.post<FlowCreateRefundResponse>(
@@ -181,11 +165,7 @@ export default class FlowRefunds {
         string,
         string
       >;
-      const signature = generateSignature(allData, this.secretKey); // Generar firma
-      const formData = new URLSearchParams({
-        ...allData,
-        s: signature, // Agregar firma a los datos enviados
-      });
+      const formData = generateFormData(allData, this.secretKey);
 
       // Realizar la petición POST a la API de Flow
       const response = await this.axiosInstance.get<FlowCreateRefundResponse>(
