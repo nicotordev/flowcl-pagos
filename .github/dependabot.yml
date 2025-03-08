@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/" # Ubicación del package.json en la raíz
+    schedule:
+      interval: "weekly" # Verifica actualizaciones cada semana
+    open-pull-requests-limit: 10
+    versioning-strategy: "auto" # Mantiene la versión lo más actualizada posible sin romper compatibilidad
+    labels:
+      - "dependencies"
+      - "npm"
+    assignees:
+      - "4cidkid"
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"] # Evita saltos de versión mayor en TypeScript
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      eslint-and-prettier:
+        patterns:
+          - "eslint*"
+          - "prettier"
+        update-types:
+          - "minor"
+          - "patch"
+      jest-and-ts-jest:
+        patterns:
+          - "jest"
+          - "ts-jest"
+        update-types:
+          - "minor"
+          - "patch"
+      husky-and-lint-staged:
+        patterns:
+          - "husky"
+          - "lint-staged"
+        update-types:
+          - "minor"
+          - "patch"
