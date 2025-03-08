@@ -1,0 +1,35 @@
+# Dependencias de Node.js
+node_modules/
+package-lock.json
+
+# Salida de TypeScript
+dist/
+
+# Archivos de entorno
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Archivos de logs y depuración
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+debug.log
+.DS_Store
+
+# Caché de herramientas de desarrollo
+.vscode/
+.idea/
+out/
+coverage/
+
+# Archivos de compilación de Jest
+jest-cache/
+jest-output/
+
+# Archivos temporales del sistema
+Thumbs.db
