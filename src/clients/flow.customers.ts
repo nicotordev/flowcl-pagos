@@ -9,6 +9,9 @@ import {
   FlowEditCustomerError,
   FlowGetCustomerError,
   FlowGetCustomerListError,
+  FlowListChargesCardError,
+  FlowListFailedChargesCardError,
+  FlowListPaginatedSubscriptionsError,
   FlowMassiveChargeCardStatusError,
   FlowRegisterCardError,
   FlowRegisterCardStatusError,
@@ -38,6 +41,12 @@ import {
   FlowMassiveChargeCardStatusResponse,
   FlowReverseChargeCardRequest,
   FlowReverseChargeCardResponse,
+  FlowListChargesResponse,
+  FlowListChargesRequest,
+  FlowListFailedChargesResponse,
+  FlowListFailedChargesRequest,
+  FlowListPaginatedSubscriptionsRequest,
+  FlowListPaginatedSubscriptionsResponse,
 } from '../types/flow';
 import { generateFormData, getPaymentMethod } from '../utils/flow.utils';
 
@@ -54,128 +63,163 @@ export default class FlowCustomers {
    */
   public customers: {
     /**
-     * Permite crear un nuevo cliente. El servicio retorna el objeto cliente creado.
-     * @param data FlowCreateCustomerRequest Datos del cliente a crear. Debe incluir email y nombre.
-     * @returns Promise<FlowCreateCustomerResponse> Objeto con la información del cliente creado.
-     * @throws FlowCreateCustomerError Si hay problemas al crear el cliente.
-     * @throws FlowAPIError Si hay problemas con la API de Flow.
+     * Crea un nuevo cliente en Flow.
+     * @param {FlowCreateCustomerRequest} data Datos del cliente a crear.
+     * @returns {Promise<FlowCreateCustomerResponse>} Objeto con la información del cliente creado.
+     * @throws {FlowCreateCustomerError}
+     * @throws {FlowAPIError}
      */
     create: (
       data: FlowCreateCustomerRequest,
     ) => Promise<FlowCreateCustomerResponse>;
     /**
-     * Permite editar un cliente existente. El servicio retorna el objeto cliente editado.
-     * @param data FlowEditCustomerRequest Datos del cliente a editar. puede incluir email y nombre.
-     * @returns Promise<FlowEditCustomerResponse> Objeto con la información del cliente editado.
-     * @throws FlowCreateCustomerError Si hay problemas al crear el cliente.
-     * @throws FlowAPIError Si hay problemas con la API de Flow.
+     * Edita un cliente existente en Flow.
+     * @param {FlowEditCustomerRequest} data Datos del cliente a editar.
+     * @returns {Promise<FlowEditCustomerResponse>} Objeto con la información del cliente editado.
+     * @throws {FlowEditCustomerError}¿
+     * @throws {FlowAPIError}
      */
     edit: (data: FlowEditCustomerRequest) => Promise<FlowEditCustomerResponse>;
     /**
-     * Permite eliminar un cliente. Para eliminar un cliente, este no debe tener suscripciones activas o importes pendientes de pago.
-     * @param customerId Identificador del cliente a eliminar.
-     * @returns Promise<FlowDeleteCustomerResponse> Objeto con la información del cliente eliminado.
-     * @throws FlowCreateCustomerError Si hay problemas al crear el cliente.
-     * @throws FlowAPIError Si hay problemas con la API de Flow.
+     * Elimina un cliente en Flow.
+     * @param {string} customerId Identificador del cliente a eliminar.
+     * @returns {Promise<FlowDeleteCustomerResponse>} Objeto con la información del cliente eliminado.
+     * @throws {FlowDeleteCustomerError}
+     * @throws {FlowAPIError}
      */
     delete: (customerId: string) => Promise<FlowDeleteCustomerResponse>;
     /**
      * Permite obtener los datos de un cliente en base a su customerId.
-     * @param customerId Identificador del cliente a obtener.
-     * @returns Promise<FlowGetCustomerResponse> Objeto con la información del cliente.
-     * @throws FlowCreateCustomerError Si hay problemas al crear el cliente.
-     * @throws FlowAPIError Si hay problemas con la API de Flow.
+     * @param {string} customerId Identificador del cliente a obtener.
+     * @returns {Promise<FlowGetCustomerResponse>} Objeto con la información del cliente.
+     * @throws {FlowCreateCustomerError} Si hay problemas al crear el cliente.
+     * @throws {FlowAPIError} Si hay problemas con la API de Flow.
      */
     get: (customerId: string) => Promise<FlowGetCustomerResponse>;
     /**
      * Permite obtener la lista de clientes paginada de acuerdo a los parámetros de paginación. Además, se puede definir los siguientes filtros:
      * filter: filtro por nombre del cliente
      * status: filtro por estado del cliente
-     * @param data FlowGetCustomerListRequest Datos de la petición de la lista de clientes.
-     * @returns Promise<FloeGetCustomerListResponse> Objeto con la información de la lista de clientes.
-     * @throws FlowGetCustomerError Si hay problemas al obtener la lista de clientes.
-     * @throws FlowAPIError Si hay problemas con la API de Flow.
+     * @param {FlowGetCustomerListRequest} data Datos de la petición de la lista de clientes.
+     * @returns {Promise<FloeGetCustomerListResponse>} Objeto con la información de la lista de clientes.
+     * @throws {FlowGetCustomerError} Si hay problemas al obtener la lista de clientes.
+     * @throws {FlowAPIError} Si hay problemas con la API de Flow.
      */
     list: (
       data: FlowGetCustomerListRequest,
     ) => Promise<FlowGetCustomerListResponse>;
     card: {
       /**
-       * Envía a un cliente a registrar su tarjeta de crédito para poder efectuarle cargos automáticos. El servicio responde con la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma:
-       * url + "?token=" + token
-       * @param data FlowRegisterCardRequest Datos de la petición de registro de tarjeta.
-       * @returns Promise<FlowRegisterCardResponse> Objeto con la información de la transacción.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
-       * @throws FlowRegisterCardError Si hay problemas al registrar la tarjeta.
+       * Registra una tarjeta de crédito para un cliente en Flow.
+       * @param {FlowRegisterCardRequest} data Datos de la solicitud de registro de tarjeta.
+       * @returns {Promise<FlowRegisterCardResponse>} Información de la transacción con URL de redirección.
+       * @throws {FlowRegisterCardError}
+       * @throws {FlowAPIError}
        */
       register: (
         data: FlowRegisterCardRequest,
       ) => Promise<FlowRegisterCardResponse>;
       /**
-       * Este servicio retorna el resultado del registro de la tarjeta de crédito de un cliente.
-       * @param token Token de la transacción de registro de tarjeta.
-       * @returns Promise<FlowRegisterCardStatusResponse> Objeto con la información del registro de la tarjeta.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
-       * @throws FlowRegisterCardError Si hay problemas al registrar la tarjeta.
+       * Obtiene el estado del registro de tarjeta de un cliente.
+       * @param {string} token Token de la transacción.
+       * @returns {Promise<FlowRegisterCardStatusResponse> } Estado del registro de la tarjeta.
+       * @throws {FlowRegisterCardStatusError}
+       * @throws {FlowAPIError}
        */
       status: (token: string) => Promise<FlowRegisterCardStatusResponse>;
       /**
-       * Este servicio permite eliminar el registro de la tarjeta de crédito de un cliente. Al eliminar el registro no se podrá hacer cargos automáticos y Flow enviará un cobro por email.
-       * @param customerId Identificador del cliente.
-       * @returns Promise<FlowDeleteCardResponse> Objeto con la información del registro de la tarjeta eliminado.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
-       * @throws FlowDeleteCardError Si hay problemas al eliminar el registro de la tarjeta.
+       * Elimina el registro de la tarjeta de crédito de un cliente.
+       * @param {string} customerId Identificador del cliente.
+       * @returns {Promise<FlowDeleteCardResponse>} Información del registro de tarjeta eliminado.
+       * @throws {FlowDeleteCardError} Si hay problemas al eliminar el registro de la tarjeta.
+       * @throws {FlowDeleteCardError} Si hay problemas al eliminar el registro de la tarjeta.
        */
       delete: (customerId: string) => Promise<FlowDeleteCardResponse>;
       /**
        * Este servicio permite efectuar un cargo automático en la tarjeta de crédito previamente registrada por el cliente. Si el cliente no tiene registrada una tarjeta el metodo retornará error.
-       * @param data FlowChargeCardRequest Datos de la petición de cargo.
-       * @returns Promise<FlowChargeCardResponse> Objeto con la información del cargo.
-       * @throws FlowChargeCardError Si hay problemas al realizar el cargo.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       * @param {FlowChargeCardRequest} data Datos de la petición de cargo.
+       * @returns {Promise<FlowChargeCardResponse>} Objeto con la información del cargo.
+       * @throws {FlowChargeCardError} Si hay problemas al realizar el cargo.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
        */
       charge: (data: FlowChargeCardRequest) => Promise<FlowChargeCardResponse>;
       /**
        * Este servicio envía un cobro a un cliente. Si el cliente tiene registrada una tarjeta de crédito se le hace un cargo automático, si no tiene registrada una tarjeta de credito se genera un cobro. Si se envía el parámetro byEmail = 1, se genera un cobro por email.
-       * @param data FlowSendChargeRequest Datos de la petición de cargo.
-       * @returns Promise<FlowSendChargeResponse> Objeto con la información del cargo.
-       * @throws FlowSendChargeCardError Si hay problemas al realizar el cargo.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       * @param {FlowSendChargeRequest} data Datos de la petición de cargo.
+       * @returns {Promise<FlowSendChargeResponse>} Objeto con la información del cargo.
+       * @throws {FlowSendChargeCardError} Si hay problemas al realizar el cargo.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
        */
       sendCharge: (
         data: FlowSendChargeRequest,
       ) => Promise<FlowSendChargeResponse>;
       /**
        * Este servicio envía de forma masiva un lote de cobros a clientes. Similar al servicio collect pero masivo y asíncrono. Este servicio responde con un token identificador del lote y el número de filas recibidas.
-       * @param data FlowSendMassiveChargeCardRequest Datos de la petición de cargo masivo.
-       * @returns Promise<FlowSendMassiveChargeCardResponse> Objeto con la información del cargo masivo.
-       * @throws FlowSendMassiveChargeCardError Si hay problemas al realizar el cargo.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       * @param {FlowSendMassiveChargeCardRequest} data Datos de la petición de cargo masivo.
+       * @returns {Promise<FlowSendMassiveChargeCardResponse>} Objeto con la información del cargo masivo.
+       * @throws {FlowSendMassiveChargeCardError} Si hay problemas al realizar el cargo.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
        */
       sendMassiveCharge: (
         data: FlowSendMassiveChargeCardRequest,
       ) => Promise<FlowSendMassiveChargeCardResponse>;
       /**
        * Este servicio permite consultar el estado de un lote de cobros enviados por medio del servicio batchCollect.
-       * @param token Token del lote de cobros.
-       * @returns Promise<FlowMassiveChargeCardStatusResponse> Objeto con la información del estado del lote de cobros.
-       * @throws FlowMassiveChargeCardStatusError Si hay problemas al ver el estado del lote de cobros.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       * @param {string} token Token del lote de cobros.
+       * @returns {Promise<FlowMassiveChargeCardStatusResponse>} Objeto con la información del estado del lote de cobros.
+       * @throws {FlowMassiveChargeCardStatusError} Si hay problemas al ver el estado del lote de cobros.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
        */
       massiveChargeStatus: (
         token: string,
       ) => Promise<FlowMassiveChargeCardStatusResponse>;
       /**
        * Este servicio permite reversar un cargo previamente efectuado a un cliente. Para que el cargo se reverse, este servicio debe ser invocado dentro de las 24 horas siguientes a efectuado el cargo, las 24 horas rigen desde las 14:00 hrs, es decir, si el cargo se efectuó a las 16:00 hrs, este puede reversarse hasta las 14:00 hrs del día siguiente.\n\n Puede enviar como parámetros el commerceOrder o el flowOrder.
-       * @param data FlowReverseChargeCardRequest Datos de la petición de reversa.
-       * @returns Promise<FlowReverseChargeCardResponse> Objeto con la información de la reversa.
-       * @throws FlowReverseChargeCardError Si hay problemas al realizar la reversa.
-       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       * @param {FlowReverseChargeCardRequest} data Datos de la petición de reversa.
+       * @returns {Promise<FlowReverseChargeCardResponse>} Objeto con la información de la reversa.
+       * @throws {FlowReverseChargeCardError} Si hay problemas al realizar la reversa.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
        *
        */
       reverseCharge: (
         data: FlowReverseChargeCardRequest,
       ) => Promise<FlowReverseChargeCardResponse>;
+      /**
+       * Este servicio obtiene la lista paginada de los cargos efectuados a un cliente.
+       * @param {FlowListChargesRequest} data Datos de la petición de lista de cargos.
+       * @returns {Promise<FlowListChargesResponse>} Objeto con la información de la lista de cargos.
+       * @throws {FlowListChargesCardError} Si hay problemas al listar los cargos.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+       *
+       */
+      listCharges: (
+        data: FlowListChargesRequest,
+      ) => Promise<FlowListChargesResponse>;
+      /**
+       * Este servicio obtiene la lista paginada de los intentos de cargos fallidos a un cliente.
+       * @param {FlowListFailedChargesRequest} data Datos de la petición de lista de cargos fallidos.
+       * @returns {Promise<FlowListFailedChargesResponse>} Objeto con la información de la lista de cargos fallidos.
+       * @throws {FlowListFailedChargesCardError} Si hay problemas al listar los cargos fallidos.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+       */
+      listFailedCharges: (
+        data: FlowListFailedChargesRequest,
+      ) => Promise<FlowListFailedChargesResponse>;
+    };
+    /**
+     * Operaciones relacionadas con las suscripciones de un cliente.
+     */
+    subscriptions: {
+      /**
+       * Este servicio obtiene la lista paginada de las suscripciones de un cliente.
+       * @param {FlowListPaginatedSubscriptionsRequest} data  Datos de la petición de lista de suscripciones.
+       * @returns {Promise<FlowListPaginatedSubscriptionsResponse>} Objeto con la información de la lista de suscripciones.
+       * @throws {FlowListPaginatedSubscriptionsError} Si hay problemas al listar las suscripciones.
+       * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+       */
+      listPaginated: (
+        data: FlowListPaginatedSubscriptionsRequest,
+      ) => Promise<FlowListPaginatedSubscriptionsResponse>;
     };
   };
 
@@ -216,18 +260,23 @@ export default class FlowCustomers {
         sendMassiveCharge: this.sendMassiveChargeCard.bind(this),
         massiveChargeStatus: this.massiveChargeCardStatus.bind(this),
         reverseCharge: this.reverseChargeCard.bind(this),
+        listCharges: this.listChargeCard.bind(this),
+        listFailedCharges: this.listFailedChargesCard.bind(this),
+      },
+      subscriptions: {
+        listPaginated: this.listPaginatedSubscriptions.bind(this),
       },
     };
   }
   /**
    * Realiza una petición a la API de Flow.
-   * @param endpoint URL del endpoint de la API.
-   * @param data Datos a enviar en la petición.
-   * @param method Método de la petición (POST o GET).
-   * @param errorParam Error a lanzar en caso de error.
-   * @returns Promise<T> Respuesta de la API.
-   * @throws FlowAPIError Si hay problemas con la API de Flow.
-   * @throws Error Si hay problemas al realizar la petición.
+   * @param {string} endpoint URL del endpoint de la API.
+   * @param {string} data Datos a enviar en la petición.
+   * @param {string} method Método de la petición (POST o GET).
+   * @param {(err: unknown) => never} error - Error a lanzar en caso de error.
+   * @returns {Promise<T>} Respuesta de la API.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   * @throws {Error} Si hay problemas al realizar la petición.
    */
   private async request<T>(
     endpoint: string,
@@ -262,9 +311,10 @@ export default class FlowCustomers {
 
   /**
    * Crea un nuevo cliente en Flow.
-   * @param data Datos del cliente a crear.
-   * @returns Objeto con la información del cliente creado.
-   * @throws FlowCreateCustomerError | FlowAPIError
+   * @param {FlowCreateCustomerRequest} data Datos del cliente a crear.
+   * @returns {Promise<FlowCreateCustomerResponse>} Objeto con la información del cliente creado.
+   * @throws {FlowCreateCustomerError}
+   * @throws {FlowAPIError}
    */
   private async createCustomer(
     data: FlowCreateCustomerRequest,
@@ -281,9 +331,10 @@ export default class FlowCustomers {
 
   /**
    * Edita un cliente existente en Flow.
-   * @param data Datos del cliente a editar.
-   * @returns Objeto con la información del cliente editado.
-   * @throws FlowEditCustomerError | FlowAPIError
+   * @param {FlowEditCustomerRequest} data Datos del cliente a editar.
+   * @returns {Promise<FlowEditCustomerResponse>} Objeto con la información del cliente editado.
+   * @throws {FlowEditCustomerError}¿
+   * @throws {FlowAPIError}
    */
   private async editCustomer(
     data: FlowEditCustomerRequest,
@@ -300,9 +351,10 @@ export default class FlowCustomers {
 
   /**
    * Elimina un cliente en Flow.
-   * @param customerId Identificador del cliente a eliminar.
-   * @returns Objeto con la información del cliente eliminado.
-   * @throws FlowDeleteCustomerError | FlowAPIError
+   * @param {string} customerId Identificador del cliente a eliminar.
+   * @returns {Promise<FlowDeleteCustomerResponse>} Objeto con la información del cliente eliminado.
+   * @throws {FlowDeleteCustomerError}
+   * @throws {FlowAPIError}
    */
   private async deleteCustomer(
     customerId: string,
@@ -319,9 +371,10 @@ export default class FlowCustomers {
 
   /**
    * Obtiene los datos de un cliente por su ID.
-   * @param customerId Identificador del cliente.
-   * @returns Objeto con la información del cliente.
-   * @throws FlowGetCustomerError | FlowAPIError
+   * @param {string} customerId Identificador del cliente.
+   * @returns {Promise<FlowGetCustomerResponse>} Objeto con la información del cliente.
+   * @throws {FlowGetCustomerError}
+   * @throws {FlowAPIError}
    */
   private async getCustomer(
     customerId: string,
@@ -338,9 +391,10 @@ export default class FlowCustomers {
 
   /**
    * Obtiene una lista de clientes con paginación y filtros.
-   * @param data Parámetros de paginación y filtro.
-   * @returns Lista de clientes paginada.
-   * @throws FlowGetCustomerListError | FlowAPIError
+   * @param {FlowGetCustomerListRequest} data Parámetros de paginación y filtro.
+   * @returns {Promise<FlowGetCustomerListResponse>} Lista de clientes paginada.
+   * @throws {FlowGetCustomerListError}
+   * @throws {FlowAPIError}
    */
   private async getCustomerList(
     data: FlowGetCustomerListRequest,
@@ -357,9 +411,10 @@ export default class FlowCustomers {
 
   /**
    * Registra una tarjeta de crédito para un cliente en Flow.
-   * @param data Datos de la solicitud de registro de tarjeta.
-   * @returns Información de la transacción con URL de redirección.
-   * @throws FlowRegisterCardError | FlowAPIError
+   * @param {FlowRegisterCardRequest} data Datos de la solicitud de registro de tarjeta.
+   * @returns {Promise<FlowRegisterCardResponse>} Información de la transacción con URL de redirección.
+   * @throws {FlowRegisterCardError}
+   * @throws {FlowAPIError}
    */
   private async registerCard(
     data: FlowRegisterCardRequest,
@@ -377,9 +432,10 @@ export default class FlowCustomers {
 
   /**
    * Obtiene el estado del registro de tarjeta de un cliente.
-   * @param token Token de la transacción.
-   * @returns Estado del registro de la tarjeta.
-   * @throws FlowRegisterCardStatusError | FlowAPIError
+   * @param {string} token Token de la transacción.
+   * @returns {Promise<FlowRegisterCardStatusResponse> } Estado del registro de la tarjeta.
+   * @throws {FlowRegisterCardStatusError}
+   * @throws {FlowAPIError}
    */
   private async registerCardStatus(
     token: string,
@@ -396,9 +452,10 @@ export default class FlowCustomers {
 
   /**
    * Elimina el registro de la tarjeta de crédito de un cliente.
-   * @param customerId Identificador del cliente.
-   * @returns Información del registro de tarjeta eliminado.
-   * @throws FlowDeleteCardError | FlowAPIError
+   * @param {string} customerId Identificador del cliente.
+   * @returns {Promise<FlowDeleteCardResponse>} Información del registro de tarjeta eliminado.
+   * @throws {FlowDeleteCardError} Si hay problemas al eliminar el registro de la tarjeta.
+   * @throws {FlowDeleteCardError} Si hay problemas al eliminar el registro de la tarjeta.
    */
   private async deleteCard(
     customerId: string,
@@ -415,10 +472,10 @@ export default class FlowCustomers {
 
   /**
    * Este servicio permite efectuar un cargo automático en la tarjeta de crédito previamente registrada por el cliente. Si el cliente no tiene registrada una tarjeta el metodo retornará error.
-   * @param data FlowChargeCardRequest Datos de la petición de cargo.
-   * @returns Promise<FlowChargeCardResponse> Objeto con la información del cargo.
-   * @throws FlowChargeCardError Si hay problemas al realizar el cargo.
-   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @param {FlowChargeCardRequest} data Datos de la petición de cargo.
+   * @returns {Promise<FlowChargeCardResponse>} Objeto con la información del cargo.
+   * @throws {FlowChargeCardError} Si hay problemas al realizar el cargo.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    */
   private async chargeCard(
     data: FlowChargeCardRequest,
@@ -434,10 +491,10 @@ export default class FlowCustomers {
   }
   /**
    * Este servicio envía un cobro a un cliente. Si el cliente tiene registrada una tarjeta de crédito se le hace un cargo automático, si no tiene registrada una tarjeta de credito se genera un cobro. Si se envía el parámetro byEmail = 1, se genera un cobro por email.
-   * @param data FlowSendChargeRequest Datos de la petición de cargo.
-   * @returns Promise<FlowSendChargeResponse> Objeto con la información del cargo.
-   * @throws FlowSendChargeCardError Si hay problemas al realizar el cargo.
-   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @param {FlowSendChargeRequest} data Datos de la petición de cargo.
+   * @returns {Promise<FlowSendChargeResponse>} Objeto con la información del cargo.
+   * @throws {FlowSendChargeCardError} Si hay problemas al realizar el cargo.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    */
   private async sendChargeCard(
     data: FlowSendChargeRequest,
@@ -456,10 +513,10 @@ export default class FlowCustomers {
   }
   /**
    * Este servicio envía de forma masiva un lote de cobros a clientes. Similar al servicio collect pero masivo y asíncrono. Este servicio responde con un token identificador del lote y el número de filas recibidas.
-   * @param data FlowSendMassiveChargeCardRequest Datos de la petición de cargo masivo.
-   * @returns Promise<FlowSendMassiveChargeCardResponse> Objeto con la información del cargo masivo.
-   * @throws FlowSendMassiveChargeCardError Si hay problemas al realizar el cargo.
-   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @param {FlowSendMassiveChargeCardRequest} data Datos de la petición de cargo masivo.
+   * @returns {Promise<FlowSendMassiveChargeCardResponse>} Objeto con la información del cargo masivo.
+   * @throws {FlowSendMassiveChargeCardError} Si hay problemas al realizar el cargo.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    */
   private async sendMassiveChargeCard(
     data: FlowSendMassiveChargeCardRequest,
@@ -481,10 +538,10 @@ export default class FlowCustomers {
   }
   /**
    * Este servicio permite consultar el estado de un lote de cobros enviados por medio del servicio batchCollect.
-   * @param token Token del lote de cobros.
-   * @returns Promise<FlowMassiveChargeCardStatusResponse> Objeto con la información del estado del lote de cobros.
-   * @throws FlowMassiveChargeCardStatusError Si hay problemas al ver el estado del lote de cobros.
-   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @param {string} token Token del lote de cobros.
+   * @returns {Promise<FlowMassiveChargeCardStatusResponse>} Objeto con la información del estado del lote de cobros.
+   * @throws {FlowMassiveChargeCardStatusError} Si hay problemas al ver el estado del lote de cobros.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    */
   private async massiveChargeCardStatus(
     token: string,
@@ -500,10 +557,10 @@ export default class FlowCustomers {
   }
   /**
    * Este servicio permite reversar un cargo previamente efectuado a un cliente. Para que el cargo se reverse, este servicio debe ser invocado dentro de las 24 horas siguientes a efectuado el cargo, las 24 horas rigen desde las 14:00 hrs, es decir, si el cargo se efectuó a las 16:00 hrs, este puede reversarse hasta las 14:00 hrs del día siguiente.\n\n Puede enviar como parámetros el commerceOrder o el flowOrder.
-   * @param data FlowReverseChargeCardRequest Datos de la petición de reversa.
-   * @returns Promise<FlowReverseChargeCardResponse> Objeto con la información de la reversa.
-   * @throws FlowReverseChargeCardError Si hay problemas al realizar la reversa.
-   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @param {FlowReverseChargeCardRequest} data Datos de la petición de reversa.
+   * @returns {Promise<FlowReverseChargeCardResponse>} Objeto con la información de la reversa.
+   * @throws {FlowReverseChargeCardError} Si hay problemas al realizar la reversa.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    *
    */
   private async reverseChargeCard(
@@ -515,6 +572,64 @@ export default class FlowCustomers {
       'post',
       (e) => {
         throw new FlowReverseChargeCardError((e as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio obtiene la lista paginada de los cargos efectuados a un cliente.
+   * @param {FlowListChargesRequest} data Datos de la petición de lista de cargos.
+   * @returns {Promise<FlowListChargesResponse>} Objeto con la información de la lista de cargos.
+   * @throws {FlowListChargesCardError} Si hay problemas al listar los cargos.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   *
+   */
+  private async listChargeCard(
+    data: FlowListChargesRequest,
+  ): Promise<FlowListChargesResponse> {
+    return await this.request<FlowListChargesResponse>(
+      '/getCharges',
+      data,
+      'get',
+      (e) => {
+        throw new FlowListChargesCardError((e as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio obtiene la lista paginada de los intentos de cargos fallidos a un cliente.
+   * @param {FlowListFailedChargesRequest} data Datos de la petición de lista de cargos fallidos.
+   * @returns {Promise<FlowListFailedChargesResponse>} Objeto con la información de la lista de cargos fallidos.
+   * @throws {FlowListFailedChargesCardError} Si hay problemas al listar los cargos fallidos.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  private async listFailedChargesCard(
+    data: FlowListFailedChargesRequest,
+  ): Promise<FlowListFailedChargesResponse> {
+    return await this.request<FlowListChargesResponse>(
+      '/getChargeAttemps',
+      data,
+      'get',
+      (e) => {
+        throw new FlowListFailedChargesCardError((e as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio obtiene la lista paginada de las suscripciones de un cliente.
+   * @param {FlowListPaginatedSubscriptionsRequest} data  Datos de la petición de lista de suscripciones.
+   * @returns {Promise<FlowListPaginatedSubscriptionsResponse>} Objeto con la información de la lista de suscripciones.
+   * @throws {FlowListPaginatedSubscriptionsError} Si hay problemas al listar las suscripciones.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  private async listPaginatedSubscriptions(
+    data: FlowListPaginatedSubscriptionsRequest,
+  ): Promise<FlowListPaginatedSubscriptionsResponse> {
+    return await this.request<FlowListChargesResponse>(
+      '/getSubscriptions',
+      data,
+      'get',
+      (e) => {
+        throw new FlowListPaginatedSubscriptionsError((e as Error).message);
       },
     );
   }

@@ -325,12 +325,12 @@ type FlowTransactionsReceivedByDateResponse = {
    * Indica si existen más páginas de resultados.
    * `true` si hay más páginas disponibles, `false` si es la última página.
    */
-  hasMore: boolean;
+  hasMore: 0 | 1;
 
   /**
    * Arreglo de registros de la página actual.
    */
-  data: Array<Record<string, unknown>>;
+  data: string;
 };
 
 /**
@@ -346,12 +346,12 @@ type FlowPaymentsReceivedByDateResponse = {
    * Indica si existen más páginas de resultados.
    * `true` si hay más páginas disponibles, `false` si es la última página.
    */
-  hasMore: boolean;
+  hasMore: 0 | 1;
 
   /**
    * Arreglo de registros de la página actual.
    */
-  data: Array<Record<string, unknown>>;
+  data: string;
 };
 
 /**
@@ -946,12 +946,12 @@ type FlowGetCustomerListResponse = {
    * Indica si existen más páginas de resultados.
    * `true` si hay más páginas disponibles, `false` si es la última página.
    */
-  hasMore: boolean;
+  hasMore: 0 | 1;
 
   /**
    * Arreglo de registros de la página actual.
    */
-  data: Array<Record<string, unknown>>;
+  data: string;
 };
 /**
  * Representa la información de una tarjeta de crédito registrada en Flow.
@@ -1550,18 +1550,22 @@ type FlowMassiveChargeCardStatusResponse = {
     errorMsg: string;
   }>;
 };
-
+/**
+ * Representa la información de la reversa de un cargo a la tarjeta de crédito.
+ */
 type FlowReverseChargeCardRequest = {
   /**
    * Identificador de la orden del comercio
    */
-  commerceOrder: string;
+  commerceOrder?: string;
   /**
    * Identificador de la orden de Flow
    */
-  flowOrder: number;
+  flowOrder?: number;
 };
-
+/**
+ * Representa la respuesta de la API de Flow de la reversa de un cargo a la tarjeta de crédito.
+ */
 type FlowReverseChargeCardResponse = {
   /**
    * Estado de la reversa:
@@ -1573,6 +1577,143 @@ type FlowReverseChargeCardResponse = {
    * Mensaje resultado de la reversa
    */
   message: string;
+};
+/**
+ * Representa la información de los cobros en Flow.
+ */
+type FlowListChargesRequest = {
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start?: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+   */
+  limit?: number;
+  /**
+   * Filtro por descripción del cargo
+   */
+  filter?: string;
+  /**
+   * Filtro por fecha de inicio (<yyyy-mm-dd>)
+   */
+  fromDate?: string;
+  /**
+   * Filtro por estado del cargo
+   */
+  status?: number;
+};
+/**
+ * Representa la respuesta de la API de Flow de la lista de cobros.
+ */
+type FlowListChargesResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   * El número total de registros encontrados
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * arreglo de registros de la página
+   * ej: [{item list 1}{item list 2}{item list n..}
+   */
+  data: string;
+};
+/**
+ * Representa la información de los cobros fallidos en Flow.
+ */
+type FlowListFailedChargesRequest = {
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start?: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+   */
+  limit?: number;
+  /**
+   * Filtro por descripción del error
+   */
+  filter?: string;
+  /**
+   * Filtro por fecha de inicio (<yyyy-mm-dd>)
+   */
+  fromDate?: string;
+  /**
+   * Filtro por el número de la orden del comercio
+   */
+  commerceOrder?: number;
+};
+/**
+ * Representa la respuesta de la API de Flow de la lista de cobros fallidos.
+ */
+type FlowListFailedChargesResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   * El número total de registros encontrados
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * arreglo de registros de la página
+   * ej: [{item list 1}{item list 2}{item list n..}
+   */
+  data: string;
+};
+/**
+ * Lista paginada de suscripciones de un cliente
+ */
+type FlowListPaginatedSubscriptionsRequest = {
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start?: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+   */
+  limit?: number;
+  /**
+   * filtro por el identificador de la suscripción
+   */
+  filter?: string;
+};
+
+type FlowListPaginatedSubscriptionsResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   * El número total de registros encontrados
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * arreglo de registros de la página
+   * ej: [{item list 1}{item list 2}{item list n..}
+   */
+  data: string;
 };
 
 export type {
@@ -1615,4 +1756,10 @@ export type {
   FlowMassiveChargeCardStatusResponse,
   FlowReverseChargeCardRequest,
   FlowReverseChargeCardResponse,
+  FlowListChargesRequest,
+  FlowListChargesResponse,
+  FlowListFailedChargesRequest,
+  FlowListFailedChargesResponse,
+  FlowListPaginatedSubscriptionsRequest,
+  FlowListPaginatedSubscriptionsResponse,
 };

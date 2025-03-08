@@ -255,3 +255,31 @@ export class FlowReverseChargeCardError extends FlowError {
     this.name = 'FlowReverseChargeCardError';
   }
 }
+
+/**
+ * Error cuando hay problemas al listar paginadamente los cargos efectuados a un cliente
+ */
+export class FlowListChargesCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar cargos efectuados en la tarjeta: ${message}`);
+    this.name = 'FlowListChargesCardError';
+  }
+}
+/**
+ * Error cuando hay problemas al listar paginadamente los cargos fallidos a un cliente
+ */
+export class FlowListFailedChargesCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar cargos fallidos en la tarjeta: ${message}`);
+    this.name = 'FlowListFailedChargesCardError';
+  }
+}
+/**
+ * Error cuando hay problemas al listar paginadamente los cobros efectuados a un cliente
+ */
+export class FlowListPaginatedSubscriptionsError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar suscripciones paginadas: ${message}`);
+    this.name = 'FlowListPaginatedSubscriptionsError';
+  }
+}

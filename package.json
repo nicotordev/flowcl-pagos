@@ -46,6 +46,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@nicotordev/flowcl-pagos": "^4.0.0",
     "axios": "^1.8.2",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
