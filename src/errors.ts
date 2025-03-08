@@ -52,3 +52,13 @@ export class FlowAPIError extends FlowError {
     this.statusCode = statusCode;
   }
 }
+
+/**
+ * Error cuando hay problemas al obtener los pagos recibidos por fecha.
+ */
+export class PaymentsReceivedByDateError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener los pagos recibidos por fecha: ${message}`);
+    this.name = 'PaymentsReceivedByDateError';
+  }
+}
