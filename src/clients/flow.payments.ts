@@ -48,96 +48,91 @@ export default class FlowPayments {
      */
     status: {
       /**
-       * Este método se utiliza para obtener el estado de un pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
-       * @param token Token único del pago a consultar.
-       * @returns Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
-       * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
-       * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+       * Obtiene el estado de un pago en Flow.
+       * @param {string} token Token del pago a consultar.
+       * @returns {Promise<FlowPaymentStatusResponse>} Respuesta de Flow con el estado del pago.
+       * @throws {FlowPaymentStatusError} Si ocurre un error al obtener el estado del pago.
+       * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
        */
       byToken: (token: string) => Promise<FlowPaymentStatusResponse>;
 
       /**
-       * Este método permite obtener el estado de un pago en base al commerceId
-       * @param commerceId Identificador único del comercio asignado al pago.
-       * @returns Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
-       * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
-       * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+       * Obtiene el estado de un pago utilizando el identificador de comercio.
+       * @param {string} commerceId Identificador único del comercio asignado al pago.
+       * @returns {Promise<FlowPaymentStatusResponse>} Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
+       * @throws {FlowPaymentStatusError} Si ocurre un error al obtener el estado del pago.
+       * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
        */
       byCommerceId: (commerceId: string) => Promise<FlowPaymentStatusResponse>;
 
       /**
-       * Este método permite obtener el estado de un pago en base al flowOrder.
-       * @param flowOrder Número de orden de Flow asignado al pago.
-       * @returns Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
-       * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
-       * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+       * Obtiene el estado de un pago utilizando el número de orden de Flow.
+       * @param {number} flowOrder Número de orden de Flow asignado al pago.
+       * @returns {Promise<FlowPaymentStatusResponse>} Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
+       * @throws {FlowPaymentStatusError} Si ocurre un error al obtener el estado del pago.
+       * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
        */
       byFlowOrderNumber: (
         flowOrder: number,
       ) => Promise<FlowPaymentStatusResponse>;
     };
     /**
-     * Este método permite obtener la lista paginada de pagos recibidos en un día.Los objetos pagos de la lista tienen la misma estructura de los retornados en los servicios payment/getStatus
-     * @param data FlowPaymentsReceivedByDateRequest con la fecha en formato YYYY-MM-DD
-     * @returns FlowPaymentsReceivedByDateResponse con la lista de pagos recibidos en la fecha indicada.
-     * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
-     * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+     * Obtiene la lista de pagos recibidos en una fecha específica.
+     * @param {FlowPaymentsReceivedByDateRequest} data con la fecha en formato YYYY-MM-DD
+     * @returns {Promise<FlowPaymentsReceivedByDateResponse>} con la lista de pagos recibidos en la fecha indicada.
+     * @throws {PaymentsReceivedByDateError} Si ocurre un error al obtener la lista de pagos recibidos.
+     * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
      */
     listPaymentsByDate: (
       data: FlowPaymentsReceivedByDateRequest,
     ) => Promise<FlowPaymentsReceivedByDateResponse>;
-
+    /**
+     * Obtiene la lista de transacciones recibidas en una fecha específica.
+     * @param {FlowTransactionsReceivedByDateRequest} data con la fecha en formato YYYY-MM-DD
+     * @returns {Promise<FlowTransactionsReceivedByDateResponse>} con la lista de transacciones recibidas en la fecha indicada.
+     * @throws {TransactionsReceivedByDateError} Si ocurre un error al obtener la lista de transacciones recibidas.
+     * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
+     */
     listTransactionsByDate: (
       data: FlowTransactionsReceivedByDateRequest,
     ) => Promise<FlowTransactionsReceivedByDateResponse>;
-
-    /**
-     *
-     * Este método se utiliza para obtener el estado de un pago. A diferencia del /getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
-     * @param token Token único del pago a consultar.
-     * @returns FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
-     * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
-     * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
-     *
-     */
     statusExtended: {
       /**
-       * Este método se utiliza para obtener el estado de un pago. A diferencia del /getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
-       * @param token Token único del pago a consultar.
-       * @returns  FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
-       * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
-       * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
-       * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
+       * Obtiene el estado extendido de un pago en base al token
+       * @param {string} token Token único del pago a consultar.
+       * @returns {Promise<FlowPaymentsStatusExtendedResponse>} con la lista de pagos recibidos en la fecha indicada.
+       * @throws {PaymentsReceivedByDateError} Si ocurre un error al obtener la lista de pagos recibidos.
+       * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
        */
       byToken: (token: string) => Promise<FlowPaymentsStatusExtendedResponse>;
       /**
-       * Este método se utiliza para obtener el estado de un pago. A diferencia del /getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
-       * @param flowOrder Número de orden de Flow asignado al pago, por ejemplo 68977654.
-       * @returns  FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
-       * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
-       * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
-       * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
-       */
+       * Obtiene el estado extendido de un pago en base al flowOrder
+       * @param {number} flowOrder numero de orden de Flow asignado al pago por ejemplo 68977654
+       * @returns {Promise<FlowPaymentsStatusExtendedResponse>} con la lista de pagos recibidos en la fecha indicada.
+       * @throws {PaymentsReceivedByDateError} Si ocurre un error al obtener la lista de pagos recibidos.
+       * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
+       *
+       * */
       byFlowOrder: (
         flowOrder: number,
       ) => Promise<FlowPaymentsStatusExtendedResponse>;
     };
     /**
      * Este método permite crear una orden de pago a Flow y recibe como respuesta la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma: url + "?token=" +token Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
-     * @param data FlowCreatePaymentRequest con los datos necesarios para crear un pago.
-     * @returns FlowCreatePaymentResponse con la respuesta de Flow al crear un pago.
-     * @throws FlowCreatePaymentError Si ocurre un error al crear el pago.
-     * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+     * @param {FlowCreatePaymentRequest} data con los datos necesarios para crear un pago.
+     * @returns {Promise<FlowCreatePaymentResponse>} con la respuesta de Flow al crear un pago.
+     * @throws {FlowCreatePaymentError} Si ocurre un error al crear el pago.
+     * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
      */
     createPayment: (
       data: FlowCreatePaymentRequest,
     ) => Promise<FlowCreatePaymentResponse>;
     /**
      * Permite generar un cobro por email. Flow emite un email al pagador que contiene la información de la Orden de pago y el link de pago correspondiente. Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
-     * @param data FlowCreatePaymentByEmailRequest con los datos necesarios para crear un pago.
-     * @returns FlowCreatePaymentByEmailResponse con la respuesta de Flow al crear un pago.
-     * @throws FlowCreatePaymentByEmailError Si ocurre un error al crear el pago.
-     * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+     * @param {FlowCreatePaymentByEmailRequest} data con los datos necesarios para crear un pago.
+     * @returns {Promise<FlowCreatePaymentByEmailResponse>} con la respuesta de Flow al crear un pago.
+     * @throws {FlowCreatePaymentByEmailError} Si ocurre un error al crear el pago.
+     * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
      */
     createPaymentByEmail: (
       data: FlowCreatePaymentByEmailRequest,
@@ -185,13 +180,14 @@ export default class FlowPayments {
   }
   /**
    * Realiza una petición a la API de Flow.
-   * @param endpoint URL del endpoint de la API.
-   * @param data Datos a enviar en la petición.
-   * @param method Método de la petición (POST o GET).
-   * @param errorParam Error a lanzar en caso de error.
-   * @returns Promise<T> Respuesta de la API.
-   * @throws FlowAPIError Si hay problemas con la API de Flow.
-   * @throws Error Si hay problemas al realizar la petición.
+   * @param {string} endpoint URL del endpoint de la API.
+   * @param {string} data Datos a enviar en la petición.
+   * @param {'post' | 'get'} method Método de la petición (POST o GET).
+   * @param {(e: unknown) => never} error Error a lanzar en caso de error.
+   * @param {(data: P) => P} [modifyResponse] Función para modificar la respuesta de la API.
+   * @returns {Promise<T>} Respuesta de la API.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   * @throws {Error} Si hay problemas al realizar la petición.
    */
   private async request<T, P>(
     endpoint: string,
@@ -231,10 +227,10 @@ export default class FlowPayments {
 
   /**
    * Obtiene el estado de un pago en Flow.
-   * @param token Token del pago a consultar.
-   * @returns Respuesta de Flow con el estado del pago.
-   * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {string} token Token del pago a consultar.
+   * @returns {Promise<FlowPaymentStatusResponse>} Respuesta de Flow con el estado del pago.
+   * @throws {FlowPaymentStatusError} Si ocurre un error al obtener el estado del pago.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async getPaymentStatusByToken(
     token: string,
@@ -257,10 +253,10 @@ export default class FlowPayments {
 
   /**
    * Obtiene el estado de un pago utilizando el identificador de comercio.
-   * @param commerceId Identificador único del comercio asignado al pago.
-   * @returns Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
-   * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {string} commerceId Identificador único del comercio asignado al pago.
+   * @returns {Promise<FlowPaymentStatusResponse>} Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
+   * @throws {FlowPaymentStatusError} Si ocurre un error al obtener el estado del pago.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async getPaymentStatusByCommerceId(
     commerceId: string,
@@ -283,10 +279,10 @@ export default class FlowPayments {
 
   /**
    * Obtiene el estado de un pago utilizando el número de orden de Flow.
-   * @param flowOrder Número de orden de Flow asignado al pago.
-   * @returns Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
-   * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {number} flowOrder Número de orden de Flow asignado al pago.
+   * @returns {Promise<FlowPaymentStatusResponse>} Una promesa que resuelve con la respuesta de Flow sobre el estado del pago.
+   * @throws {FlowPaymentStatusError} Si ocurre un error al obtener el estado del pago.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async getPaymentStatusByFlowOrderNumber(
     flowOrder: number,
@@ -311,10 +307,10 @@ export default class FlowPayments {
   }
   /**
    * Obtiene la lista de pagos recibidos en una fecha específica.
-   * @param data FlowPaymentsReceivedByDateRequest con la fecha en formato YYYY-MM-DD
-   * @returns FlowPaymentsReceivedByDateResponse con la lista de pagos recibidos en la fecha indicada.
-   * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {FlowPaymentsReceivedByDateRequest} data con la fecha en formato YYYY-MM-DD
+   * @returns {Promise<FlowPaymentsReceivedByDateResponse>} con la lista de pagos recibidos en la fecha indicada.
+   * @throws {PaymentsReceivedByDateError} Si ocurre un error al obtener la lista de pagos recibidos.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async getPaymentsReceivedByDate(
     data: FlowPaymentsReceivedByDateRequest,
@@ -328,10 +324,10 @@ export default class FlowPayments {
   }
   /**
    * Obtiene el estado extendido de un pago en base al token
-   * @param token Token único del pago a consultar.
-   * @returns FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
-   * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {string} token Token único del pago a consultar.
+   * @returns {Promise<FlowPaymentsStatusExtendedResponse>} con la lista de pagos recibidos en la fecha indicada.
+   * @throws {PaymentsReceivedByDateError} Si ocurre un error al obtener la lista de pagos recibidos.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async getStatusExtendedByToken(
     token: string,
@@ -353,10 +349,10 @@ export default class FlowPayments {
   }
   /**
    * Obtiene el estado extendido de un pago en base al flowOrder
-   * @param flowOrder numero de orden de Flow asignado al pago por ejemplo 68977654
-   * @returns FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
-   * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {number} flowOrder numero de orden de Flow asignado al pago por ejemplo 68977654
+   * @returns {Promise<FlowPaymentsStatusExtendedResponse>} con la lista de pagos recibidos en la fecha indicada.
+   * @throws {PaymentsReceivedByDateError} Si ocurre un error al obtener la lista de pagos recibidos.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    *
    * */
   private async getStatusExtendedByFlowOrder(
@@ -379,10 +375,10 @@ export default class FlowPayments {
   }
   /**
    * Obtiene la lista de transacciones recibidas en una fecha específica.
-   * @param data FlowTransactionsReceivedByDateRequest con la fecha en formato YYYY-MM-DD
-   * @returns FlowTransactionsReceivedByDateResponse con la lista de transacciones recibidas en la fecha indicada.
-   * @throws TransactionsReceivedByDateError Si ocurre un error al obtener la lista de transacciones recibidas.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {FlowTransactionsReceivedByDateRequest} data con la fecha en formato YYYY-MM-DD
+   * @returns {Promise<FlowTransactionsReceivedByDateResponse>} con la lista de transacciones recibidas en la fecha indicada.
+   * @throws {TransactionsReceivedByDateError} Si ocurre un error al obtener la lista de transacciones recibidas.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async getTransactionsReceivedByDate(
     data: FlowTransactionsReceivedByDateRequest,
@@ -396,10 +392,10 @@ export default class FlowPayments {
   }
   /**
    * Este método permite crear una orden de pago a Flow y recibe como respuesta la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma: url + "?token=" +token Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
-   * @param data FlowCreatePaymentRequest con los datos necesarios para crear un pago.
-   * @returns FlowCreatePaymentResponse con la respuesta de Flow al crear un pago.
-   * @throws FlowCreatePaymentError Si ocurre un error al crear el pago.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {FlowCreatePaymentRequest} data con los datos necesarios para crear un pago.
+   * @returns {Promise<FlowCreatePaymentResponse>} con la respuesta de Flow al crear un pago.
+   * @throws {FlowCreatePaymentError} Si ocurre un error al crear el pago.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async createPayment(
     data: FlowCreatePaymentRequest,
@@ -432,10 +428,10 @@ export default class FlowPayments {
 
   /**
    * Permite generar un cobro por email. Flow emite un email al pagador que contiene la información de la Orden de pago y el link de pago correspondiente. Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
-   * @param data FlowCreatePaymentByEmailRequest con los datos necesarios para crear un pago.
-   * @returns FlowCreatePaymentByEmailResponse con la respuesta de Flow al crear un pago.
-   * @throws FlowCreatePaymentByEmailError Si ocurre un error al crear el pago.
-   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   * @param {FlowCreatePaymentByEmailRequest} data con los datos necesarios para crear un pago.
+   * @returns {Promise<FlowCreatePaymentByEmailResponse>} con la respuesta de Flow al crear un pago.
+   * @throws {FlowCreatePaymentByEmailError} Si ocurre un error al crear el pago.
+   * @throws {FlowAPIError} Si la API de Flow responde con un error HTTP.
    */
   private async createPaymentByEmail(
     data: FlowCreatePaymentByEmailRequest,
