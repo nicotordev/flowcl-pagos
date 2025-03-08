@@ -995,6 +995,74 @@ type FlowRegisterCardStatusResponse = {
    * - `1` - Tarjeta no registrada
    */
   status: '0' | '1';
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+  /**
+   * Tipo de tarjeta de crédito registrada. Ejemplo: Visa, Mastercard, etc.
+   */
+  creditCardType: string;
+  /**
+   * Últimos 4 dígitos de la tarjeta de crédito registrada.
+   */
+  last4CardDigits: string;
+};
+
+type FlowDeleteCardResponse = {
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+
+  /**
+   * La fecha de creación (Formato: yyyy-mm-dd hh:mm:ss)
+   */
+  created: string;
+
+  /**
+   * Email del cliente
+   */
+  email: string;
+
+  /**
+   * Nombre del cliente
+   */
+  name: string;
+
+  /**
+   * Modo de pago del cliente:
+   * - "auto": Cargo automático
+   * - "manual": Cobro manual
+   */
+  pay_mode: 'auto' | 'manual';
+
+  /**
+   * La marca de la tarjeta de crédito registrada
+   */
+  creditCardType: string;
+
+  /**
+   * Los últimos 4 dígitos de la tarjeta de crédito registrada
+   */
+  last4CardDigits: string;
+
+  /**
+   * El identificador del cliente en su negocio
+   */
+  externalId: string;
+
+  /**
+   * El estado del cliente:
+   * - "0": Eliminado
+   * - "1": Activo
+   */
+  status: '0' | '1';
+
+  /**
+   * La fecha en que el cliente registró su tarjeta de crédito (Formato: yyyy-mm-dd hh:mm:ss)
+   */
+  registerDate: string;
 };
 
 export type {
@@ -1027,4 +1095,5 @@ export type {
   FlowRegisterCardRequest,
   FlowRegisterCardResponse,
   FlowRegisterCardStatusResponse,
+  FlowDeleteCardResponse,
 };
