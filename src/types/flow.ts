@@ -1359,6 +1359,196 @@ type FlowSendChargeResponse = {
   } | null;
 };
 
+/**
+ * Representa el cobro masivo de tarjetas de crédito.
+ */
+type FlowSendMassiveChargeCardRequest = {
+  /**
+   * url callback del comercio donde Flow avisará cuando el lote ha sido procesado.
+   */
+  urlCallBack: string;
+  /**
+   * url callbak del comercio donde Flow confirmará el pago
+   */
+  urlConfirmation: string;
+  /**
+   * url de retorno del comercio donde Flow redirigirá al pagador
+   */
+  urlReturn: string;
+  /**
+   * Arreglo en formato JSON del lote de cargos CollectObject
+   */
+  batchRows: Array<{
+    /**
+     * Identificador del cliente en Flow
+     */
+    customerId: string;
+    /**
+     * Identificador de la orden del comercio
+     */
+    commerceOrder: string;
+    /**
+     * descripción de la orden de cobro
+     */
+    subject: string;
+    /**
+     * monto del cobro
+     */
+    amount: number;
+    /**
+     * moneda del cobro, por omisón CLP
+     */
+    currency?: string;
+    /**
+     * medio de pago en el caso de cobros tipo 2, por omisión 9 todos los medios de pago disponibles por el comercio
+     */
+    paymentMethod?: FlowPaymentMethods;
+    /**
+     * Valores opcionales en formato JSON
+     */
+    optional?: string;
+  }>;
+  /**
+   * Si se desea que Flow envíe cobros por email, este parámetro debe enviarse con valor 1
+   */
+  byEmail?: 1;
+  /**
+   * Número de días posteriores al envío del cobro para enviar una nueva notificación de persistencia si la orden no está pagada.
+   */
+  forward_days_after?: number;
+  /**
+   * Número de veces de envío de mail de persistencia.
+   */
+  forward_times?: number;
+  /**
+   * tiempo en segundos para que una orden expire después de haber sido creada. Si no se envía este parámetro la orden no expirará y estará vigente para pago por tiempo indefinido. Si envía un valor en segundos, la orden expirará x segundos después de haber sido creada y no podrá pagarse.
+   */
+  timeout?: number;
+};
+/**
+ * Representa la API response de Flow del cobro masivo de tarjetas de crédito.
+ */
+
+type FlowSendMassiveChargeCardResponse = {
+  /**
+   * Token del lote de cobros
+   */
+  token: string;
+  /**
+   * Número de filas de collects recibidas
+   */
+  receivedRows: number;
+  /**
+   * Número de filas aceptadas
+   */
+  acceptedRows: number;
+  /**
+   * Número de filas rechazadas
+   */
+  rejectedRows: Array<{
+    /**
+     * Identificador del cliente en Flow
+     */
+    customerId: string;
+    /**
+     *  Identificador de la orden del comercio
+     */
+    commerceOrder: string;
+    /**
+     * Número de fila
+     */
+    rowNumber: number;
+    /**
+     * nombre del parametros con error
+     */
+    parameter: string;
+    /**
+     *  código del error:
+     * 100 Mandatory field not sent
+     * 101 Value is empty or cero
+     * 102 Invalid field
+     * 103 customer not exist or deleted
+     * 104 CommerceOrder already sent
+     * 105 CommerceOrder has been previously paid
+     * 106 Currency is not soported
+     * 107 Amount is not numeric
+     * 108 Amount can not contain decimals for this currency
+     * 109 The minimum amount is $value CLP
+     * 110 Optional values are not in JSON format
+     */
+    errorCode: 100 | 101 | 102 | 103 | 104 | 105 | 106 | 107 | 108 | 109 | 110;
+    /**
+     * Mensaje de error
+     */
+    errorMsg: string;
+  }>;
+};
+
+type FlowMassiveChargeCardStatusResponse = {
+  /**
+   * hash token identificador del lote recibido
+   */
+  token: string;
+  /**
+   * Fecha de creación del lote (<yyyy-mm-dd hh:mm:ss>)
+   */
+  createdDate: string;
+  /**
+   * Fecha en que se procesó el lote (<yyyy-mm-dd hh:mm:ss>)
+   */
+  processedDate: string;
+  /**
+   * Estado del lote de collect:
+   * created (lote creado)
+   * processing (lote en procesamiento)
+   * processed (lote procesado)
+   */
+  status: 'created' | 'processing' | 'processed';
+  /**
+   * arreglo de resultados de los cargos (collect) generados
+   */
+  collectRows: Array<{
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+    /**
+     * Tipo de cobro:
+     * 1 Cobro automático
+     * 2 Cobro normal (link de pago)
+     * 3 Cobro por email
+     */
+    type: 1 | 2 | 3;
+    /**
+     * El número de la orden de Flow
+     */
+    flowOrder: number;
+    /**
+     * URL ha redireccionar. Los cargos automaticos no tienen url por ser síncronos. Para formar el link de pago a esta URL se debe concatenar el token de la siguiente manera: url + "?token=" + token
+     */
+    url: string;
+    /**
+     * token de la transacción
+     */
+    token: string;
+    /**
+     * Estado del registro de collect:
+     * unprocessed (Fila no procesada)
+     * collected (Cobro generado)
+     * uncollected (Cobro no generado)
+     */
+    status: 'unprocessed' | 'collected' | 'uncollected';
+    /**
+     * Código de error de la fila
+     */
+    erroorCode: number;
+    /**
+     * Mensaje de error de la fila
+     */
+    errorMsg: string;
+  }>;
+};
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -1394,4 +1584,7 @@ export type {
   FlowChargeCardResponse,
   FlowSendChargeRequest,
   FlowSendChargeResponse,
+  FlowSendMassiveChargeCardRequest,
+  FlowSendMassiveChargeCardResponse,
+  FlowMassiveChargeCardStatusResponse,
 };

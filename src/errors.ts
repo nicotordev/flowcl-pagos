@@ -226,3 +226,22 @@ export class FlowSendChargeCardError extends FlowError {
     this.name = 'FlowSendChargeCardError';
   }
 }
+
+/**
+ * Error cuando hay problemas al tratar de enviar varios cobros a varios clientes.
+ */
+export class FlowSendMassiveChargeCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al enviar cobros masivos a tarjetas: ${message}`);
+    this.name = 'FlowSendMassiveChargeCardError';
+  }
+}
+/**
+ * Error cuando hay problemas al tratar de ver el estado de varios cobros a varios
+ */
+export class FlowMassiveChargeCardStatusError extends FlowError {
+  constructor(message: string) {
+    super(`Error al ver el estado de cobros masivos a tarjetas: ${message}`);
+    this.name = 'FlowMassiveChargeCardStatusError';
+  }
+}

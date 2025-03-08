@@ -9,9 +9,11 @@ import {
   FlowEditCustomerError,
   FlowGetCustomerError,
   FlowGetCustomerListError,
+  FlowMassiveChargeCardStatusError,
   FlowRegisterCardError,
   FlowRegisterCardStatusError,
   FlowSendChargeCardError,
+  FlowSendMassiveChargeCardError,
 } from '../errors';
 import {
   FlowGetCustomerListResponse,
@@ -30,6 +32,9 @@ import {
   FlowChargeCardResponse,
   FlowSendChargeRequest,
   FlowSendChargeResponse,
+  FlowSendMassiveChargeCardRequest,
+  FlowSendMassiveChargeCardResponse,
+  FlowMassiveChargeCardStatusResponse,
 } from '../types/flow';
 import { generateFormData, getPaymentMethod } from '../utils/flow.utils';
 
@@ -137,6 +142,16 @@ export default class FlowCustomers {
       sendCharge: (
         data: FlowSendChargeRequest,
       ) => Promise<FlowSendChargeResponse>;
+      /**
+       * Este servicio envía de forma masiva un lote de cobros a clientes. Similar al servicio collect pero masivo y asíncrono. Este servicio responde con un token identificador del lote y el número de filas recibidas.
+       * @param data FlowSendMassiveChargeCardRequest Datos de la petición de cargo masivo.
+       * @returns Promise<FlowSendMassiveChargeCardResponse> Objeto con la información del cargo masivo.
+       * @throws FlowSendMassiveChargeCardError Si hay problemas al realizar el cargo.
+       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       */
+      sendMassiveCharge: (
+        data: FlowSendMassiveChargeCardRequest,
+      ) => Promise<FlowSendMassiveChargeCardResponse>;
     };
   };
 
@@ -174,6 +189,7 @@ export default class FlowCustomers {
         delete: this.deleteCard.bind(this),
         charge: this.chargeCard.bind(this),
         sendCharge: this.sendChargeCard.bind(this),
+        sendMassiveCharge: this.sendMassiveChargeCard.bind(this),
       },
     };
   }
@@ -191,7 +207,7 @@ export default class FlowCustomers {
     endpoint: string,
     data: Record<string, unknown>,
     method: 'post' | 'get' = 'post',
-    error: () => never,
+    error: (err: unknown) => never,
   ): Promise<T> {
     try {
       const allData = {
@@ -214,7 +230,7 @@ export default class FlowCustomers {
       if (axios.isAxiosError(err)) {
         throw new FlowAPIError(err.response?.status || 500, err.message);
       }
-      error();
+      error(err);
     }
   }
 
@@ -231,8 +247,8 @@ export default class FlowCustomers {
       '/create',
       data,
       'post',
-      () => {
-        throw new FlowCreateCustomerError('Error al crear el cliente.');
+      (e) => {
+        throw new FlowCreateCustomerError((e as Error).message);
       },
     );
   }
@@ -250,8 +266,8 @@ export default class FlowCustomers {
       '/edit',
       data,
       'post',
-      () => {
-        throw new FlowEditCustomerError('Error al editar el cliente.');
+      (e) => {
+        throw new FlowEditCustomerError((e as Error).message);
       },
     );
   }
@@ -269,8 +285,8 @@ export default class FlowCustomers {
       '/delete',
       { customerId },
       'post',
-      () => {
-        throw new FlowDeleteCustomerError('Error al eliminar el cliente.');
+      (e) => {
+        throw new FlowDeleteCustomerError((e as Error).message);
       },
     );
   }
@@ -288,8 +304,8 @@ export default class FlowCustomers {
       '/get',
       { customerId },
       'get',
-      () => {
-        throw new FlowGetCustomerError('Error al obtener el cliente.');
+      (e) => {
+        throw new FlowGetCustomerError((e as Error).message);
       },
     );
   }
@@ -307,10 +323,8 @@ export default class FlowCustomers {
       '/list',
       data,
       'get',
-      () => {
-        throw new FlowGetCustomerListError(
-          'Error al obtener la lista de clientes.',
-        );
+      (e) => {
+        throw new FlowGetCustomerListError((e as Error).message);
       },
     );
   }
@@ -326,8 +340,8 @@ export default class FlowCustomers {
   ): Promise<FlowRegisterCardResponse> {
     const response = await this.request<
       Omit<FlowRegisterCardResponse, 'redirectUrl'>
-    >('/register', data, 'post', () => {
-      throw new FlowRegisterCardError('Error al registrar la tarjeta.');
+    >('/register', data, 'post', (e) => {
+      throw new FlowRegisterCardError((e as Error).message);
     });
     return {
       ...response,
@@ -348,10 +362,8 @@ export default class FlowCustomers {
       '/getRegisterStatus',
       { token },
       'post',
-      () => {
-        throw new FlowRegisterCardStatusError(
-          'Error al obtener el estado de registro de la tarjeta.',
-        );
+      (e) => {
+        throw new FlowRegisterCardStatusError((e as Error).message);
       },
     );
   }
@@ -369,8 +381,8 @@ export default class FlowCustomers {
       '/unRegister',
       { customerId },
       'post',
-      () => {
-        throw new FlowDeleteCardError('Error al eliminar la tarjeta.');
+      (e) => {
+        throw new FlowDeleteCardError((e as Error).message);
       },
     );
   }
@@ -389,8 +401,8 @@ export default class FlowCustomers {
       '/charge',
       data,
       'post',
-      () => {
-        throw new FlowChargeCardError('Error al realizar el cargo.');
+      (e) => {
+        throw new FlowChargeCardError((e as Error).message);
       },
     );
   }
@@ -405,14 +417,54 @@ export default class FlowCustomers {
     data: FlowSendChargeRequest,
   ): Promise<FlowSendChargeResponse> {
     return await this.request<FlowSendChargeResponse>(
-      '/charge',
+      '/collect',
       {
         ...data,
         paymentMethod: getPaymentMethod(data.paymentMethod ?? 'flow'),
       },
       'post',
-      () => {
-        throw new FlowSendChargeCardError('Error al realizar el cargo.');
+      (e) => {
+        throw new FlowSendChargeCardError((e as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio envía de forma masiva un lote de cobros a clientes. Similar al servicio collect pero masivo y asíncrono. Este servicio responde con un token identificador del lote y el número de filas recibidas.
+   * @param data FlowSendMassiveChargeCardRequest Datos de la petición de cargo masivo.
+   * @returns Promise<FlowSendMassiveChargeCardResponse> Objeto con la información del cargo masivo.
+   * @throws FlowSendMassiveChargeCardError Si hay problemas al realizar el cargo.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   */
+  private async sendMassiveChargeCard(
+    data: FlowSendMassiveChargeCardRequest,
+  ): Promise<FlowSendMassiveChargeCardResponse> {
+    return await this.request<FlowSendMassiveChargeCardResponse>(
+      '/batchCollect',
+      {
+        ...data,
+        batchRows: data.batchRows.map((row) => ({
+          ...row,
+          paymentMethod: getPaymentMethod(row.paymentMethod ?? 'flow'),
+        })),
+      },
+      'post',
+      (e) => {
+        throw new FlowSendMassiveChargeCardError((e as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio permite consultar el estado de un lote de cobros enviados por medio del servicio batchCollect.
+   */
+  private async massiveChargeCardStatus(
+    token: string,
+  ): Promise<FlowMassiveChargeCardStatusResponse> {
+    return await this.request<FlowMassiveChargeCardStatusResponse>(
+      '/getBatchCollectStatus',
+      { token },
+      'get',
+      (e) => {
+        throw new FlowMassiveChargeCardStatusError((e as Error).message);
       },
     );
   }

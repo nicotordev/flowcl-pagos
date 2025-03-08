@@ -197,7 +197,7 @@ export default class FlowPayments {
     endpoint: string,
     data: Record<string, unknown>,
     method: 'post' | 'get' = 'post',
-    error: () => never,
+    error: (e: unknown) => never,
     modifyResponse?: (data: P) => P,
   ): Promise<T | P> {
     try {
@@ -225,7 +225,7 @@ export default class FlowPayments {
       if (axios.isAxiosError(err)) {
         throw new FlowAPIError(err.response?.status || 500, err.message);
       }
-      error();
+      error(err);
     }
   }
 
@@ -243,10 +243,8 @@ export default class FlowPayments {
       '/getStatus',
       { token },
       'get',
-      () => {
-        throw new FlowPaymentStatusError(
-          'Error al obtener el estado del pago.',
-        );
+      (e) => {
+        throw new FlowPaymentStatusError((e as Error).message);
       },
       (data) => {
         return {
@@ -271,10 +269,8 @@ export default class FlowPayments {
       '/getPaymentStatusByCommerceId',
       { commerceId },
       'get',
-      () => {
-        throw new FlowPaymentStatusError(
-          'Error al obtener el estado del pago.',
-        );
+      (e) => {
+        throw new FlowPaymentStatusError((e as Error).message);
       },
       (data) => {
         return {
@@ -302,10 +298,8 @@ export default class FlowPayments {
       '/getStatusByFlowOrder',
       { flowOrder },
       'get',
-      () => {
-        throw new FlowPaymentStatusError(
-          'Error al obtener el estado del pago.',
-        );
+      (e) => {
+        throw new FlowPaymentStatusError((e as Error).message);
       },
       (data) => {
         return {
@@ -328,10 +322,8 @@ export default class FlowPayments {
     if (!isValidPaymentReceivedByDate(data.date)) {
       throw new FlowPaymentsReceivedByDateError('Fecha no válida');
     }
-    return this.request('/getPayments', data, 'get', () => {
-      throw new FlowPaymentsReceivedByDateError(
-        'Error al obtener la lista de pagos recibidos.',
-      );
+    return this.request('/getPayments', data, 'get', (e) => {
+      throw new FlowPaymentsReceivedByDateError((e as Error).message);
     });
   }
   /**
@@ -348,10 +340,8 @@ export default class FlowPayments {
       '/getStatusExtended',
       { token },
       'get',
-      () => {
-        throw new FlowStatusExtendedError(
-          'Error al obtener el estado extendido del pago.',
-        );
+      (e) => {
+        throw new FlowStatusExtendedError((e as Error).message);
       },
       (data) => {
         return {
@@ -376,10 +366,8 @@ export default class FlowPayments {
       '/getStatusByFlowOrderExtended',
       { flowOrder },
       'get',
-      () => {
-        throw new FlowStatusExtendedError(
-          'Error al obtener el estado extendido del pago.',
-        );
+      (e) => {
+        throw new FlowStatusExtendedError((e as Error).message);
       },
       (data) => {
         return {
@@ -402,10 +390,8 @@ export default class FlowPayments {
     if (!isValidPaymentReceivedByDate(data.date)) {
       throw new FlowTransactionsReceivedByDateError('Fecha no válida');
     }
-    return this.request('/getTransactions', data, 'get', () => {
-      throw new FlowTransactionsReceivedByDateError(
-        'Error al obtener la lista de transacciones recibidas.',
-      );
+    return this.request('/getTransactions', data, 'get', (e) => {
+      throw new FlowTransactionsReceivedByDateError((e as Error).message);
     });
   }
   /**
@@ -428,8 +414,8 @@ export default class FlowPayments {
         paymentMethod: getPaymentMethod(data.paymentMethod || 'flow'),
       },
       'post',
-      () => {
-        throw new FlowCreatePaymentError('Error al crear el pago.');
+      (e) => {
+        throw new FlowCreatePaymentError((e as Error).message);
       },
       (data) => {
         return {
@@ -464,10 +450,8 @@ export default class FlowPayments {
         paymentMethod: getPaymentMethod(data.paymentMethod || 'flow'),
       },
       'post',
-      () => {
-        throw new FlowCreatePaymentByEmailError(
-          'Error al crear el pago por email.',
-        );
+      (e) => {
+        throw new FlowCreatePaymentByEmailError((e as Error).message);
       },
       (data) => {
         return {
