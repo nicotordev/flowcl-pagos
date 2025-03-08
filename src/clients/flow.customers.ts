@@ -85,7 +85,7 @@ export default class FlowCustomers {
     list: (
       data: FlowGetCustomerListRequest,
     ) => Promise<FlowGetCustomerListResponse>;
-    registerCard: {
+    card: {
       /**
        * Envía a un cliente a registrar su tarjeta de crédito para poder efectuarle cargos automáticos. El servicio responde con la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma:
        * url + "?token=" + token
@@ -144,7 +144,7 @@ export default class FlowCustomers {
       delete: this.deleteCustomer.bind(this),
       get: this.getCustomer.bind(this),
       list: this.getCustomerList.bind(this),
-      registerCard: {
+      card: {
         register: this.registerCard.bind(this),
         status: this.registerCardStatus.bind(this),
         delete: this.deleteCard.bind(this),
@@ -198,7 +198,7 @@ export default class FlowCustomers {
   private async createCustomer(
     data: FlowCreateCustomerRequest,
   ): Promise<FlowCreateCustomerResponse> {
-    return this.request<FlowCreateCustomerResponse>(
+    return await this.request<FlowCreateCustomerResponse>(
       '/create',
       data,
       'post',
@@ -217,9 +217,14 @@ export default class FlowCustomers {
   private async editCustomer(
     data: FlowEditCustomerRequest,
   ): Promise<FlowEditCustomerResponse> {
-    return this.request<FlowEditCustomerResponse>('/edit', data, 'post', () => {
-      throw new FlowEditCustomerError('Error al editar el cliente.');
-    });
+    return await this.request<FlowEditCustomerResponse>(
+      '/edit',
+      data,
+      'post',
+      () => {
+        throw new FlowEditCustomerError('Error al editar el cliente.');
+      },
+    );
   }
 
   /**
@@ -231,7 +236,7 @@ export default class FlowCustomers {
   private async deleteCustomer(
     customerId: string,
   ): Promise<FlowDeleteCustomerResponse> {
-    return this.request<FlowDeleteCustomerResponse>(
+    return await this.request<FlowDeleteCustomerResponse>(
       '/delete',
       { customerId },
       'post',
@@ -250,7 +255,7 @@ export default class FlowCustomers {
   private async getCustomer(
     customerId: string,
   ): Promise<FlowGetCustomerResponse> {
-    return this.request<FlowGetCustomerResponse>(
+    return await this.request<FlowGetCustomerResponse>(
       '/get',
       { customerId },
       'get',
@@ -269,7 +274,7 @@ export default class FlowCustomers {
   private async getCustomerList(
     data: FlowGetCustomerListRequest,
   ): Promise<FlowGetCustomerListResponse> {
-    return this.request<FlowGetCustomerListResponse>(
+    return await this.request<FlowGetCustomerListResponse>(
       '/list',
       data,
       'get',
@@ -310,7 +315,7 @@ export default class FlowCustomers {
   private async registerCardStatus(
     token: string,
   ): Promise<FlowRegisterCardStatusResponse> {
-    return this.request<FlowRegisterCardStatusResponse>(
+    return await this.request<FlowRegisterCardStatusResponse>(
       '/getRegisterStatus',
       { token },
       'post',
@@ -331,7 +336,7 @@ export default class FlowCustomers {
   private async deleteCard(
     customerId: string,
   ): Promise<FlowDeleteCardResponse> {
-    return this.request<FlowDeleteCardResponse>(
+    return await this.request<FlowDeleteCardResponse>(
       '/unRegister',
       { customerId },
       'post',

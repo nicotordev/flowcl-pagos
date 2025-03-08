@@ -200,7 +200,10 @@ export default class FlowPayments {
     modifyResponse?: (data: P) => P,
   ): Promise<T | P> {
     try {
-      const allData = data as Record<string, string>;
+      const allData = {
+        ...data,
+        apiKey: this.apiKey,
+      } as Record<string, string>;
       const formData = generateFormData(allData, this.secretKey);
 
       const response =
