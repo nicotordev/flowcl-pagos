@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import {
   FlowAPIError,
   FlowAuthenticationError,
+  FlowChargeCardError,
   FlowCreateCustomerError,
   FlowDeleteCardError,
   FlowDeleteCustomerError,
@@ -10,6 +11,7 @@ import {
   FlowGetCustomerListError,
   FlowRegisterCardError,
   FlowRegisterCardStatusError,
+  FlowSendChargeCardError,
 } from '../errors';
 import {
   FlowGetCustomerListResponse,
@@ -24,8 +26,12 @@ import {
   FlowRegisterCardRequest,
   FlowRegisterCardStatusResponse,
   FlowDeleteCardResponse,
+  FlowChargeCardRequest,
+  FlowChargeCardResponse,
+  FlowSendChargeRequest,
+  FlowSendChargeResponse,
 } from '../types/flow';
-import { generateFormData } from '../utils/flow.utils';
+import { generateFormData, getPaymentMethod } from '../utils/flow.utils';
 
 /**
  * Cliente para interactuar con la API de clientes de Flow.
@@ -113,6 +119,24 @@ export default class FlowCustomers {
        * @throws FlowDeleteCardError Si hay problemas al eliminar el registro de la tarjeta.
        */
       delete: (customerId: string) => Promise<FlowDeleteCardResponse>;
+      /**
+       * Este servicio permite efectuar un cargo automático en la tarjeta de crédito previamente registrada por el cliente. Si el cliente no tiene registrada una tarjeta el metodo retornará error.
+       * @param data FlowChargeCardRequest Datos de la petición de cargo.
+       * @returns Promise<FlowChargeCardResponse> Objeto con la información del cargo.
+       * @throws FlowChargeCardError Si hay problemas al realizar el cargo.
+       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       */
+      charge: (data: FlowChargeCardRequest) => Promise<FlowChargeCardResponse>;
+      /**
+       * Este servicio envía un cobro a un cliente. Si el cliente tiene registrada una tarjeta de crédito se le hace un cargo automático, si no tiene registrada una tarjeta de credito se genera un cobro. Si se envía el parámetro byEmail = 1, se genera un cobro por email.
+       * @param data FlowSendChargeRequest Datos de la petición de cargo.
+       * @returns Promise<FlowSendChargeResponse> Objeto con la información del cargo.
+       * @throws FlowSendChargeCardError Si hay problemas al realizar el cargo.
+       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       */
+      sendCharge: (
+        data: FlowSendChargeRequest,
+      ) => Promise<FlowSendChargeResponse>;
     };
   };
 
@@ -148,6 +172,8 @@ export default class FlowCustomers {
         register: this.registerCard.bind(this),
         status: this.registerCardStatus.bind(this),
         delete: this.deleteCard.bind(this),
+        charge: this.chargeCard.bind(this),
+        sendCharge: this.sendChargeCard.bind(this),
       },
     };
   }
@@ -345,6 +371,48 @@ export default class FlowCustomers {
       'post',
       () => {
         throw new FlowDeleteCardError('Error al eliminar la tarjeta.');
+      },
+    );
+  }
+
+  /**
+   * Este servicio permite efectuar un cargo automático en la tarjeta de crédito previamente registrada por el cliente. Si el cliente no tiene registrada una tarjeta el metodo retornará error.
+   * @param data FlowChargeCardRequest Datos de la petición de cargo.
+   * @returns Promise<FlowChargeCardResponse> Objeto con la información del cargo.
+   * @throws FlowChargeCardError Si hay problemas al realizar el cargo.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   */
+  private async chargeCard(
+    data: FlowChargeCardRequest,
+  ): Promise<FlowChargeCardResponse> {
+    return await this.request<FlowChargeCardResponse>(
+      '/charge',
+      data,
+      'post',
+      () => {
+        throw new FlowChargeCardError('Error al realizar el cargo.');
+      },
+    );
+  }
+  /**
+   * Este servicio envía un cobro a un cliente. Si el cliente tiene registrada una tarjeta de crédito se le hace un cargo automático, si no tiene registrada una tarjeta de credito se genera un cobro. Si se envía el parámetro byEmail = 1, se genera un cobro por email.
+   * @param data FlowSendChargeRequest Datos de la petición de cargo.
+   * @returns Promise<FlowSendChargeResponse> Objeto con la información del cargo.
+   * @throws FlowSendChargeCardError Si hay problemas al realizar el cargo.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   */
+  private async sendChargeCard(
+    data: FlowSendChargeRequest,
+  ): Promise<FlowSendChargeResponse> {
+    return await this.request<FlowSendChargeResponse>(
+      '/charge',
+      {
+        ...data,
+        paymentMethod: getPaymentMethod(data.paymentMethod ?? 'flow'),
+      },
+      'post',
+      () => {
+        throw new FlowSendChargeCardError('Error al realizar el cargo.');
       },
     );
   }
