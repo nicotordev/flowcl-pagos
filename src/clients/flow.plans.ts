@@ -140,6 +140,7 @@ export default class FlowPlans {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
+        console.error(JSON.stringify(err.response?.data, null, 2));
         throw new FlowAPIError(err.response?.status || 500, err.message);
       }
       error(err);
