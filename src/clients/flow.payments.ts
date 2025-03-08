@@ -92,7 +92,7 @@ export default class FlowPayments {
 
     /**
      *
-     * Este método se utiliza para obtener el estado de un pago. A diferencia del /payment/getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
+     * Este método se utiliza para obtener el estado de un pago. A diferencia del /getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
      * @param token Token único del pago a consultar.
      * @returns FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
      * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
@@ -101,7 +101,7 @@ export default class FlowPayments {
      */
     statusExtended: {
       /**
-       * Este método se utiliza para obtener el estado de un pago. A diferencia del /payment/getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
+       * Este método se utiliza para obtener el estado de un pago. A diferencia del /getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
        * @param token Token único del pago a consultar.
        * @returns  FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
        * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
@@ -110,7 +110,7 @@ export default class FlowPayments {
        */
       byToken: (token: string) => Promise<FlowPaymentsStatusExtendedResponse>;
       /**
-       * Este método se utiliza para obtener el estado de un pago. A diferencia del /payment/getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
+       * Este método se utiliza para obtener el estado de un pago. A diferencia del /getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
        * @param flowOrder Número de orden de Flow asignado al pago, por ejemplo 68977654.
        * @returns  FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
        * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
@@ -168,7 +168,7 @@ export default class FlowPayments {
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
-      baseURL,
+      baseURL: `${baseURL}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -215,7 +215,7 @@ export default class FlowPayments {
       // Enviar solicitud GET a la API de Flow para obtener el estado del pago
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentStatusResponse, 'statusStr'>
-      >('/payment/getStatus?' + formData.toString());
+      >('/getStatus?' + formData.toString());
 
       return {
         ...response.data,
@@ -252,7 +252,7 @@ export default class FlowPayments {
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentStatusResponse, 'statusStr'>
-      >('/payment/getPaymentStatusByCommerceId?' + formData.toString());
+      >('/getPaymentStatusByCommerceId?' + formData.toString());
       return {
         ...response.data,
         statusStr: getPaymentStatus(response.data.status),
@@ -288,7 +288,7 @@ export default class FlowPayments {
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentStatusResponse, 'statusStr'>
-      >('/payment/getStatusByFlowOrder?' + formData.toString());
+      >('/getStatusByFlowOrder?' + formData.toString());
       return {
         ...response.data,
         statusStr: getPaymentStatus(response.data.status),
@@ -333,7 +333,7 @@ export default class FlowPayments {
 
       const response =
         await this.axiosInstance.get<FlowPaymentsReceivedByDateResponse>(
-          '/payment/getPayments?' + formData.toString(),
+          '/getPayments?' + formData.toString(),
         );
 
       return response.data;
@@ -368,7 +368,7 @@ export default class FlowPayments {
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentsStatusExtendedResponse, 'statusStr'>
-      >('/payment/getStatusExtended?' + formData.toString());
+      >('/getStatusExtended?' + formData.toString());
 
       return {
         ...response.data,
@@ -406,7 +406,7 @@ export default class FlowPayments {
 
       const response = await this.axiosInstance.get<
         Omit<FlowPaymentsStatusExtendedResponse, 'statusStr'>
-      >('/payment/getStatusByFlowOrderExtended?' + formData.toString());
+      >('/getStatusByFlowOrderExtended?' + formData.toString());
 
       return {
         ...response.data,
@@ -451,7 +451,7 @@ export default class FlowPayments {
 
       const response =
         await this.axiosInstance.get<FlowTransactionsReceivedByDateResponse>(
-          '/payment/getTransactions?' + formData.toString(),
+          '/getTransactions?' + formData.toString(),
         );
 
       return response.data;
@@ -485,7 +485,7 @@ export default class FlowPayments {
 
       const response = await this.axiosInstance.post<
         Omit<FlowCreatePaymentResponse, 'redirectUrl'>
-      >('/payment/create', formData);
+      >('/create', formData);
       return {
         ...response.data,
         redirectUrl: response.data.url + '?token=' + response.data.token,
@@ -520,7 +520,7 @@ export default class FlowPayments {
 
       const response = await this.axiosInstance.post<
         Omit<FlowCreatePaymentByEmailResponse, 'redirectUrl'>
-      >('/payment/createEmail', formData);
+      >('/createEmail', formData);
       return {
         ...response.data,
         redirectUrl: response.data.url + '?token=' + response.data.token,
