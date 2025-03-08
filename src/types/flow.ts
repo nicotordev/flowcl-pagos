@@ -2,7 +2,7 @@
  * Datos requeridos para crear una orden de pago en Flow.
  * Basado en la documentación oficial de Flow.cl.
  */
-export interface FlowCreatePaymentRequest {
+type FlowCreatePaymentRequest = {
   /**
    * Número único de orden del comercio (requerido).
    */
@@ -57,12 +57,12 @@ export interface FlowCreatePaymentRequest {
    * Moneda en la que se espera que se pague la orden (opcional).
    */
   paymentCurrency?: string;
-}
+};
 
 /**
  * Respuesta al crear una orden de pago en Flow.
  */
-export interface FlowCreatePaymentResponse {
+type FlowCreatePaymentResponse = {
   /**
    * Token de la transacción generado por Flow.
    */
@@ -80,12 +80,12 @@ export interface FlowCreatePaymentResponse {
    * URL completa de redirección para completar el pago.
    */
   redirectUrl: string;
-}
+};
 
 /**
  * Respuesta al consultar el estado de una orden en Flow.
  */
-export interface FlowPaymentStatusResponse {
+type FlowPaymentStatusResponse = {
   /**
    * Número de la orden en Flow.
    */
@@ -146,13 +146,13 @@ export interface FlowPaymentStatusResponse {
    * ID del comercio asociado (puede ser `null`).
    */
   merchantId?: string | null;
-}
+};
 
 /**
  * Datos requeridos para consultar los pagos recibidos por una fecha específica.
  *
  */
-export interface FlowPaymentsReceivedByDateRequest {
+type FlowPaymentsReceivedByDateRequest = {
   /**
    * Fecha de los pagos a consultar.
    * Formato: YYYY-MM-DD
@@ -166,12 +166,12 @@ export interface FlowPaymentsReceivedByDateRequest {
    * Límite de resultados por página.
    */
   limit?: number;
-}
+};
 
 /**
  * Tipo que representa la respuesta de la API al obtener el listado de pagos recibidos en un día.
  */
-export type FlowPaymentsReceivedByDateResponse = {
+type FlowPaymentsReceivedByDateResponse = {
   /**
    * El número total de registros encontrados.
    */
@@ -190,9 +190,109 @@ export type FlowPaymentsReceivedByDateResponse = {
 };
 
 /**
+ * Represents the response schema for a Flow payment status request.
+ */
+type FlowPaymentsStatusExtendedResponse = {
+  /**
+   * The Flow order number.
+   */
+  flowOrder: number;
+
+  /**
+   * The commerce order number.
+   */
+  commerceOrder: string;
+
+  /**
+   * The order creation date in format yyyy-mm-dd hh:mm:ss.
+   */
+  requestDate: string;
+
+  /**
+   * The order status:
+   * 1 - Pending payment
+   * 2 - Paid
+   * 3 - Rejected
+   * 4 - Canceled
+   */
+  status: 1 | 2 | 3 | 4;
+
+  /**
+   * The order status in text format.
+   */
+  statusStr: FlowPaymentStatus;
+
+  /**
+   * The order concept.
+   */
+  subject: string;
+
+  /**
+   * The currency used for the transaction.
+   */
+  currency: string;
+
+  /**
+   * The total amount of the order.
+   */
+  amount: number;
+
+  /**
+   * The email of the payer.
+   */
+  payer: string;
+
+  /**
+   * Optional data sent by the merchant in JSON format.
+   */
+  optional?: Record<string, any> | null;
+
+  /**
+   * Information for pending payments when a payment coupon was generated.
+   */
+  pending_info?: {
+    media: string;
+    date: string;
+  } | null;
+
+  /**
+   * Payment data details.
+   */
+  paymentData?: {
+    date: string;
+    media: string;
+    conversionDate: string;
+    conversionRate: number;
+    amount: number;
+    currency: string;
+    fee: number;
+    balance: number;
+    transferDate: string;
+    mediaType: string;
+    cardLast4Numbers: string;
+    taxes: number;
+    installments: number;
+    autorizationCode: string;
+  } | null;
+
+  /**
+   * Associated merchant ID, applies only for integrator merchants.
+   */
+  merchantId?: string | null;
+
+  /**
+   * Last error information in case of a failed attempt.
+   */
+  lastError?: {
+    code: string;
+    message: string;
+    medioCode: string;
+  } | null;
+};
+/**
  * Métodos de pago admitidos en Flow.
  */
-export type PaymentMethods =
+type PaymentMethods =
   | 'webpay-plus'
   | 'mach'
   | 'khipu'
@@ -203,16 +303,12 @@ export type PaymentMethods =
 /**
  * Estados de pago posibles en Flow.
  */
-export type FlowPaymentStatus =
-  | 'Pendiente'
-  | 'Pagada'
-  | 'Rechazada'
-  | 'Anulada';
+type FlowPaymentStatus = 'Pendiente' | 'Pagada' | 'Rechazada' | 'Anulada';
 
 /**
  * Constantes relacionadas con Flow.
  */
-export interface FlowConstants {
+type FlowConstants = {
   /**
    * Mapeo de métodos de pago a sus respectivos códigos numéricos.
    */
@@ -221,4 +317,16 @@ export interface FlowConstants {
    * Mapeo de códigos de estado de pago a su representación en texto.
    */
   FLOW_PAYMENT_STATUS_CODES: Record<number, FlowPaymentStatus>;
-}
+};
+
+export type {
+  FlowCreatePaymentRequest,
+  FlowCreatePaymentResponse,
+  FlowPaymentStatusResponse,
+  FlowPaymentsReceivedByDateRequest,
+  FlowPaymentsReceivedByDateResponse,
+  FlowPaymentsStatusExtendedResponse,
+  PaymentMethods,
+  FlowPaymentStatus,
+  FlowConstants,
+};
