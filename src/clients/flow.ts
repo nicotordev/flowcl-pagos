@@ -1,8 +1,8 @@
 import { FlowAuthenticationError } from '../errors';
 import FlowPayments from './flow.payments';
+import FlowRefunds from './flow.refunds';
 /**
  * Cliente para interactuar con la API de Flow.
- 
  */
 class Flow {
   /**
@@ -12,9 +12,7 @@ class Flow {
   /**
    * Objeto que proporciona métodos para interactuar con los reembolsos en Flow.
    */
-  public refunds: {
-    createRefund: () => void;
-  };
+  public refunds: FlowRefunds;
 
   /**
    * Constructor de la clase FlowClient.
@@ -33,9 +31,7 @@ class Flow {
     }
 
     this.payments = new FlowPayments(apiKey, secretKey, enviroment);
-    this.refunds = {
-      createRefund: () => {},
-    };
+    this.refunds = new FlowRefunds(apiKey, secretKey, enviroment);
   }
 }
 
