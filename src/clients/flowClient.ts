@@ -7,6 +7,10 @@ import axios, { AxiosInstance } from 'axios';
 import CryptoJS from 'crypto-js';
 
 import {
+  FlowCreatePaymentByEmailRequest,
+  FlowCreatePaymentByEmailResponse,
+  FlowCreatePaymentRequest,
+  FlowCreatePaymentResponse,
   FlowPaymentsReceivedByDateRequest,
   FlowPaymentsReceivedByDateResponse,
   FlowPaymentsStatusExtendedResponse,
@@ -21,9 +25,12 @@ import {
 import {
   FlowAPIError,
   FlowAuthenticationError,
+  FlowCreatePaymentByEmailError,
+  FlowCreatePaymentError,
   FlowPaymentStatusError,
-  PaymentsReceivedByDateError,
-  TransactionsReceivedByDateError,
+  FlowPaymentsReceivedByDateError,
+  FlowStatusExtendedError,
+  FlowTransactionsReceivedByDateError,
 } from '../errors';
 
 class FlowClient {
@@ -114,6 +121,26 @@ class FlowClient {
         flowOrder: number,
       ) => Promise<FlowPaymentsStatusExtendedResponse>;
     };
+    /**
+     * Este método permite crear una orden de pago a Flow y recibe como respuesta la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma: url + "?token=" +token Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
+     * @param data FlowCreatePaymentRequest con los datos necesarios para crear un pago.
+     * @returns FlowCreatePaymentResponse con la respuesta de Flow al crear un pago.
+     * @throws FlowCreatePaymentError Si ocurre un error al crear el pago.
+     * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+     */
+    createPayment: (
+      data: FlowCreatePaymentRequest,
+    ) => Promise<FlowCreatePaymentResponse>;
+    /**
+     * Permite generar un cobro por email. Flow emite un email al pagador que contiene la información de la Orden de pago y el link de pago correspondiente. Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
+     * @param data FlowCreatePaymentByEmailRequest con los datos necesarios para crear un pago.
+     * @returns FlowCreatePaymentByEmailResponse con la respuesta de Flow al crear un pago.
+     * @throws FlowCreatePaymentByEmailError Si ocurre un error al crear el pago.
+     * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+     */
+    createPaymentByEmail: (
+      data: FlowCreatePaymentByEmailRequest,
+    ) => Promise<FlowCreatePaymentByEmailResponse>;
   };
 
   /**
@@ -159,6 +186,8 @@ class FlowClient {
         byToken: this.getStatusExtendedByToken.bind(this),
         byFlowOrder: this.getStatusExtendedByFlowOrder.bind(this),
       },
+      createPayment: this.createPayment.bind(this),
+      createPaymentByEmail: this.createPaymentByEmail.bind(this),
     };
   }
 
@@ -301,7 +330,7 @@ class FlowClient {
       const validatedDate = isValidPaymentReceivedByDate(data.date);
 
       if (Boolean(validatedDate) === false) {
-        throw new PaymentsReceivedByDateError('Fecha no válida');
+        throw new FlowPaymentsReceivedByDateError('Fecha no válida');
       }
 
       const allData = {
@@ -326,7 +355,7 @@ class FlowClient {
       if (axios.isAxiosError(error)) {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
-      throw new PaymentsReceivedByDateError((error as Error).message);
+      throw new FlowPaymentsReceivedByDateError((error as Error).message);
     }
   }
   /**
@@ -363,7 +392,7 @@ class FlowClient {
       if (axios.isAxiosError(error)) {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
-      throw new PaymentsReceivedByDateError((error as Error).message);
+      throw new FlowStatusExtendedError((error as Error).message);
     }
   }
   /**
@@ -401,7 +430,7 @@ class FlowClient {
       if (axios.isAxiosError(error)) {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
-      throw new PaymentsReceivedByDateError((error as Error).message);
+      throw new FlowStatusExtendedError((error as Error).message);
     }
   }
   /**
@@ -420,7 +449,7 @@ class FlowClient {
       const validatedDate = isValidPaymentReceivedByDate(data.date);
 
       if (Boolean(validatedDate) === false) {
-        throw new TransactionsReceivedByDateError('Fecha no válida');
+        throw new FlowTransactionsReceivedByDateError('Fecha no válida');
       }
 
       const allData = {
@@ -444,7 +473,77 @@ class FlowClient {
       if (axios.isAxiosError(error)) {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
-      throw new TransactionsReceivedByDateError((error as Error).message);
+      throw new FlowTransactionsReceivedByDateError((error as Error).message);
+    }
+  }
+  /**
+   * Este método permite crear una orden de pago a Flow y recibe como respuesta la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma: url + "?token=" +token Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
+   * @param data FlowCreatePaymentRequest con los datos necesarios para crear un pago.
+   * @returns FlowCreatePaymentResponse con la respuesta de Flow al crear un pago.
+   * @throws FlowCreatePaymentError Si ocurre un error al crear el pago.
+   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   */
+  private async createPayment(
+    data: FlowCreatePaymentRequest,
+  ): Promise<FlowCreatePaymentResponse> {
+    try {
+      const allData = { ...data, apiKey: this.apiKey } as unknown as Record<
+        string,
+        string
+      >;
+      const signature = this.generateSignature(allData);
+      const formData = new URLSearchParams({
+        ...allData,
+        s: signature,
+      });
+
+      const response = await this.axiosInstance.post<
+        Omit<FlowCreatePaymentResponse, 'redirectUrl'>
+      >('/payment/create', formData);
+      return {
+        ...response.data,
+        redirectUrl: response.data.url + '?token=' + response.data.token,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowCreatePaymentError((error as Error).message);
+    }
+  }
+  /**
+   * Permite generar un cobro por email. Flow emite un email al pagador que contiene la información de la Orden de pago y el link de pago correspondiente. Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
+   * @param data FlowCreatePaymentByEmailRequest con los datos necesarios para crear un pago.
+   * @returns FlowCreatePaymentByEmailResponse con la respuesta de Flow al crear un pago.
+   * @throws FlowCreatePaymentByEmailError Si ocurre un error al crear el pago.
+   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   */
+  private async createPaymentByEmail(
+    data: FlowCreatePaymentByEmailRequest,
+  ): Promise<FlowCreatePaymentByEmailResponse> {
+    try {
+      const allData = { ...data, apiKey: this.apiKey } as unknown as Record<
+        string,
+        string
+      >;
+      const signature = this.generateSignature(allData);
+      const formData = new URLSearchParams({
+        ...allData,
+        s: signature,
+      });
+
+      const response = await this.axiosInstance.post<
+        Omit<FlowCreatePaymentByEmailResponse, 'redirectUrl'>
+      >('/payment/createEmail', formData);
+      return {
+        ...response.data,
+        redirectUrl: response.data.url + '?token=' + response.data.token,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowCreatePaymentByEmailError((error as Error).message);
     }
   }
 }

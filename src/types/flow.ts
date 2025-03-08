@@ -83,6 +83,100 @@ type FlowCreatePaymentResponse = {
 };
 
 /**
+ * Tipo para representar una solicitud de pago por email en Flow.
+ */
+type FlowCreatePaymentByEmailRequest = {
+  /**
+   * Orden del comercio (obligatorio)
+   */
+  commerceOrder: string;
+
+  /**
+   * Descripción de la orden (obligatorio)
+   */
+  subject: string;
+
+  /**
+   * Moneda de la orden (opcional)
+   */
+  currency?: string;
+
+  /**
+   * Monto de la orden (obligatorio)
+   */
+  amount: number;
+
+  /**
+   * Email del pagador (obligatorio)
+   */
+  email: string;
+
+  /**
+   * Identificador del medio de pago (opcional)
+   * Si se envía este identificador, el pagador será redirigido directamente al medio de pago.
+   * Si no se especifica, Flow presentará una página para seleccionar el medio de pago.
+   * Para indicar todos los medios de pago, utilice el identificador: 9.
+   */
+  paymentMethod?: number;
+
+  /**
+   * URL de confirmación de pago donde Flow confirmará la transacción (obligatorio)
+   */
+  urlConfirmation: string;
+
+  /**
+   * URL de retorno al comercio donde Flow redirigirá al pagador tras el pago (obligatorio)
+   */
+  urlReturn: string;
+
+  /**
+   * Datos opcionales en formato JSON clave=valor (opcional)
+   * Ejemplo: {"rut":"9999999-9","nombre":"cliente 1"}
+   */
+  optional?: string;
+
+  /**
+   * Tiempo en segundos para que una orden expire después de ser creada (opcional)
+   * Si no se envía este parámetro, la orden no expirará y estará vigente indefinidamente.
+   */
+  timeout?: number;
+
+  /**
+   * ID de comercio asociado (opcional)
+   * Solo aplica si el comercio es integrador.
+   */
+  merchantId?: string;
+
+  /**
+   * Moneda en la que se espera que se pague la orden (opcional)
+   */
+  payment_currency?: string;
+};
+
+/**
+ * Respuesta al crear una orden de pago en Flow.cl por email.
+ */
+type FlowCreatePaymentByEmailResponse = {
+  /**
+   * Token de la transacción generado por Flow.
+   */
+  token: string;
+  /**
+   * URL para redirigir al usuario y completar el pago.
+   * Se debe concatenar con el token: `url + "?token=" + token`
+   */
+  url: string;
+  /**
+   * Número de orden generado por Flow.
+   */
+  flowOrder: number;
+  /**
+   * URL completa de redirección para completar el pago.
+   */
+  redirectUrl: string;
+};
+
+/**
  * Respuesta al consultar el estado de una orden en Flow.
  */
 type FlowPaymentStatusResponse = {
@@ -363,13 +457,15 @@ type FlowConstants = {
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
+  FlowCreatePaymentByEmailRequest,
+  FlowCreatePaymentByEmailResponse,
   FlowPaymentStatusResponse,
   FlowPaymentsReceivedByDateRequest,
   FlowPaymentsReceivedByDateResponse,
+  FlowTransactionsReceivedByDateRequest,
+  FlowTransactionsReceivedByDateResponse,
   FlowPaymentsStatusExtendedResponse,
   PaymentMethods,
   FlowPaymentStatus,
   FlowConstants,
-  FlowTransactionsReceivedByDateRequest,
-  FlowTransactionsReceivedByDateResponse,
 };

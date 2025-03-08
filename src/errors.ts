@@ -56,7 +56,7 @@ export class FlowAPIError extends FlowError {
 /**
  * Error cuando hay problemas al obtener los pagos recibidos por fecha.
  */
-export class PaymentsReceivedByDateError extends FlowError {
+export class FlowPaymentsReceivedByDateError extends FlowError {
   constructor(message: string) {
     super(`Error al obtener los pagos recibidos por fecha: ${message}`);
     this.name = 'PaymentsReceivedByDateError';
@@ -66,9 +66,36 @@ export class PaymentsReceivedByDateError extends FlowError {
 /**
  * Error cuando hay problemas al obtener las transacciones recibidas por fecha.
  */
-export class TransactionsReceivedByDateError extends FlowError {
+export class FlowTransactionsReceivedByDateError extends FlowError {
   constructor(message: string) {
     super(`Error al obtener las transacciones recibidas por fecha: ${message}`);
     this.name = 'TransactionsReceivedByDateError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al crear un pago.
+ */
+export class FlowCreatePaymentError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear el pago: ${message}`);
+    this.name = 'FlowCreatePaymentError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al obtener el estado extendido de un pago.
+ */
+export class FlowStatusExtendedError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener el estado extendido del pago: ${message}`);
+    this.name = 'FlowStatusExtendedError';
+  }
+}
+
+export class FlowCreatePaymentByEmailError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear el pago por email: ${message}`);
+    this.name = 'FlowCreatePaymentByEmailError';
   }
 }
