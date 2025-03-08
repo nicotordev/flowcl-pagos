@@ -168,7 +168,10 @@ export default class FlowCustomers {
     error: () => never,
   ): Promise<T> {
     try {
-      const allData = data as Record<string, string>;
+      const allData = {
+        ...data,
+        apiKey: this.apiKey,
+      } as Record<string, string>;
       const formData = generateFormData(allData, this.secretKey);
 
       const response =
