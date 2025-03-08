@@ -169,6 +169,47 @@ type FlowPaymentsReceivedByDateRequest = {
 };
 
 /**
+ * Datos requeridos para consultar los pagos recibidos por una fecha específica.
+ *
+ */
+type FlowTransactionsReceivedByDateRequest = {
+  /**
+   * Fecha de los pagos a consultar.
+   * Formato: YYYY-MM-DD
+   */
+  date: string | Date;
+  /**
+   * Número de página de inicio.
+   */
+  start?: number;
+  /**
+   * Límite de resultados por página.
+   */
+  limit?: number;
+};
+
+/**
+ * Tipo que representa la respuesta de la API al obtener el listado de transacciones recibidas en un día.
+ */
+type FlowTransactionsReceivedByDateResponse = {
+  /**
+   * El número total de registros encontrados.
+   */
+  total: number;
+
+  /**
+   * Indica si existen más páginas de resultados.
+   * `true` si hay más páginas disponibles, `false` si es la última página.
+   */
+  hasMore: boolean;
+
+  /**
+   * Arreglo de registros de la página actual.
+   */
+  data: Array<Record<string, unknown>>;
+};
+
+/**
  * Tipo que representa la respuesta de la API al obtener el listado de pagos recibidos en un día.
  */
 type FlowPaymentsReceivedByDateResponse = {
@@ -186,7 +227,7 @@ type FlowPaymentsReceivedByDateResponse = {
   /**
    * Arreglo de registros de la página actual.
    */
-  data: Array<Record<string, any>>;
+  data: Array<Record<string, unknown>>;
 };
 
 /**
@@ -245,7 +286,7 @@ type FlowPaymentsStatusExtendedResponse = {
   /**
    * Optional data sent by the merchant in JSON format.
    */
-  optional?: Record<string, any> | null;
+  optional?: Record<string, unknown> | null;
 
   /**
    * Information for pending payments when a payment coupon was generated.
@@ -329,4 +370,6 @@ export type {
   PaymentMethods,
   FlowPaymentStatus,
   FlowConstants,
+  FlowTransactionsReceivedByDateRequest,
+  FlowTransactionsReceivedByDateResponse,
 };
