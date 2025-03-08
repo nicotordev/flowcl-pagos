@@ -24,13 +24,15 @@ export interface FlowCreatePaymentRequest {
    */
   email: string;
   /**
-   * Identificador del medio de pago (opcional).
-   * - `1` - Webpay
-   * - `2` - Servipag
-   * - `3` - Multicaja
-   * - `4` - Otros
+   * Identificador del medio de pago (opcional). "webpay-plus" | "mach" | "khipu" | "redpay" | "onepay" | "flow"
+   * - `webpay-plus` - Webpay
+   * - `mach` - Mach
+   * - `khipu` - Khipu
+   * - `redpay` - RedPay
+   * - `onepay` - Onepay
+   * - `flow` - Flow
    */
-  paymentMethod?: number;
+  paymentMethod?: PaymentMethods;
   /**
    * URL de retorno del comercio para redirigir al pagador (requerido).
    */
@@ -101,6 +103,14 @@ export interface FlowPaymentStatusResponse {
    */
   status: 1 | 2 | 3 | 4;
   /**
+   * Estado de la orden en formato de texto:
+   * - Pendiente
+   * - Pagada
+   * - Rechazada
+   * - Anulada
+   */
+  statusStr: FlowPaymentStatus;
+  /**
    * Descripción de la orden.
    */
   subject: string;
@@ -132,4 +142,38 @@ export interface FlowPaymentStatusResponse {
    * ID del comercio asociado (puede ser `null`).
    */
   merchantId?: string | null;
+}
+
+/**
+ * Métodos de pago admitidos en Flow.
+ */
+export type PaymentMethods =
+  | 'webpay-plus'
+  | 'mach'
+  | 'khipu'
+  | 'redpay'
+  | 'onepay'
+  | 'flow';
+
+/**
+ * Estados de pago posibles en Flow.
+ */
+export type FlowPaymentStatus =
+  | 'Pendiente'
+  | 'Pagada'
+  | 'Rechazada'
+  | 'Anulada';
+
+/**
+ * Constantes relacionadas con Flow.
+ */
+export interface FlowConstants {
+  /**
+   * Mapeo de métodos de pago a sus respectivos códigos numéricos.
+   */
+  FLOW_PAYMENT_METHOD_CODES: Record<PaymentMethods, number>;
+  /**
+   * Mapeo de códigos de estado de pago a su representación en texto.
+   */
+  FLOW_PAYMENT_STATUS_CODES: Record<number, FlowPaymentStatus>;
 }
