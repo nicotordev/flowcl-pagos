@@ -205,3 +205,24 @@ export class FlowDeleteCardError extends FlowError {
     this.name = 'FlowDeleteCardError';
   }
 }
+/**
+ * Error cuando hay problemas al tratar de obtener la tarjeta de un cliente.
+ */
+
+export class FlowChargeCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al cargar la tarjeta: ${message}`);
+    this.name = 'FlowChargeCardError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al tratar de enviar cobro a un cliente.
+ */
+
+export class FlowSendChargeCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al enviar cobro a la tarjeta: ${message}`);
+    this.name = 'FlowSendChargeCardError';
+  }
+}
