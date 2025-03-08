@@ -128,17 +128,53 @@ export class FlowRefundStatusError extends FlowError {
     this.name = 'FlowRefundStatusError';
   }
 }
-
+/**
+ * Error cuando hay problemas al obtener el estado de un reembolso por email.
+ */
 export class FlowCreateCustomerError extends FlowError {
   constructor(message: string) {
     super(`Error al crear el cliente: ${message}`);
     this.name = 'FlowCreateCustomerError';
   }
 }
-
+/**
+ * Error cuando hay problemas al editar un cliente.
+ */
 export class FlowEditCustomerError extends FlowError {
   constructor(message: string) {
     super(`Error al editar el cliente: ${message}`);
     this.name = 'FlowEditCustomerError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al eliminar un cliente.
+ */
+export class FlowDeleteCustomerError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar el cliente: ${message}`);
+    this.name = 'FlowDeleteCustomerError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al obtener un cliente.
+ */
+
+export class FlowGetCustomerError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener el cliente: ${message}`);
+    this.name = 'FlowGetCustomerError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al obtener los clientes.
+ */
+
+export class FlowGetCustomerListError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener los clientes: ${message}`);
+    this.name = 'FlowGetCustomersError';
   }
 }

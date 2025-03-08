@@ -790,6 +790,169 @@ type FlowEditCustomerResponse = {
    */
   registerDate: string;
 };
+/**
+ * Representa la respuesta de la API de Flow en formato application/json.
+ */
+type FlowDeleteCustomerResponse = {
+  /**
+   * Identificador único del cliente.
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación del cliente en formato yyyy-mm-dd hh:mm:ss.
+   */
+  created: string;
+
+  /**
+   * Correo electrónico del cliente.
+   */
+  email: string;
+
+  /**
+   * Nombre completo del cliente.
+   */
+  name: string;
+
+  /**
+   * Modo de pago del cliente.
+   * Puede ser:
+   * - 'auto' (cargo automático)
+   * - 'manual' (cobro manual)
+   */
+  pay_mode: 'auto' | 'manual';
+
+  /**
+   * Marca de la tarjeta de crédito registrada.
+   */
+  creditCardType: string;
+
+  /**
+   * Últimos 4 dígitos de la tarjeta de crédito registrada.
+   */
+  last4CardDigits: string;
+
+  /**
+   * Identificador del cliente en su negocio.
+   */
+  externalId: string;
+
+  /**
+   * Estado del cliente.
+   * Puede ser:
+   * - '0' (Eliminado)
+   * - '1' (Activo)
+   */
+  status: '0' | '1';
+
+  /**
+   * Fecha en la que el cliente registró su tarjeta de crédito.
+   * Formato yyyy-mm-dd hh:mm:ss.
+   */
+  registerDate: string;
+};
+/**
+ * Representa la respuesta de un cliente en el sistema de pagos.
+ */
+type FlowGetCustomerResponse = {
+  /**
+   * Identificador único del cliente.
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación del cliente en formato 'yyyy-mm-dd hh:mm:ss'.
+   */
+  created: string;
+
+  /**
+   * Correo electrónico del cliente.
+   */
+  email: string;
+
+  /**
+   * Nombre completo del cliente.
+   */
+  name: string;
+
+  /**
+   * Modo de pago del cliente.
+   * Puede ser:
+   * - 'auto' (cargo automático)
+   * - 'manual' (cobro manual)
+   */
+  pay_mode: 'auto' | 'manual';
+
+  /**
+   * Tipo de tarjeta de crédito registrada (por ejemplo, Visa, Mastercard, etc.).
+   */
+  creditCardType: string;
+
+  /**
+   * Últimos 4 dígitos de la tarjeta de crédito registrada.
+   */
+  last4CardDigits: string;
+
+  /**
+   * Identificador externo del cliente en su negocio.
+   */
+  externalId: string;
+
+  /**
+   * Estado del cliente:
+   * - '0' (Eliminado)
+   * - '1' (Activo)
+   */
+  status: '0' | '1';
+
+  /**
+   * Fecha en que el cliente registró su tarjeta de crédito en formato 'yyyy-mm-dd hh:mm:ss'.
+   */
+  registerDate: string;
+};
+
+type FlowGetCustomerListRequest = {
+  /**
+   * Número de registro de inicio de la página.
+   * Si se omite, el valor por defecto es 0.
+   */
+  start?: number;
+
+  /**
+   * Número de registros por página.
+   * Si se omite, el valor por defecto es 10.
+   * El valor máximo permitido es 100.
+   */
+  limit?: number;
+
+  /**
+   * Filtro por nombre del cliente.
+   */
+  filter?: string;
+
+  /**
+   * Filtro por estado del cliente.
+   */
+  status?: number;
+};
+
+type FloeGetCustomerListResponse = {
+  /**
+   *  El número total de registros encontrados.
+   */
+  total: number;
+
+  /**
+   * Indica si existen más páginas de resultados.
+   * `true` si hay más páginas disponibles, `false` si es la última página.
+   */
+  hasMore: boolean;
+
+  /**
+   * Arreglo de registros de la página actual.
+   */
+  data: Array<Record<string, unknown>>;
+};
 
 export type {
   FlowCreatePaymentRequest,
@@ -814,4 +977,8 @@ export type {
   FlowCreateCustomerResponse,
   FlowEditCustomerRequest,
   FlowEditCustomerResponse,
+  FlowDeleteCustomerResponse,
+  FlowGetCustomerResponse,
+  FlowGetCustomerListRequest,
+  FloeGetCustomerListResponse,
 };
