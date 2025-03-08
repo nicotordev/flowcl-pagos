@@ -2,9 +2,21 @@ import flowConstants from '../constants/flow.constants';
 import { FlowPaymentStatus, PaymentMethods } from '../types/flow';
 import { parse, isValid, format } from 'date-fns';
 
+/**
+ * Obtiene el código de metodo de pago en Flow.
+ * @param paymentMethod El metodo de pago "webpay-plus" | "mach" | "khipu" | "redpay" | "onepay" | "flow"
+ * @returns El codigo de metodo de pago en Flow.
+ */
+
 function getPaymentMethod(paymentMethod: PaymentMethods) {
   return flowConstants.FLOW_PAYMENT_METHOD_CODES[paymentMethod];
 }
+
+/**
+ * Obtiene el estado de un pago en Flow.
+ * @param status numero de estado
+ * @returns El estado del pago en Flow en formato string.
+ */
 
 function getPaymentStatus(status: number): FlowPaymentStatus {
   return flowConstants.FLOW_PAYMENT_STATUS_CODES[status];
