@@ -1,11 +1,4 @@
-/**
- * Cliente para interactuar con la API de Flow.
- * Permite crear órdenes de pago y consultar su estado.
- * Implementa un sistema de errores personalizados para un mejor manejo de fallos.
- */
 import axios, { AxiosInstance } from 'axios';
-import CryptoJS from 'crypto-js';
-
 import {
   FlowCreatePaymentByEmailRequest,
   FlowCreatePaymentByEmailResponse,
@@ -18,10 +11,7 @@ import {
   FlowTransactionsReceivedByDateRequest,
   FlowTransactionsReceivedByDateResponse,
 } from '../types/flow';
-import {
-  getPaymentStatus,
-  isValidPaymentReceivedByDate,
-} from '../utils/flow.utils';
+
 import {
   FlowAPIError,
   FlowAuthenticationError,
@@ -32,8 +22,18 @@ import {
   FlowStatusExtendedError,
   FlowTransactionsReceivedByDateError,
 } from '../errors';
+import {
+  generateSignature,
+  getPaymentStatus,
+  isValidPaymentReceivedByDate,
+} from '../utils/flow.utils';
 
-class FlowClient {
+/**
+ * Cliente para interactuar con la API de Flow.
+ * Permite crear órdenes de pago y consultar su estado.
+ * Implementa un sistema de errores personalizados para un mejor manejo de fallos.
+ */
+export default class FlowPayments {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
@@ -192,20 +192,6 @@ class FlowClient {
   }
 
   /**
-   * Genera una firma HMAC-SHA256 para asegurar la autenticidad de los datos enviados a Flow.
-   * @param params Parámetros a firmar.
-   * @returns Firma generada.
-   */
-  private generateSignature(params: Record<string, string>): string {
-    const sortedKeys = Object.keys(params).sort(); // Ordenar las claves alfabéticamente
-    let toSign = '';
-    sortedKeys.forEach((key) => {
-      toSign += key + params[key]; // Concatenar clave y valor
-    });
-    return CryptoJS.HmacSHA256(toSign, this.secretKey).toString(); // Generar firma
-  }
-
-  /**
    * Obtiene el estado de un pago en Flow.
    * @param token Token del pago a consultar.
    * @returns Respuesta de Flow con el estado del pago.
@@ -220,7 +206,7 @@ class FlowClient {
         string,
         string
       >;
-      const signature = this.generateSignature(allData); // Generar firma
+      const signature = generateSignature(allData, this.secretKey); // Generar firma
       const formData = new URLSearchParams({
         ...allData,
         s: signature, // Agregar firma a los datos enviados
@@ -258,7 +244,7 @@ class FlowClient {
         string,
         string
       >;
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -294,7 +280,7 @@ class FlowClient {
         string,
         string
       >;
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -339,7 +325,7 @@ class FlowClient {
         date: validatedDate,
       } as unknown as Record<string, string>;
 
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -374,7 +360,7 @@ class FlowClient {
         string
       >;
 
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -412,7 +398,7 @@ class FlowClient {
         string
       >;
 
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -457,7 +443,7 @@ class FlowClient {
         apiKey: this.apiKey,
       } as unknown as Record<string, string>;
 
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -491,7 +477,7 @@ class FlowClient {
         string,
         string
       >;
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -526,7 +512,7 @@ class FlowClient {
         string,
         string
       >;
-      const signature = this.generateSignature(allData);
+      const signature = generateSignature(allData, this.secretKey);
       const formData = new URLSearchParams({
         ...allData,
         s: signature,
@@ -547,5 +533,3 @@ class FlowClient {
     }
   }
 }
-
-export default FlowClient;

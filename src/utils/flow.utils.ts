@@ -1,6 +1,7 @@
 import flowConstants from '../constants/flow.constants';
 import { FlowPaymentStatus, PaymentMethods } from '../types/flow';
 import { parse, isValid, format } from 'date-fns';
+import CryptoJS from 'crypto-js';
 
 /**
  * Obtiene el código de metodo de pago en Flow.
@@ -45,4 +46,26 @@ function isValidPaymentReceivedByDate(
   return null;
 }
 
-export { getPaymentMethod, getPaymentStatus, isValidPaymentReceivedByDate };
+/**
+ * Genera una firma HMAC-SHA256 para asegurar la autenticidad de los datos enviados a Flow.
+ * @param params Parámetros a firmar.
+ * @returns Firma generada.
+ */
+function generateSignature(
+  params: Record<string, string>,
+  secretKey: string,
+): string {
+  const sortedKeys = Object.keys(params).sort(); // Ordenar las claves alfabéticamente
+  let toSign = '';
+  sortedKeys.forEach((key) => {
+    toSign += key + params[key]; // Concatenar clave y valor
+  });
+  return CryptoJS.HmacSHA256(toSign, secretKey).toString(); // Generar firma
+}
+
+export {
+  getPaymentMethod,
+  getPaymentStatus,
+  isValidPaymentReceivedByDate,
+  generateSignature,
+};
