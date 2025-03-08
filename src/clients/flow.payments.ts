@@ -24,6 +24,7 @@ import {
 } from '../errors';
 import {
   generateFormData,
+  getPaymentMethod,
   getPaymentStatus,
   isValidPaymentReceivedByDate,
 } from '../utils/flow.utils';
@@ -422,7 +423,10 @@ export default class FlowPayments {
       FlowCreatePaymentResponse
     >(
       '/create',
-      data,
+      {
+        ...data,
+        paymentMethod: getPaymentMethod(data.paymentMethod || 'flow'),
+      },
       'post',
       () => {
         throw new FlowCreatePaymentError('Error al crear el pago.');
@@ -455,7 +459,10 @@ export default class FlowPayments {
       FlowCreatePaymentByEmailResponse
     >(
       '/createEmail',
-      data,
+      {
+        ...data,
+        paymentMethod: getPaymentMethod(data.paymentMethod || 'flow'),
+      },
       'post',
       () => {
         throw new FlowCreatePaymentByEmailError(
