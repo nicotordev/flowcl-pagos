@@ -11,6 +11,8 @@ import {
   FlowPaymentsReceivedByDateResponse,
   FlowPaymentsStatusExtendedResponse,
   FlowPaymentStatusResponse,
+  FlowTransactionsReceivedByDateRequest,
+  FlowTransactionsReceivedByDateResponse,
 } from '../types/flow';
 import {
   getPaymentStatus,
@@ -21,6 +23,7 @@ import {
   FlowAuthenticationError,
   FlowPaymentStatusError,
   PaymentsReceivedByDateError,
+  TransactionsReceivedByDateError,
 } from '../errors';
 
 class FlowClient {
@@ -72,9 +75,14 @@ class FlowClient {
      * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
      * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
      */
-    list: (
+    listPaymentsByDate: (
       data: FlowPaymentsReceivedByDateRequest,
     ) => Promise<FlowPaymentsReceivedByDateResponse>;
+
+    listTransactionsByDate: (
+      data: FlowTransactionsReceivedByDateRequest,
+    ) => Promise<FlowTransactionsReceivedByDateResponse>;
+
     /**
      *
      * Este método se utiliza para obtener el estado de un pago. A diferencia del /payment/getStatus este servicio retorna el tipo de pago, los 4 últimos dígitos de la tarjeta (si el pago se hizo con tarjeta) y la información del último intento de pago. Se debe utilizar en la página callback del comercio para recibir notificaciones de pagos. Cada vez que el pagador efectúe un pago, Flow enviará vía POST una llamada a la página del comercio, pasando como parámetro un token que deberá utilizarse en este servicio.
@@ -145,7 +153,8 @@ class FlowClient {
         byCommerceId: this.getPaymentStatusByCommerceId.bind(this),
         byFlowOrderNumber: this.getPaymentStatusByFlowOrderNumber.bind(this),
       },
-      list: this.getPaymentsReceivedByDate.bind(this),
+      listPaymentsByDate: this.getPaymentsReceivedByDate.bind(this),
+      listTransactionsByDate: this.getTransactionsReceivedByDate.bind(this),
       statusExtended: {
         byToken: this.getStatusExtendedByToken.bind(this),
         byFlowOrder: this.getStatusExtendedByFlowOrder.bind(this),
@@ -320,6 +329,13 @@ class FlowClient {
       throw new PaymentsReceivedByDateError((error as Error).message);
     }
   }
+  /**
+   * Obtiene el estado extendido de un pago en base al token
+   * @param token Token único del pago a consultar.
+   * @returns FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
+   * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
+   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   */
   private async getStatusExtendedByToken(
     token: string,
   ): Promise<FlowPaymentsStatusExtendedResponse> {
@@ -350,6 +366,14 @@ class FlowClient {
       throw new PaymentsReceivedByDateError((error as Error).message);
     }
   }
+  /**
+   * Obtiene el estado extendido de un pago en base al flowOrder
+   * @param flowOrder numero de orden de Flow asignado al pago por ejemplo 68977654
+   * @returns FlowPaymentsStatusExtendedResponse con la lista de pagos recibidos en la fecha indicada.
+   * @throws PaymentsReceivedByDateError Si ocurre un error al obtener la lista de pagos recibidos.
+   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   *
+   * */
   private async getStatusExtendedByFlowOrder(
     flowOrder: number,
   ): Promise<FlowPaymentsStatusExtendedResponse> {
@@ -378,6 +402,49 @@ class FlowClient {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
       throw new PaymentsReceivedByDateError((error as Error).message);
+    }
+  }
+  /**
+   * Obtiene la lista de transacciones recibidas en una fecha específica.
+   * @param data FlowTransactionsReceivedByDateRequest con la fecha en formato YYYY-MM-DD
+   * @returns FlowTransactionsReceivedByDateResponse con la lista de transacciones recibidas en la fecha indicada.
+   * @throws TransactionsReceivedByDateError Si ocurre un error al obtener la lista de transacciones recibidas.
+   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
+   */
+  private async getTransactionsReceivedByDate(
+    data: FlowTransactionsReceivedByDateRequest,
+  ): Promise<FlowTransactionsReceivedByDateResponse> {
+    try {
+      // check that the data is in right format, if not, throw an error
+      // date should be in format YYYY-MM-DD
+      const validatedDate = isValidPaymentReceivedByDate(data.date);
+
+      if (Boolean(validatedDate) === false) {
+        throw new TransactionsReceivedByDateError('Fecha no válida');
+      }
+
+      const allData = {
+        ...data,
+        apiKey: this.apiKey,
+      } as unknown as Record<string, string>;
+
+      const signature = this.generateSignature(allData);
+      const formData = new URLSearchParams({
+        ...allData,
+        s: signature,
+      });
+
+      const response =
+        await this.axiosInstance.get<FlowTransactionsReceivedByDateResponse>(
+          '/payment/getTransactions?' + formData.toString(),
+        );
+
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new TransactionsReceivedByDateError((error as Error).message);
     }
   }
 }
