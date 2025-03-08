@@ -33,3 +33,6 @@ jest-output/
 
 # Archivos temporales del sistema
 Thumbs.db
+
+# Archivos de compilación
+*.tsbuildinfo
