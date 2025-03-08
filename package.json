@@ -1,5 +1,5 @@
 {
-  "name": "flowcl-pagos",
+  "name": "@nicotordev/flowcl-pagos",
   "version": "1.0.0",
   "description": "SDK en TypeScript para integrar pagos con la API de Flow.cl de manera sencilla y segura.",
   "main": "dist/index.js",
@@ -30,6 +30,7 @@
   "author": "Nicolas Torres <nicotordev@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^22.13.10",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
@@ -46,6 +47,7 @@
   },
   "dependencies": {
     "axios": "^1.8.2",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.3.1"
   },
   "files": [
