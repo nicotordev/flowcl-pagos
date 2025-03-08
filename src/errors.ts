@@ -196,3 +196,12 @@ export class FlowRegisterCardStatusError extends FlowError {
     this.name = 'FlowRegisterCardStatusError';
   }
 }
+/**
+ * Error cuando hay problemas al tratar de eliminar la tarjeta de un cliente.
+ */
+export class FlowDeleteCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar la tarjeta: ${message}`);
+    this.name = 'FlowDeleteCardError';
+  }
+}
