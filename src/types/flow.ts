@@ -1746,7 +1746,7 @@ type FlowCreatePlanRequest = {
    * 3 = mensual
    * 4 = anual
    */
-  interval: number;
+  interval: 1 | 2 | 3 | 4;
 
   /**
    * Número de intervalos de frecuencia de cobros. Por omisión es 1.
@@ -1772,7 +1772,7 @@ type FlowCreatePlanRequest = {
   /**
    * URL donde Flow notificará al comercio los pagos efectuados por este plan.
    */
-  urlCallback?: string;
+  urlCallback: string;
 
   /**
    * Número de reintentos de cargo. Por omisión es 3.
@@ -1784,7 +1784,7 @@ type FlowCreatePlanRequest = {
    * 1 = al pago (default)
    * 2 = al importe (invoice)
    */
-  currency_convert_option?: any;
+  currency_convert_option?: 1 | 2;
 };
 /**
  * Representa la respuesta de la API de Flow de la creación de un plan.
@@ -2037,7 +2037,7 @@ type FlowEditPlanRequest = {
    * 1 = al pago (default)
    * 2 = al importe (invoice)
    */
-  currency_convert_option?: any;
+  currency_convert_option?: 0 | 1;
 };
 
 type FlowEditPlanResponse = {
