@@ -1,5 +1,5 @@
 import flowConstants from '../constants/flow.constants';
-import { FlowPaymentStatus, PaymentMethods } from '../types/flow';
+import { FlowPaymentStatus, FlowPaymentMethods } from '../types/flow';
 import { parse, isValid, format } from 'date-fns';
 import CryptoJS from 'crypto-js';
 
@@ -9,7 +9,7 @@ import CryptoJS from 'crypto-js';
  * @returns El codigo de metodo de pago en Flow.
  */
 
-function getPaymentMethod(paymentMethod: PaymentMethods) {
+function getPaymentMethod(paymentMethod: FlowPaymentMethods) {
   return flowConstants.FLOW_PAYMENT_METHOD_CODES[paymentMethod];
 }
 
