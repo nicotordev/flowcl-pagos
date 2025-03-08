@@ -160,7 +160,6 @@ export class FlowDeleteCustomerError extends FlowError {
 /**
  * Error cuando hay problemas al obtener un cliente.
  */
-
 export class FlowGetCustomerError extends FlowError {
   constructor(message: string) {
     super(`Error al obtener el cliente: ${message}`);
@@ -171,10 +170,29 @@ export class FlowGetCustomerError extends FlowError {
 /**
  * Error cuando hay problemas al obtener los clientes.
  */
-
 export class FlowGetCustomerListError extends FlowError {
   constructor(message: string) {
     super(`Error al obtener los clientes: ${message}`);
     this.name = 'FlowGetCustomersError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al tratar de registrar la tarjeta de un cliente.
+ */
+export class FlowRegisterCardError extends FlowError {
+  constructor(message: string) {
+    super(`Error al registrar la tarjeta: ${message}`);
+    this.name = 'FlowRegisterCardError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al tratar de ver el estado de la tarjeta de un cliente.
+ */
+export class FlowRegisterCardStatusError extends FlowError {
+  constructor(message: string) {
+    super(`Error al ver el estado de la tarjeta: ${message}`);
+    this.name = 'FlowRegisterCardStatusError';
   }
 }

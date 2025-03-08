@@ -7,9 +7,11 @@ import {
   FlowEditCustomerError,
   FlowGetCustomerError,
   FlowGetCustomerListError,
+  FlowRegisterCardError,
+  FlowRegisterCardStatusError,
 } from '../errors';
 import {
-  FloeGetCustomerListResponse,
+  FlowGetCustomerListResponse,
   FlowCreateCustomerRequest,
   FlowCreateCustomerResponse,
   FlowDeleteCustomerResponse,
@@ -17,6 +19,9 @@ import {
   FlowEditCustomerResponse,
   FlowGetCustomerListRequest,
   FlowGetCustomerResponse,
+  FlowRegisterCardResponse,
+  FlowRegisterCardRequest,
+  FlowRegisterCardStatusResponse,
 } from '../types/flow';
 import { generateFormData } from '../utils/flow.utils';
 
@@ -77,7 +82,28 @@ export default class FlowCustomers {
      */
     list: (
       data: FlowGetCustomerListRequest,
-    ) => Promise<FloeGetCustomerListResponse>;
+    ) => Promise<FlowGetCustomerListResponse>;
+    registerCard: {
+      /**
+       * Envía a un cliente a registrar su tarjeta de crédito para poder efectuarle cargos automáticos. El servicio responde con la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma:
+       * url + "?token=" + token
+       * @param data FlowRegisterCardRequest Datos de la petición de registro de tarjeta.
+       * @returns Promise<FlowRegisterCardResponse> Objeto con la información de la transacción.
+       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       * @throws FlowRegisterCardError Si hay problemas al registrar la tarjeta.
+       */
+      register: (
+        data: FlowRegisterCardRequest,
+      ) => Promise<FlowRegisterCardResponse>;
+      /**
+       * Este servicio retorna el resultado del registro de la tarjeta de crédito de un cliente.
+       * @param token Token de la transacción de registro de tarjeta.
+       * @returns Promise<FlowRegisterCardStatusResponse> Objeto con la información del registro de la tarjeta.
+       * @throws FlowAPIError Si hay problemas con la API de Flow.
+       * @throws FlowRegisterCardError Si hay problemas al registrar la tarjeta.
+       */
+      status: (token: string) => Promise<FlowRegisterCardStatusResponse>;
+    };
   };
 
   /**
@@ -108,6 +134,10 @@ export default class FlowCustomers {
       delete: this.deleteCustomer.bind(this),
       get: this.getCustomer.bind(this),
       list: this.getCustomerList.bind(this),
+      registerCard: {
+        register: this.registerCard.bind(this),
+        status: this.registerCardStatus.bind(this),
+      },
     };
   }
   /**
@@ -238,7 +268,7 @@ export default class FlowCustomers {
    */
   private async getCustomerList(
     data: FlowGetCustomerListRequest,
-  ): Promise<FloeGetCustomerListResponse> {
+  ): Promise<FlowGetCustomerListResponse> {
     try {
       const allData = { ...data, apiKey: this.apiKey } as unknown as Record<
         string,
@@ -247,7 +277,7 @@ export default class FlowCustomers {
       const formData = generateFormData(allData, this.secretKey);
 
       const response =
-        await this.axiosInstance.get<FloeGetCustomerListResponse>(
+        await this.axiosInstance.get<FlowGetCustomerListResponse>(
           '/list?' + formData.toString(),
         );
 
@@ -257,6 +287,69 @@ export default class FlowCustomers {
         throw new FlowAPIError(error.response?.status || 500, error.message);
       }
       throw new FlowGetCustomerListError((error as Error).message);
+    }
+  }
+  /**
+   * Envía a un cliente a registrar su tarjeta de crédito para poder efectuarle cargos automáticos. El servicio responde con la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma:
+   * url + "?token=" + token
+   * @param data FlowRegisterCardRequest Datos de la petición de registro de tarjeta.
+   * @returns Promise<FlowRegisterCardResponse> Objeto con la información de la transacción.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @throws FlowRegisterCardError Si hay problemas al registrar la tarjeta.
+   */
+  private async registerCard(
+    data: FlowRegisterCardRequest,
+  ): Promise<FlowRegisterCardResponse> {
+    try {
+      const allData = { ...data, apiKey: this.apiKey } as unknown as Record<
+        string,
+        string
+      >;
+      const formData = generateFormData(allData, this.secretKey);
+
+      const response = await this.axiosInstance.post<
+        Omit<FlowRegisterCardResponse, 'redirectUrl'>
+      >('/register?' + formData.toString());
+
+      return {
+        ...response.data,
+        redirectUrl: `${response.data.url}?token=${response.data.token}`,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowRegisterCardError((error as Error).message);
+    }
+  }
+  /**
+   * Este servicio retorna el resultado del registro de la tarjeta de crédito de un cliente.
+   * @param token Token de la transacción de registro de tarjeta.
+   * @returns Promise<FlowRegisterCardStatusResponse> Objeto con la información del registro de la tarjeta.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @throws FlowRegisterCardError Si hay problemas al registrar la tarjeta.
+   */
+  private async registerCardStatus(
+    token: string,
+  ): Promise<FlowRegisterCardStatusResponse> {
+    try {
+      const allData = { token, apiKey: this.apiKey } as unknown as Record<
+        string,
+        string
+      >;
+      const formData = generateFormData(allData, this.secretKey);
+
+      const response =
+        await this.axiosInstance.post<FlowRegisterCardStatusResponse>(
+          '/getRegisterStatus?' + formData.toString(),
+        );
+
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowRegisterCardStatusError((error as Error).message);
     }
   }
 }

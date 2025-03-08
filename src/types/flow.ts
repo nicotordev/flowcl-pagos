@@ -936,7 +936,7 @@ type FlowGetCustomerListRequest = {
   status?: number;
 };
 
-type FloeGetCustomerListResponse = {
+type FlowGetCustomerListResponse = {
   /**
    *  El número total de registros encontrados.
    */
@@ -952,6 +952,49 @@ type FloeGetCustomerListResponse = {
    * Arreglo de registros de la página actual.
    */
   data: Array<Record<string, unknown>>;
+};
+/**
+ * Representa la información de una tarjeta de crédito registrada en Flow.
+ */
+type FlowRegisterCardRequest = {
+  /**
+   * Identificador único del cliente en Flow.
+   */
+  customerId: string;
+  /**
+   * URL de retorno del comercio para redirigir al pagador (requerido).
+   */
+  url_return: string;
+};
+
+/**
+ * Representa la respuesta de la API de Flow del registro de una tarjeta de crédito.
+ */
+
+type FlowRegisterCardResponse = {
+  /**
+   * URL para redirigir al usuario y completar el pago.
+   */
+  url: string;
+  /**
+   * Token de la transacción generado por Flow.
+   */
+  token: string;
+  /**
+   * URL completa de redirección para completar el pago.
+   */
+  redirectUrl: string;
+};
+/**
+ * Representa la respuesta de la API de Flow del estado de la tarjeta de crédito registrada.
+ */
+type FlowRegisterCardStatusResponse = {
+  /**
+   * Estado de la tarjeta de crédito registrada.
+   * - `0` - Tarjeta registrada
+   * - `1` - Tarjeta no registrada
+   */
+  status: '0' | '1';
 };
 
 export type {
@@ -980,5 +1023,8 @@ export type {
   FlowDeleteCustomerResponse,
   FlowGetCustomerResponse,
   FlowGetCustomerListRequest,
-  FloeGetCustomerListResponse,
+  FlowGetCustomerListResponse,
+  FlowRegisterCardRequest,
+  FlowRegisterCardResponse,
+  FlowRegisterCardStatusResponse,
 };
