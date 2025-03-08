@@ -182,6 +182,48 @@ export default class FlowPayments {
       createPaymentByEmail: this.createPaymentByEmail.bind(this),
     };
   }
+  /**
+   * Realiza una petición a la API de Flow.
+   * @param endpoint URL del endpoint de la API.
+   * @param data Datos a enviar en la petición.
+   * @param method Método de la petición (POST o GET).
+   * @param errorParam Error a lanzar en caso de error.
+   * @returns Promise<T> Respuesta de la API.
+   * @throws FlowAPIError Si hay problemas con la API de Flow.
+   * @throws Error Si hay problemas al realizar la petición.
+   */
+  private async request<T, P>(
+    endpoint: string,
+    data: Record<string, unknown>,
+    method: 'post' | 'get' = 'post',
+    error: () => never,
+    modifyResponse?: (data: P) => P,
+  ): Promise<T | P> {
+    try {
+      const allData = data as Record<string, string>;
+      const formData = generateFormData(allData, this.secretKey);
+
+      const response =
+        method === 'post'
+          ? await this.axiosInstance.post<T>(
+              `${endpoint}?${formData.toString()}`,
+            )
+          : await this.axiosInstance.get<T>(
+              `${endpoint}?${formData.toString()}`,
+            );
+
+      if (modifyResponse) {
+        return modifyResponse(data as P);
+      }
+
+      return response.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        throw new FlowAPIError(err.response?.status || 500, err.message);
+      }
+      error();
+    }
+  }
 
   /**
    * Obtiene el estado de un pago en Flow.
@@ -193,27 +235,22 @@ export default class FlowPayments {
   private async getPaymentStatusByToken(
     token: string,
   ): Promise<FlowPaymentStatusResponse> {
-    try {
-      const allData = { token, apiKey: this.apiKey } as unknown as Record<
-        string,
-        string
-      >;
-      const formData = generateFormData(allData, this.secretKey);
-      // Enviar solicitud GET a la API de Flow para obtener el estado del pago
-      const response = await this.axiosInstance.get<
-        Omit<FlowPaymentStatusResponse, 'statusStr'>
-      >('/getStatus?' + formData.toString());
-
-      return {
-        ...response.data,
-        statusStr: getPaymentStatus(response.data.status),
-      };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowPaymentStatusError((error as Error).message);
-    }
+    return this.request(
+      '/getStatus',
+      { token },
+      'get',
+      () => {
+        throw new FlowPaymentStatusError(
+          'Error al obtener el estado del pago.',
+        );
+      },
+      (data) => {
+        return {
+          ...data,
+          statusStr: getPaymentStatus(data.status),
+        };
+      },
+    );
   }
 
   /**
@@ -226,26 +263,22 @@ export default class FlowPayments {
   private async getPaymentStatusByCommerceId(
     commerceId: string,
   ): Promise<FlowPaymentStatusResponse> {
-    try {
-      const allData = { commerceId, apiKey: this.apiKey } as Record<
-        string,
-        string
-      >;
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response = await this.axiosInstance.get<
-        Omit<FlowPaymentStatusResponse, 'statusStr'>
-      >('/getPaymentStatusByCommerceId?' + formData.toString());
-      return {
-        ...response.data,
-        statusStr: getPaymentStatus(response.data.status),
-      };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowPaymentStatusError((error as Error).message);
-    }
+    return this.request(
+      '/getPaymentStatusByCommerceId',
+      { commerceId },
+      'get',
+      () => {
+        throw new FlowPaymentStatusError(
+          'Error al obtener el estado del pago.',
+        );
+      },
+      (data) => {
+        return {
+          ...data,
+          statusStr: getPaymentStatus(data.status),
+        };
+      },
+    );
   }
 
   /**
@@ -258,26 +291,25 @@ export default class FlowPayments {
   private async getPaymentStatusByFlowOrderNumber(
     flowOrder: number,
   ): Promise<FlowPaymentStatusResponse> {
-    try {
-      const allData = { flowOrder, apiKey: this.apiKey } as unknown as Record<
-        string,
-        string
-      >;
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response = await this.axiosInstance.get<
-        Omit<FlowPaymentStatusResponse, 'statusStr'>
-      >('/getStatusByFlowOrder?' + formData.toString());
-      return {
-        ...response.data,
-        statusStr: getPaymentStatus(response.data.status),
-      };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowPaymentStatusError((error as Error).message);
-    }
+    return this.request<
+      Omit<FlowPaymentStatusResponse, 'statusStr'>,
+      FlowPaymentStatusResponse
+    >(
+      '/getStatusByFlowOrder',
+      { flowOrder },
+      'get',
+      () => {
+        throw new FlowPaymentStatusError(
+          'Error al obtener el estado del pago.',
+        );
+      },
+      (data) => {
+        return {
+          ...data,
+          statusStr: getPaymentStatus(data.status),
+        };
+      },
+    ) as Promise<FlowPaymentStatusResponse>;
   }
   /**
    * Obtiene la lista de pagos recibidos en una fecha específica.
@@ -289,35 +321,14 @@ export default class FlowPayments {
   private async getPaymentsReceivedByDate(
     data: FlowPaymentsReceivedByDateRequest,
   ): Promise<FlowPaymentsReceivedByDateResponse> {
-    try {
-      // check that the data is in right format, if not, throw an error
-      // date should be in format YYYY-MM-DD
-      const validatedDate = isValidPaymentReceivedByDate(data.date);
-
-      if (Boolean(validatedDate) === false) {
-        throw new FlowPaymentsReceivedByDateError('Fecha no válida');
-      }
-
-      const allData = {
-        ...data,
-        apiKey: this.apiKey,
-        date: validatedDate,
-      } as unknown as Record<string, string>;
-
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response =
-        await this.axiosInstance.get<FlowPaymentsReceivedByDateResponse>(
-          '/getPayments?' + formData.toString(),
-        );
-
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowPaymentsReceivedByDateError((error as Error).message);
+    if (!isValidPaymentReceivedByDate(data.date)) {
+      throw new FlowPaymentsReceivedByDateError('Fecha no válida');
     }
+    return this.request('/getPayments', data, 'get', () => {
+      throw new FlowPaymentsReceivedByDateError(
+        'Error al obtener la lista de pagos recibidos.',
+      );
+    });
   }
   /**
    * Obtiene el estado extendido de un pago en base al token
@@ -329,28 +340,22 @@ export default class FlowPayments {
   private async getStatusExtendedByToken(
     token: string,
   ): Promise<FlowPaymentsStatusExtendedResponse> {
-    try {
-      const allData = { token, apiKey: this.apiKey } as unknown as Record<
-        string,
-        string
-      >;
-
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response = await this.axiosInstance.get<
-        Omit<FlowPaymentsStatusExtendedResponse, 'statusStr'>
-      >('/getStatusExtended?' + formData.toString());
-
-      return {
-        ...response.data,
-        statusStr: getPaymentStatus(response.data.status),
-      };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowStatusExtendedError((error as Error).message);
-    }
+    return this.request(
+      '/getStatusExtended',
+      { token },
+      'get',
+      () => {
+        throw new FlowStatusExtendedError(
+          'Error al obtener el estado extendido del pago.',
+        );
+      },
+      (data) => {
+        return {
+          ...data,
+          statusStr: getPaymentStatus(data.status),
+        };
+      },
+    );
   }
   /**
    * Obtiene el estado extendido de un pago en base al flowOrder
@@ -363,28 +368,22 @@ export default class FlowPayments {
   private async getStatusExtendedByFlowOrder(
     flowOrder: number,
   ): Promise<FlowPaymentsStatusExtendedResponse> {
-    try {
-      const allData = { flowOrder, apiKey: this.apiKey } as unknown as Record<
-        string,
-        string
-      >;
-
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response = await this.axiosInstance.get<
-        Omit<FlowPaymentsStatusExtendedResponse, 'statusStr'>
-      >('/getStatusByFlowOrderExtended?' + formData.toString());
-
-      return {
-        ...response.data,
-        statusStr: getPaymentStatus(response.data.status),
-      };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowStatusExtendedError((error as Error).message);
-    }
+    return this.request(
+      '/getStatusByFlowOrderExtended',
+      { flowOrder },
+      'get',
+      () => {
+        throw new FlowStatusExtendedError(
+          'Error al obtener el estado extendido del pago.',
+        );
+      },
+      (data) => {
+        return {
+          ...data,
+          statusStr: getPaymentStatus(data.status),
+        };
+      },
+    );
   }
   /**
    * Obtiene la lista de transacciones recibidas en una fecha específica.
@@ -396,34 +395,14 @@ export default class FlowPayments {
   private async getTransactionsReceivedByDate(
     data: FlowTransactionsReceivedByDateRequest,
   ): Promise<FlowTransactionsReceivedByDateResponse> {
-    try {
-      // check that the data is in right format, if not, throw an error
-      // date should be in format YYYY-MM-DD
-      const validatedDate = isValidPaymentReceivedByDate(data.date);
-
-      if (Boolean(validatedDate) === false) {
-        throw new FlowTransactionsReceivedByDateError('Fecha no válida');
-      }
-
-      const allData = {
-        ...data,
-        apiKey: this.apiKey,
-      } as unknown as Record<string, string>;
-
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response =
-        await this.axiosInstance.get<FlowTransactionsReceivedByDateResponse>(
-          '/getTransactions?' + formData.toString(),
-        );
-
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowTransactionsReceivedByDateError((error as Error).message);
+    if (!isValidPaymentReceivedByDate(data.date)) {
+      throw new FlowTransactionsReceivedByDateError('Fecha no válida');
     }
+    return this.request('/getTransactions', data, 'get', () => {
+      throw new FlowTransactionsReceivedByDateError(
+        'Error al obtener la lista de transacciones recibidas.',
+      );
+    });
   }
   /**
    * Este método permite crear una orden de pago a Flow y recibe como respuesta la URL para redirigir el browser del pagador y el token que identifica la transacción. La url de redirección se debe formar concatenando los valores recibidos en la respuesta de la siguiente forma: url + "?token=" +token Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
@@ -435,27 +414,29 @@ export default class FlowPayments {
   private async createPayment(
     data: FlowCreatePaymentRequest,
   ): Promise<FlowCreatePaymentResponse> {
-    try {
-      const allData = { ...data, apiKey: this.apiKey } as unknown as Record<
-        string,
-        string
-      >;
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response = await this.axiosInstance.post<
-        Omit<FlowCreatePaymentResponse, 'redirectUrl'>
-      >('/create', formData);
-      return {
-        ...response.data,
-        redirectUrl: response.data.url + '?token=' + response.data.token,
-      };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowCreatePaymentError((error as Error).message);
-    }
+    const response = await this.request<
+      Omit<FlowCreatePaymentResponse, 'redirectUrl'>,
+      FlowCreatePaymentResponse
+    >(
+      '/create',
+      data,
+      'post',
+      () => {
+        throw new FlowCreatePaymentError('Error al crear el pago.');
+      },
+      (data) => {
+        return {
+          ...data,
+          redirectUrl: data.url + '?token=' + data.token,
+        };
+      },
+    );
+    return {
+      ...response,
+      redirectUrl: response.url + '?token=' + response.token,
+    };
   }
+
   /**
    * Permite generar un cobro por email. Flow emite un email al pagador que contiene la información de la Orden de pago y el link de pago correspondiente. Una vez que el pagador efectúe el pago, Flow notificará el resultado a la página del comercio que se envió en el parámetro urlConfirmation.
    * @param data FlowCreatePaymentByEmailRequest con los datos necesarios para crear un pago.
@@ -466,25 +447,28 @@ export default class FlowPayments {
   private async createPaymentByEmail(
     data: FlowCreatePaymentByEmailRequest,
   ): Promise<FlowCreatePaymentByEmailResponse> {
-    try {
-      const allData = { ...data, apiKey: this.apiKey } as unknown as Record<
-        string,
-        string
-      >;
-      const formData = generateFormData(allData, this.secretKey);
-
-      const response = await this.axiosInstance.post<
-        Omit<FlowCreatePaymentByEmailResponse, 'redirectUrl'>
-      >('/createEmail', formData);
-      return {
-        ...response.data,
-        redirectUrl: response.data.url + '?token=' + response.data.token,
-      };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new FlowAPIError(error.response?.status || 500, error.message);
-      }
-      throw new FlowCreatePaymentByEmailError((error as Error).message);
-    }
+    const response = await this.request<
+      Omit<FlowCreatePaymentByEmailResponse, 'redirectUrl'>,
+      FlowCreatePaymentByEmailResponse
+    >(
+      '/createEmail',
+      data,
+      'post',
+      () => {
+        throw new FlowCreatePaymentByEmailError(
+          'Error al crear el pago por email.',
+        );
+      },
+      (data) => {
+        return {
+          ...data,
+          redirectUrl: data.url + '?token=' + data.token,
+        };
+      },
+    );
+    return {
+      ...response,
+      redirectUrl: response.url + '?token=' + response.token,
+    };
   }
 }
