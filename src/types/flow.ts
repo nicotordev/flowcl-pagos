@@ -76,6 +76,10 @@ export interface FlowCreatePaymentResponse {
    * Número de orden generado por Flow.
    */
   flowOrder: number;
+  /**
+   * URL completa de redirección para completar el pago.
+   */
+  redirectUrl: string;
 }
 
 /**

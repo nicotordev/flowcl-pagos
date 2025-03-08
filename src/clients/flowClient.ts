@@ -94,7 +94,10 @@ class FlowClient {
         '/payment/create',
         formData,
       );
-      return response.data;
+      return {
+        ...response.data,
+        redirectUrl: response.data.url + '?token=' + response.data.token,
+      };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new FlowAPIError(error.response?.status || 500, error.message);
