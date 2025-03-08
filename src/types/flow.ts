@@ -619,6 +619,9 @@ type FlowRefundStatusResponse = {
   fee: number;
 };
 
+/**
+ * Representa la información de un cliente en Flow.
+ */
 type FlowCreateCustomerRequest = {
   /**
    * Nombre del cliente que realiza la transacción.
@@ -697,6 +700,96 @@ type FlowCreateCustomerResponse = {
    */
   registerDate: string;
 };
+/**
+ * Representa la información de un cliente en Flow.
+ */
+type FlowEditCustomerRequest = {
+  /**
+   * Identificador único del cliente en Flow.
+   */
+  customerId: string;
+
+  /**
+   * Nombre del cliente que se desea actualizar.
+   * Debe incluir nombre y apellido.
+   * Opcional.
+   */
+  name?: string;
+
+  /**
+   * Dirección de correo electrónico del cliente.
+   * Opcional.
+   */
+  email?: string;
+
+  /**
+   * Identificador externo del cliente en el negocio del comercio.
+   * Opcional.
+   */
+  externalId?: string;
+};
+
+/**
+ * Representa la respuesta de la API de Flow en formato application/json.
+ */
+type FlowEditCustomerResponse = {
+  /**
+   * Identificador único del cliente.
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación del cliente en formato yyyy-mm-dd hh:mm:ss.
+   */
+  created: string;
+
+  /**
+   * Correo electrónico del cliente.
+   */
+  email: string;
+
+  /**
+   * Nombre completo del cliente.
+   */
+  name: string;
+
+  /**
+   * Modo de pago del cliente.
+   * Puede ser:
+   * - 'auto' (cargo automático)
+   * - 'manual' (cobro manual)
+   */
+  pay_mode: 'auto' | 'manual';
+
+  /**
+   * Marca de la tarjeta de crédito registrada.
+   */
+  creditCardType: string;
+
+  /**
+   * Últimos 4 dígitos de la tarjeta de crédito registrada.
+   */
+  last4CardDigits: string;
+
+  /**
+   * Identificador del cliente en su negocio.
+   */
+  externalId: string;
+
+  /**
+   * Estado del cliente.
+   * Puede ser:
+   * - '0' (Eliminado)
+   * - '1' (Activo)
+   */
+  status: '0' | '1';
+
+  /**
+   * Fecha en la que el cliente registró su tarjeta de crédito.
+   * Formato yyyy-mm-dd hh:mm:ss.
+   */
+  registerDate: string;
+};
 
 export type {
   FlowCreatePaymentRequest,
@@ -719,4 +812,6 @@ export type {
   FlowRefundStatus,
   FlowCreateCustomerRequest,
   FlowCreateCustomerResponse,
+  FlowEditCustomerRequest,
+  FlowEditCustomerResponse,
 };

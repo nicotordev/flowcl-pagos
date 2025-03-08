@@ -135,3 +135,10 @@ export class FlowCreateCustomerError extends FlowError {
     this.name = 'FlowCreateCustomerError';
   }
 }
+
+export class FlowEditCustomerError extends FlowError {
+  constructor(message: string) {
+    super(`Error al editar el cliente: ${message}`);
+    this.name = 'FlowEditCustomerError';
+  }
+}
