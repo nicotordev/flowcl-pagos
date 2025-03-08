@@ -1,4 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * Cliente para interactuar con la API de Flow.
+ * Permite crear órdenes de pago y consultar su estado.
+ * Implementa un sistema de errores personalizados para un mejor manejo de fallos.
+ */
 import axios, { AxiosInstance } from 'axios';
 import CryptoJS from 'crypto-js';
 
@@ -7,6 +11,13 @@ import {
   FlowCreatePaymentResponse,
   FlowPaymentStatusResponse,
 } from '../types/flow';
+import { getPaymentMethod, getPaymentStatus } from '../utils/flow.utils';
+import {
+  FlowAPIError,
+  FlowAuthenticationError,
+  FlowOrderCreationError,
+  FlowPaymentStatusError,
+} from '../errors';
 
 class FlowClient {
   private apiKey: string;
@@ -17,7 +28,8 @@ class FlowClient {
    * Constructor de la clase FlowClient.
    * @param apiKey Clave de API proporcionada por Flow.
    * @param secretKey Clave secreta proporcionada por Flow.
-   * @param enviroment Entorno de Flow (sandbox o producción).
+   * @param enviroment Entorno de Flow ('sandbox' o 'production').
+   * @throws FlowAuthenticationError Si no se proporciona apiKey o secretKey.
    */
   constructor(
     apiKey: string,
@@ -25,7 +37,7 @@ class FlowClient {
     enviroment: 'sandbox' | 'production' = 'sandbox',
   ) {
     if (!apiKey || !secretKey) {
-      throw new Error('API Key y Secret Key son requeridos');
+      throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
@@ -62,12 +74,15 @@ class FlowClient {
    * Crea una orden de pago en Flow.
    * @param data Datos de la orden de pago (sin incluir apiKey y firma, ya que se agregan automáticamente).
    * @returns Respuesta de Flow con los detalles de la orden creada.
+   * @throws FlowOrderCreationError Si ocurre un error en la creación de la orden.
+   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
    */
   async createOrder(
     data: Omit<FlowCreatePaymentRequest, 'apiKey' | 's'>,
   ): Promise<FlowCreatePaymentResponse> {
     try {
-      const allData = { ...data, apiKey: this.apiKey }; // Agregar apiKey a los datos
+      const paymentMethod = getPaymentMethod(data.paymentMethod ?? 'flow');
+      const allData = { ...data, apiKey: this.apiKey, paymentMethod }; // Agregar apiKey a los datos
       const signature = this.generateSignature(allData); // Generar firma
       const formData = new URLSearchParams({
         ...(allData as any),
@@ -81,7 +96,10 @@ class FlowClient {
       );
       return response.data;
     } catch (error) {
-      throw error; // Propagar error en caso de fallo
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowOrderCreationError((error as Error).message);
     }
   }
 
@@ -89,6 +107,8 @@ class FlowClient {
    * Obtiene el estado de un pago en Flow.
    * @param token Token del pago a consultar.
    * @returns Respuesta de Flow con el estado del pago.
+   * @throws FlowPaymentStatusError Si ocurre un error al obtener el estado del pago.
+   * @throws FlowAPIError Si la API de Flow responde con un error HTTP.
    */
   async getPaymentStatus(token: string): Promise<FlowPaymentStatusResponse> {
     try {
@@ -103,9 +123,15 @@ class FlowClient {
       const response = await this.axiosInstance.get<FlowPaymentStatusResponse>(
         '/payment/getStatus?' + formData.toString(),
       );
-      return response.data;
+      return {
+        ...response.data,
+        statusStr: getPaymentStatus(response.data.status),
+      };
     } catch (error) {
-      throw error; // Propagar error en caso de fallo
+      if (axios.isAxiosError(error)) {
+        throw new FlowAPIError(error.response?.status || 500, error.message);
+      }
+      throw new FlowPaymentStatusError((error as Error).message);
     }
   }
 }
