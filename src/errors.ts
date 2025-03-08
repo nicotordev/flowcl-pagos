@@ -128,3 +128,10 @@ export class FlowRefundStatusError extends FlowError {
     this.name = 'FlowRefundStatusError';
   }
 }
+
+export class FlowCreateCustomerError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear el cliente: ${message}`);
+    this.name = 'FlowCreateCustomerError';
+  }
+}

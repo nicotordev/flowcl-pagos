@@ -619,6 +619,85 @@ type FlowRefundStatusResponse = {
   fee: number;
 };
 
+type FlowCreateCustomerRequest = {
+  /**
+   * Nombre del cliente que realiza la transacción.
+   * Debe incluir nombre y apellido.
+   */
+  name: string;
+
+  /**
+   * Dirección de correo electrónico del cliente.
+   * Se utilizará para notificaciones y validaciones.
+   */
+  email: string;
+
+  /**
+   * Identificador externo del cliente.
+   * Corresponde al ID con el que el sistema del comercio reconoce al cliente.
+   */
+  externalId: string;
+};
+
+/**
+ * Representa la respuesta de la API de Flow en formato application/json.
+ */
+type FlowCreateCustomerResponse = {
+  /**
+   * Identificador del cliente.
+   */
+  customerId: string;
+
+  /**
+   * La fecha de creación del cliente en formato yyyy-mm-dd hh:mm:ss.
+   */
+  created: string;
+
+  /**
+   * Dirección de correo electrónico del cliente.
+   */
+  email: string;
+
+  /**
+   * Nombre completo del cliente.
+   */
+  name: string;
+
+  /**
+   * Modo de pago del cliente:
+   * - "auto": Cargo automático
+   * - "manual": Cobro manual
+   */
+  pay_mode: 'auto' | 'manual';
+
+  /**
+   * La marca de la tarjeta de crédito registrada.
+   */
+  creditCardType: string;
+
+  /**
+   * Los últimos 4 dígitos de la tarjeta de crédito registrada.
+   */
+  last4CardDigits: string;
+
+  /**
+   * Identificador externo del cliente en el negocio del comercio.
+   */
+  externalId: string;
+
+  /**
+   * Estado del cliente:
+   * - "0": Eliminado
+   * - "1": Activo
+   */
+  status: '0' | '1';
+
+  /**
+   * La fecha en que el cliente registró su tarjeta de crédito en formato yyyy-mm-dd hh:mm:ss.
+   */
+  registerDate: string;
+};
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -637,4 +716,7 @@ export type {
   FlowCreateRefundResponse,
   FlowCancelRefundResponse,
   FlowRefundStatusResponse,
+  FlowRefundStatus,
+  FlowCreateCustomerRequest,
+  FlowCreateCustomerResponse,
 };
