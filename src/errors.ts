@@ -283,3 +283,13 @@ export class FlowListPaginatedSubscriptionsError extends FlowError {
     this.name = 'FlowListPaginatedSubscriptionsError';
   }
 }
+
+/**
+ *  Error cuando hay problemas al tratar de crear una suscripción
+ */
+export class FlowCreatePlanError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear el plan: ${message}`);
+    this.name = 'FlowCreatePlanError';
+  }
+}

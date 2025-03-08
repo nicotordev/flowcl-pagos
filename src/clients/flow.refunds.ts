@@ -26,39 +26,34 @@ export default class FlowRefunds {
   /**
    * Objeto que proporciona métodos para interactuar con los reembolsos en Flow.
    */
-  public refunds: {
+  /**
+   * Este servicio permite crear una orden de reembolso. Una vez que el receptor del reembolso acepte o rechaze el reembolso, Flow notificará vía POST a la página del comercio identificada en urlCallback pasando como parámetro token En esta página, el comercio debe invocar el servicio refund/getStatus para obtener el estado del reembolso.
+   * @param {string} data FlowCreateRefundRequest con los datos del reembolso.
+   * @returns {Promise<FlowCreateRefundResponse>} con la respuesta de Flow.
+   * @throws {FlowAPIError} Si hay un error en la respuesta de la API.
+   * @throws {FlowCreateRefundError} Si hay un error al crear el reembolso.
+   */
+  public create = this.createRefund.bind(this);
+  /**
+   * Este servicio permite cancelar una orden de reembolso pendiente
+   * @param {string} token Token de la orden de reembolso
+   * @returns {Promise<FlowCancelRefundResponse>} con la respuesta de Flow.
+   * @throws {FlowAPIError} Si hay un error en la respuesta de la API.
+   * @throws {FlowCancelRefundError} Si hay un error al cancelar el reembolso.
+   */
+  public cancel = this.cancelRefund.bind(this);
+  /**
+   * Este servicio permite obtener el estado de un reembolso.
+   */
+  public status = {
     /**
-     * Este servicio permite crear una orden de reembolso. Una vez que el receptor del reembolso acepte o rechaze el reembolso, Flow notificará vía POST a la página del comercio identificada en urlCallback pasando como parámetro token En esta página, el comercio debe invocar el servicio refund/getStatus para obtener el estado del reembolso.
-     * @param {string} data FlowCreateRefundRequest con los datos del reembolso.
-     * @returns {Promise<FlowCreateRefundResponse>} con la respuesta de Flow.
-     * @throws {FlowAPIError} Si hay un error en la respuesta de la API.
-     * @throws {FlowCreateRefundError} Si hay un error al crear el reembolso.
-     */
-    createRefund: (
-      data: FlowCreateRefundRequest,
-    ) => Promise<FlowCreateRefundResponse>;
-    /**
-     * Este servicio permite cancelar una orden de reembolso pendiente
+     * Permite obtener el estado de un reembolso solicitado. Este servicio se debe invocar desde la página del comercio que se señaló en el parámetro urlCallback del servicio refund/create.
      * @param {string} token Token de la orden de reembolso
-     * @returns {Promise<FlowCancelRefundResponse>} con la respuesta de Flow.
+     * @returns {Promise<FlowRefundStatusResponse>} con la respuesta de Flow.
      * @throws {FlowAPIError} Si hay un error en la respuesta de la API.
-     * @throws {FlowCancelRefundError} Si hay un error al cancelar el reembolso.
+     * @throws {FlowRefundStatusError} Si hay un error al obtener el estado del reembolso.
      */
-    cancelRefund: (token: string) => Promise<FlowCancelRefundResponse>;
-
-    /**
-     * Este servicio permite obtener el estado de un reembolso.
-     */
-    status: {
-      /**
-       * Permite obtener el estado de un reembolso solicitado. Este servicio se debe invocar desde la página del comercio que se señaló en el parámetro urlCallback del servicio refund/create.
-       * @param {string} token Token de la orden de reembolso
-       * @returns {Promise<FlowRefundStatusResponse>} con la respuesta de Flow.
-       * @throws {FlowAPIError} Si hay un error en la respuesta de la API.
-       * @throws {FlowRefundStatusError} Si hay un error al obtener el estado del reembolso.
-       */
-      byToken: (token: string) => Promise<FlowRefundStatusResponse>;
-    };
+    byToken: this.getRefundStatus.bind(this),
   };
 
   /**
@@ -83,14 +78,6 @@ export default class FlowRefunds {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
-
-    this.refunds = {
-      createRefund: this.createRefund.bind(this),
-      cancelRefund: this.cancelRefund.bind(this),
-      status: {
-        byToken: this.getRefundStatus.bind(this),
-      },
-    };
   }
   /**
    * Realiza una petición a la API de Flow.

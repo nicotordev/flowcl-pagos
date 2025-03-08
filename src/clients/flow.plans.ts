@@ -1,6 +1,11 @@
 import axios, { AxiosInstance } from 'axios';
-import { FlowAPIError, FlowAuthenticationError } from '../errors';
+import {
+  FlowAPIError,
+  FlowAuthenticationError,
+  FlowCreatePlanError,
+} from '../errors';
 import { generateFormData } from '../utils/flow.utils';
+import { FlowCreatePlanRequest, FlowCreatePlanResponse } from '../types/flow';
 
 /**
  * Cliente para interactuar con la API de pagos de Flow.
@@ -10,6 +15,13 @@ export default class FlowPlans {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
+
+  /**
+   * Servicios relacionados con los planes de suscripción.
+   */
+  public create: (
+    data: FlowCreatePlanRequest,
+  ) => Promise<FlowCreatePlanResponse> = this.createPlan.bind(this);
 
   /**
    * Constructor de la clase FlowClient.
@@ -28,7 +40,7 @@ export default class FlowPlans {
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
-      baseURL: `${baseURL}/payment`,
+      baseURL: `${baseURL}/plans`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -79,5 +91,24 @@ export default class FlowPlans {
       }
       error(err);
     }
+  }
+  /**
+   * Este servicio permite crear un nuevo Plan de Suscripción
+   * @param {FlowCreatePlanRequest} data Datos para crear el plan.
+   * @returns {Promise<FlowCreatePlanResponse>} Respuesta de la API.
+   * @throws {FlowCreatePlanError} Si hay problemas al crear el plan.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  private async createPlan(
+    data: FlowCreatePlanRequest,
+  ): Promise<FlowCreatePlanResponse> {
+    return await this.request<FlowCreatePlanResponse, FlowCreatePlanResponse>(
+      '/create',
+      data,
+      'post',
+      (e) => {
+        throw new FlowCreatePlanError((e as Error).message);
+      },
+    );
   }
 }
