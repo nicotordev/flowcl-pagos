@@ -62,3 +62,13 @@ export class PaymentsReceivedByDateError extends FlowError {
     this.name = 'PaymentsReceivedByDateError';
   }
 }
+
+/**
+ * Error cuando hay problemas al obtener las transacciones recibidas por fecha.
+ */
+export class TransactionsReceivedByDateError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener las transacciones recibidas por fecha: ${message}`);
+    this.name = 'TransactionsReceivedByDateError';
+  }
+}
