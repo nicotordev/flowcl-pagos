@@ -32,7 +32,7 @@ type FlowCreatePaymentRequest = {
    * - `onepay` - Onepay
    * - `flow` - Flow
    */
-  paymentMethod?: PaymentMethods;
+  paymentMethod?: FlowPaymentMethods;
   /**
    * URL de retorno del comercio para redirigir al pagador (requerido).
    */
@@ -424,10 +424,86 @@ type FlowPaymentsStatusExtendedResponse = {
     medioCode: string;
   } | null;
 };
+
+/**
+ * Tipo que representa una solicitud de reembolso en Flow.
+ */
+type FlowCreateRefundRequest = {
+  /**
+   * La orden de reembolso del comercio. Identifica de manera única el reembolso dentro del sistema del comercio.
+   */
+  refundCommerceOrder: string;
+
+  /**
+   * Email del receptor del reembolso. La persona que recibirá el reembolso.
+   */
+  receiverEmail: string;
+
+  /**
+   * Monto del reembolso en la moneda definida por el comercio.
+   */
+  amount: number;
+
+  /**
+   * La URL callback del comercio donde Flow comunica el estado del reembolso.
+   */
+  urlCallBack: string;
+
+  /**
+   * Identificador del comercio de la transacción original que se va a reembolsar (opcional).
+   */
+  commerceTrxId?: string;
+
+  /**
+   * Identificador de Flow de la transacción original que se va a reembolsar (opcional).
+   */
+  flowTrxId?: string;
+};
+
+/**
+ * Tipo que representa la respuesta de una solicitud de reembolso en Flow.
+ */
+type FlowCreateRefundResponse = {
+  /**
+   * Token del reembolso.
+   */
+  token: string;
+
+  /**
+   * Número de orden de reembolso.
+   */
+  flowRefundOrder: string;
+
+  /**
+   * Fecha de solicitud de reembolso en formato yyyy-mm-dd hh:mm:ss.
+   */
+  date: string;
+
+  /**
+   * Estado del reembolso. Los estados posibles son:
+   * - created: Solicitud creada
+   * - accepted: Reembolso aceptado
+   * - rejected: Reembolso rechazado
+   * - refunded: Reembolso reembolsado
+   * - canceled: Reembolso cancelado
+   */
+  status: 'created' | 'accepted' | 'rejected' | 'refunded' | 'canceled';
+
+  /**
+   * Monto del reembolso.
+   */
+  amount: number;
+
+  /**
+   * Costo del servicio de reembolso.
+   */
+  fee: number;
+};
+
 /**
  * Métodos de pago admitidos en Flow.
  */
-type PaymentMethods =
+type FlowPaymentMethods =
   | 'webpay-plus'
   | 'mach'
   | 'khipu'
@@ -447,7 +523,7 @@ type FlowConstants = {
   /**
    * Mapeo de métodos de pago a sus respectivos códigos numéricos.
    */
-  FLOW_PAYMENT_METHOD_CODES: Record<PaymentMethods, number>;
+  FLOW_PAYMENT_METHOD_CODES: Record<FlowPaymentMethods, number>;
   /**
    * Mapeo de códigos de estado de pago a su representación en texto.
    */
@@ -465,7 +541,9 @@ export type {
   FlowTransactionsReceivedByDateRequest,
   FlowTransactionsReceivedByDateResponse,
   FlowPaymentsStatusExtendedResponse,
-  PaymentMethods,
+  FlowPaymentMethods,
   FlowPaymentStatus,
   FlowConstants,
+  FlowCreateRefundRequest,
+  FlowCreateRefundResponse,
 };
