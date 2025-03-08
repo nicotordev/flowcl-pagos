@@ -1,114 +1,91 @@
-# @nicotordev/flowcl-pagos
+# Flow.cl SDK para Node.js
 
-Cliente de TypeScript para la API de Flow.cl, que permite procesar pagos en línea de manera sencilla y segura.
+![Flow.cl](https://www.flow.cl/logo.png)
 
-## 🚀 Instalación
+[![NPM Version](https://img.shields.io/npm/v/@nicotordev/flowcl-pagos.svg)](https://www.npmjs.com/package/@nicotordev/flowcl-pagos)
+[![License](https://img.shields.io/npm/l/@nicotordev/flowcl-pagos.svg)](LICENSE)
 
-Puedes instalar este paquete con npm o yarn:
+## Descripción
+
+Este paquete proporciona un SDK en TypeScript para integrar pagos con la API de Flow.cl de manera sencilla y segura.
+
+## Instalación
 
 ```sh
 npm install @nicotordev/flowcl-pagos
 ```
 
-o con yarn:
+## Uso
 
-```sh
-yarn add @nicotordev/flowcl-pagos
-```
-
-## 🔑 Configuración
-
-Para utilizar el cliente, necesitas una **API Key** y una **Secret Key** de Flow.cl.
-
-## 📌 Uso
-
-### 1️⃣ Importar y crear una instancia del cliente
+### Importar y configurar el cliente
 
 ```typescript
 import FlowClient from '@nicotordev/flowcl-pagos';
 
-const flow = new FlowClient('TU_API_KEY', 'TU_SECRET_KEY');
+const flow = new FlowClient(
+  'tu_api_key',
+  'tu_secret_key',
+  'sandbox' // o 'production'
+);
 ```
 
-### 2️⃣ Crear un pago
+### Crear una orden de pago
 
 ```typescript
-const paymentData = {
+const order = await flow.createOrder({
   commerceOrder: '123456',
-  subject: 'Compra de servicio',
+  subject: 'Compra de producto',
   amount: 10000,
-  currency: 'CLP',
   email: 'cliente@example.com',
-  paymentMethod: 1, // 1: Webpay, 2: Servipag, 3: Multicaja
-  urlReturn: 'https://tudominio.com/retorno',
-  urlConfirmation: 'https://tudominio.com/confirmacion',
-};
+  urlReturn: 'https://tusitio.com/retorno',
+  urlConfirmation: 'https://tusitio.com/confirmacion'
+});
 
-async function createPayment() {
-  try {
-    const response = await flow.createOrder(paymentData);
-    console.log('Pago creado:', response);
-  } catch (error) {
-    console.error('Error al crear el pago:', error);
-  }
-}
-
-createPayment();
+console.log('URL de pago:', order.url + '?token=' + order.token);
 ```
 
-### 3️⃣ Obtener el estado de un pago
+### Consultar el estado de un pago
 
 ```typescript
-async function checkPaymentStatus(token: string) {
-  try {
-    const response = await flow.getPaymentStatus(token);
-    console.log('Estado del pago:', response);
-  } catch (error) {
-    console.error('Error al consultar el estado del pago:', error);
-  }
-}
-
-// Llamar a la función con un token válido
-checkPaymentStatus('TOKEN_DE_PAGO');
+const status = await flow.getPaymentStatus('token_de_transaccion');
+console.log('Estado del pago:', status.status);
 ```
 
-## 📜 Métodos disponibles
+## Tipos de datos
 
-### `new FlowClient(apiKey: string, secretKey: string, baseURL?: string)`
+### `FlowCreatePaymentRequest`
 
-Crea una instancia del cliente de Flow.
+- `commerceOrder`: Número único de orden.
+- `subject`: Descripción de la orden.
+- `amount`: Monto total en CLP.
+- `email`: Correo del pagador.
+- `urlReturn`: URL de retorno tras el pago.
+- `urlConfirmation`: URL para recibir confirmaciones.
+- `paymentMethod` (opcional): Medio de pago específico.
 
-- **apiKey** (string) - Clave de acceso a la API de Flow.
-- **secretKey** (string) - Clave secreta para firmar las solicitudes.
-- **baseURL** (string) - URL base de la API de Flow (por defecto, `https://www.flow.cl/api`).
+### `FlowCreatePaymentResponse`
 
----
+- `token`: Identificador de la transacción.
+- `url`: URL de pago.
+- `flowOrder`: Número de orden en Flow.
 
-### `createOrder(data: Omit<FlowCreatePaymentRequest, 'apiKey' | 's'>): Promise<FlowCreatePaymentResponse>`
+### `FlowPaymentStatusResponse`
 
-Crea un nuevo pago en Flow.cl.
+- `flowOrder`: Número de orden en Flow.
+- `commerceOrder`: Número de orden del comercio.
+- `status`: Estado de la orden (`1`: Pendiente, `2`: Pagada, `3`: Rechazada, `4`: Anulada).
+- `amount`: Monto total.
+- `payer`: Correo del pagador.
 
-- **data** (FlowCreatePaymentRequest) - Datos del pago, como el monto, correo del cliente, URLs de retorno y confirmación, etc.
-- **Retorna** (Promise<FlowCreatePaymentResponse>) - Respuesta de la API con detalles del pago creado.
+## Requisitos
 
----
+- Node.js 16+
+- TypeScript 5+
 
-### `getPaymentStatus(token: string): Promise<FlowPaymentStatusResponse>`
+## Contribuciones
 
-Obtiene el estado de un pago en Flow.cl.
+Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request en el [repositorio de GitHub](https://github.com/4cidkid/flowcl-pagos).
 
-- **token** (string) - Token del pago generado en `createOrder`.
-- **Retorna** (Promise<FlowPaymentStatusResponse>) - Respuesta con el estado del pago.
+## Licencia
 
-## 📌 Notas
-
-- Recuerda que debes configurar las **URLs de retorno y confirmación** en tu cuenta de Flow.
-- La firma de las solicitudes es generada automáticamente con **HMAC-SHA256**.
-
-## 📝 Licencia
-
-Este proyecto está bajo la **licencia MIT**.
-
----
-
-🤖 **Desarrollado por [@nicotordev](https://github.com/acidkid)**
+Este proyecto está bajo la licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
