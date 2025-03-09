@@ -528,3 +528,10 @@ export class FlowRetryOverdueInvoicePaymentError extends FlowError {
     this.name = 'FlowRetryOverdueInvoicePaymentError';
   }
 }
+
+export class FlowGetLiquidationsByDateRangeError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener liquidaciones por rango de fecha: ${message}`);
+    this.name = 'FlowGetLiquidationsByDateRangeError';
+  }
+}

@@ -7755,6 +7755,142 @@ type FlowRetryOverdueInvoicePaymentResponse = {
     errorDescription: string;
   }>;
 };
+
+type FlowGetLiquidationsByDateRangeRequest = {
+  /**
+   * Fecha inicio de rango
+   * <yyyy-mm-dd>
+   */
+  startDate: string;
+  /**
+   * Fecha fin de rango
+   * <yyyy-mm-dd>
+   */
+  endDate: string;
+  /**
+   * Moneda de liquidación
+   */
+  currency?: string;
+};
+
+type FlowGetLiquidationsByDateRangeResponse = {
+  /**
+   * Arreglo de registros de la liquidación
+   */
+  data: Array<{
+    /**
+     * Identificador de la liquidación
+     */
+    id: number;
+
+    /**
+     * Fecha de la liquidación en formato yyyy-mm-dd
+     */
+    date: string;
+
+    /**
+     * Identificador tributario
+     */
+    taxId: string;
+
+    /**
+     * Nombre del usuario de la cuenta Flow
+     */
+    name: string;
+
+    /**
+     * Cuenta de email del usuario de Flow
+     */
+    email: string;
+
+    /**
+     * Moneda de liquidación
+     */
+    currency: string;
+
+    /**
+     * Saldo inicial
+     */
+    initial_balance: number;
+
+    /**
+     * Saldo final
+     */
+    final_balance: number;
+
+    /**
+     * Total a depositar
+     */
+    transferred: number;
+
+    /**
+     * Monto neto a facturar
+     */
+    billed: number;
+  }>;
+};
+
+type FlowGetLiquidationByIdResponse = {
+  /**
+   * Identificador de la liquidación
+   */
+  id: number;
+
+  /**
+   * Fecha de la liquidación en formato yyyy-mm-dd
+   */
+  date: string;
+
+  /**
+   * Identificador tributario
+   */
+  taxId: string;
+
+  /**
+   * Nombre del usuario de la cuenta Flow
+   */
+  name: string;
+
+  /**
+   * Cuenta de email del usuario de Flow
+   */
+  email: string;
+
+  /**
+   * Moneda de liquidación
+   */
+  currency: string;
+
+  /**
+   * Saldo inicial
+   */
+  initial_balance: number;
+
+  /**
+   * Saldo final
+   */
+  final_balance: number;
+
+  /**
+   * Total a depositar
+   */
+  transferred: number;
+
+  /**
+   * Monto neto a facturar
+   */
+  billed: number;
+
+  /**
+   * Resumen de la liquidación
+   */
+  summary: object;
+
+  /**
+   * Detalle de la liquidación
+   */
+  detail: object;
+};
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -7848,4 +7984,7 @@ export type {
   FlowGetOverdueInvoicesRequest,
   FlowGetOverdueInvoicesResponse,
   FlowRetryOverdueInvoicePaymentResponse,
+  FlowGetLiquidationsByDateRangeRequest,
+  FlowGetLiquidationsByDateRangeResponse,
+  FlowGetLiquidationByIdResponse,
 };

@@ -5,6 +5,7 @@ import FlowInvoices from './flow.invoices';
 import FlowPayments from './flow.payments';
 import FlowPlans from './flow.plans';
 import FlowRefunds from './flow.refunds';
+import FlowSettlements from './flow.settlement';
 import FlowSubscriptions from './flow.subscriptions';
 import FlowSubscriptionsItems from './flow.subscriptionsItems';
 /**
@@ -45,6 +46,10 @@ class Flow {
    * Objeto que proporciona métodos para interactuar con los invoices en Flow.
    */
   public invoices: FlowInvoices;
+  /**
+   * Objeto que proporciona métodos para interactuar con las liquidaciones en Flow.
+   */
+  public settlements: FlowSettlements;
 
   /**
    * Constructor de la clase FlowClient.
@@ -79,6 +84,7 @@ class Flow {
     );
     this.coupons = new FlowCoupons(apiKey, secretKey, baseURL);
     this.invoices = new FlowInvoices(apiKey, secretKey, baseURL);
+    this.settlements = new FlowSettlements(apiKey, secretKey, baseURL);
   }
 }
 
