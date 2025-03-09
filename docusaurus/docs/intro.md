@@ -9,7 +9,7 @@ title: Flow.cl SDK para Node.js
 ![Flow.cl](https://www.flow.cl/images/header/logo-flow.svg)
 
 [![NPM Version](https://img.shields.io/npm/v/@nicotordev/flowcl-pagos.svg)](https://www.npmjs.com/package/@nicotordev/flowcl-pagos)
-![LICENSE](https://img.shields.io/github/license/nicotordev/flowcl-pagos)
+[![License](https://img.shields.io/npm/l/@nicotordev/flowcl-pagos.svg)]([LICENSE](https://github.com/nicotordev/flowcl-pagos/blob/main/LICENSE))
 ![Tests](https://github.com/nicotordev/flowcl-pagos/actions/workflows/test.yml/badge.svg?style=flat-square)
 
 ## 🚀 ¿Qué es este SDK?
