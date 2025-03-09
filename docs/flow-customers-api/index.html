@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="es" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-flow-customers-api" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.7.0">
+<title data-rh="true">Clientes - FlowCustomers | @nicotordev/flowcl-pagos</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://www.flow.cl/images/header/logo-flow.svg"><meta data-rh="true" name="twitter:image" content="https://www.flow.cl/images/header/logo-flow.svg"><meta data-rh="true" property="og:url" content="https://nicotordev.github.io/flowcl-pagos/docs/flow-customers-api"><meta data-rh="true" property="og:locale" content="es"><meta data-rh="true" name="docusaurus_locale" content="es"><meta data-rh="true" name="docsearch:language" content="es"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Clientes - FlowCustomers | @nicotordev/flowcl-pagos"><meta data-rh="true" name="description" content="La clase FlowCustomers permite interactuar fácilmente con la API de clientes de Flow.cl, ofreciendo métodos para gestionar clientes, tarjetas de crédito y cobros automáticos."><meta data-rh="true" property="og:description" content="La clase FlowCustomers permite interactuar fácilmente con la API de clientes de Flow.cl, ofreciendo métodos para gestionar clientes, tarjetas de crédito y cobros automáticos."><link data-rh="true" rel="icon" href="https://www.flow.cl/favicon.ico"><link data-rh="true" rel="canonical" href="https://nicotordev.github.io/flowcl-pagos/docs/flow-customers-api"><link data-rh="true" rel="alternate" href="https://nicotordev.github.io/flowcl-pagos/docs/flow-customers-api" hreflang="es"><link data-rh="true" rel="alternate" href="https://nicotordev.github.io/flowcl-pagos/docs/flow-customers-api" hreflang="x-default"><link rel="stylesheet" href="/flowcl-pagos/assets/css/styles.c175cad9.css">
+<script src="/flowcl-pagos/assets/js/runtime~main.e606c3e9.js" defer="defer"></script>
+<script src="/flowcl-pagos/assets/js/main.42f4301a.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="https://www.flow.cl/favicon.ico"><div role="region" aria-label="Saltar al contenido principal"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Saltar al contenido principal</a></div><nav aria-label="Principal" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><a class="navbar__brand" href="/flowcl-pagos/"><div class="navbar__logo"><img src="https://www.flow.cl/favicon.ico" alt="@nicotordev/flowcl-pagos Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://www.flow.cl/favicon.ico" alt="@nicotordev/flowcl-pagos Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">@nicotordev/flowcl-pagos</b></a></div><div class="navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Cambiar entre modo oscuro y claro (actualmente modo claro)" aria-label="Cambiar entre modo oscuro y claro (actualmente modo claro)" aria-live="polite" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Volver al principio" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Barra lateral de Documentos" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/flowcl-pagos/docs/quick-start">Guía Rápida de Integración</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/flowcl-pagos/docs/intro">Flow.cl SDK para Node.js</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/flowcl-pagos/docs/flow-payments-api">Pagos - FlowPayments</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/flowcl-pagos/docs/flow-refunds-api">Reembolsos - FlowRefunds</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/flowcl-pagos/docs/flow-customers-api">Clientes - FlowCustomers</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/flowcl-pagos/docs/flow-planes-api">Planes - FlowPlans</a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Rastro de navegación"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Página de Inicio" class="breadcrumbs__link" href="/flowcl-pagos/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Clientes - FlowCustomers</span><meta itemprop="position" content="1"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">En esta página</button></div><div class="theme-doc-markdown markdown"><header><h1>API de Clientes - FlowCustomers</h1></header>
+<p>La clase <code>FlowCustomers</code> permite interactuar fácilmente con la API de clientes de Flow.cl, ofreciendo métodos para gestionar clientes, tarjetas de crédito y cobros automáticos.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="inicialización">Inicialización<a href="#inicialización" class="hash-link" aria-label="Enlace directo al Inicialización" title="Enlace directo al Inicialización">​</a></h2>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> Flow </span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;@nicotordev/flowcl-pagos&#x27;</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> flow </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">new</span><span class="token plain"> </span><span class="token class-name">Flow</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;tu_api_key&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;tu_secret_key&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;sandbox&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// o &#x27;production&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> customers </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> flow</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="métodos-disponibles">Métodos Disponibles<a href="#métodos-disponibles" class="hash-link" aria-label="Enlace directo al Métodos Disponibles" title="Enlace directo al Métodos Disponibles">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="clientes">Clientes<a href="#clientes" class="hash-link" aria-label="Enlace directo al Clientes" title="Enlace directo al Clientes">​</a></h3>
+<ul>
+<li><strong>Crear cliente</strong>:</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">create</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowCreateCustomerRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowCreateCustomerResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowCreateCustomerRequest</code> incluye:</p>
+<ul>
+<li><code>name</code>: <code>string</code></li>
+<li><code>email</code>: <code>string</code></li>
+<li><code>externalId</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowCreateCustomerResponse</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>created</code>: <code>string</code></li>
+<li><code>email</code>: <code>string</code></li>
+<li><code>name</code>: <code>string</code></li>
+<li><code>pay_mode</code>: <code>number</code></li>
+<li><code>creditCardType</code>: <code>string</code></li>
+<li><code>last4CardDigits</code>: <code>string</code></li>
+<li><code>externalId</code>: <code>string</code></li>
+<li><code>status</code>: <code>number</code></li>
+<li><code>registerDate</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Editar cliente</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">edit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowEditCustomerRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowEditCustomerResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowEditCustomerRequest</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>name</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>email</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>externalId</code>: <code>string</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowEditCustomerResponse</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>created</code>: <code>string</code></li>
+<li><code>email</code>: <code>string</code></li>
+<li><code>name</code>: <code>string</code></li>
+<li><code>pay_mode</code>: <code>number</code></li>
+<li><code>creditCardType</code>: <code>string</code></li>
+<li><code>last4CardDigits</code>: <code>string</code></li>
+<li><code>externalId</code>: <code>string</code></li>
+<li><code>status</code>: <code>number</code></li>
+<li><code>registerDate</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Eliminar cliente</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">delete</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">customerId</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">string</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowDeleteCustomerResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>customerId</code>.</p>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowDeleteCustomerResponse</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>created</code>: <code>string</code></li>
+<li><code>email</code>: <code>string</code></li>
+<li><code>name</code>: <code>string</code></li>
+<li><code>pay_mode</code>: <code>number</code></li>
+<li><code>creditCardType</code>: <code>string</code></li>
+<li><code>last4CardDigits</code>: <code>string</code></li>
+<li><code>externalId</code>: <code>string</code></li>
+<li><code>status</code>: <code>number</code></li>
+<li><code>registerDate</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Obtener cliente</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">get</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">customerId</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">string</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowGetCustomerResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>customerId</code>.</p>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowGetCustomerResponse</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>created</code>: <code>string</code></li>
+<li><code>email</code>: <code>string</code></li>
+<li><code>name</code>: <code>string</code></li>
+<li><code>pay_mode</code>: <code>number</code></li>
+<li><code>creditCardType</code>: <code>string</code></li>
+<li><code>last4CardDigits</code>: <code>string</code></li>
+<li><code>externalId</code>: <code>string</code></li>
+<li><code>status</code>: <code>number</code></li>
+<li><code>registerDate</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Listar clientes</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">list</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowGetCustomerListRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowListCustomersResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowGetCustomerListRequest</code> incluye:</p>
+<ul>
+<li><code>start</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>limit</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>filter</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>status</code>: <code>number</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowListCustomersResponse</code> incluye:</p>
+<ul>
+<li><code>total</code>: <code>number</code></li>
+<li><code>hasMore</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>data</code>: <code>string</code> (arreglo con clientes)</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="tarjetas-de-crédito">Tarjetas de Crédito<a href="#tarjetas-de-crédito" class="hash-link" aria-label="Enlace directo al Tarjetas de Crédito" title="Enlace directo al Tarjetas de Crédito">​</a></h3>
+<ul>
+<li><strong>Registrar tarjeta</strong>:</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">register</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowRegisterCardRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowRegisterCardResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowRegisterCardRequest</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>url_return</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowRegisterCardResponse</code> incluye:</p>
+<ul>
+<li><code>url</code>: <code>string</code></li>
+<li><code>token</code>: <code>string</code></li>
+<li><code>redirectUrl</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Estado registro tarjeta</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">status</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">token</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">string</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowRegisterCardStatusResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>token</code></p>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowRegisterCardStatusResponse</code> incluye:</p>
+<ul>
+<li><code>status</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>creditCardType</code>: <code>string</code></li>
+<li><code>last4CardDigits</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Eliminar tarjeta registrada</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">delete</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">customerId</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">string</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowDeleteCardResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li><strong>Request</strong>: <code>customerId</code></li>
+<li><strong>Response</strong>: <code>FlowDeleteCardResponse</code> incluye:<!-- -->
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>created</code>: <code>string</code></li>
+<li><code>email</code>: <code>string</code></li>
+<li><code>name</code>: <code>string</code></li>
+<li><code>pay_mode</code>: <code>number</code></li>
+<li><code>creditCardType</code>: <code>string</code></li>
+<li><code>last4CardDigits</code>: <code>string</code></li>
+<li><code>externalId</code>: <code>string</code></li>
+<li><code>status</code>: <code>number</code></li>
+<li><code>registerDate</code>: <code>string</code></li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cobros">Cobros<a href="#cobros" class="hash-link" aria-label="Enlace directo al Cobros" title="Enlace directo al Cobros">​</a></h3>
+<ul>
+<li><strong>Cobro automático a tarjeta</strong>:</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">charge</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowChargeCardRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowChargeCardResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowChargeCardRequest</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>amount</code>: <code>number</code></li>
+<li><code>subject</code>: <code>string</code></li>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>currency</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>optionals</code>: <code>string</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowChargeCardResponse</code> incluye:</p>
+<ul>
+<li><code>flowOrder</code>: <code>number</code></li>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>status</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>subject</code>: <code>string</code></li>
+<li><code>currency</code>: <code>string</code></li>
+<li><code>amount</code>: <code>number</code></li>
+<li><code>payer</code>: <code>string</code></li>
+<li><code>optional</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>pending_info</code>: que incluye:<!-- -->
+<ul>
+<li><code>media</code>: <code>string</code></li>
+<li><code>date</code>: <code>string</code></li>
+</ul>
+</li>
+<li><code>paymentData</code>: que incluye:<!-- -->
+<ul>
+<li><code>date</code>: <code>string</code></li>
+<li><code>amount</code>: <code>number</code></li>
+<li><code>currency</code>: <code>string</code></li>
+<li><code>fee</code>: <code>number</code></li>
+<li><code>balance</code>: <code>number</code></li>
+</ul>
+</li>
+<li><code>merchantId</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Enviar cobro único</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">sendCharge</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowSendChargeRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowSendChargeResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowSendChargeRequest</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>subject</code>: <code>string</code></li>
+<li><code>amount</code>: <code>number</code></li>
+<li><code>urlConfirmation</code>: <code>string</code></li>
+<li><code>urlReturn</code>: <code>string</code></li>
+<li><code>currency</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>paymentMethod</code>: <code>string</code> <code>FlowPaymentMethods</code> <em>(opcional)</em> // Este parametro es un numero en la API de Flow, se hace una conversión interna a string</li>
+<li><code>byEmail</code>: <code>number</code> <em>(opcional)</em> (<code>1</code>)</li>
+<li><code>forward_days_after</code>:<code>number</code> <em>(opcional)</em></li>
+<li><code>forward_times</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>ignore_auto_charging</code>: <code>number</code> (<code>1</code>) <em>(opcional)</em></li>
+<li><code>optionals</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>timeout</code>: <code>number</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowSendChargeResponse</code> incluye:</p>
+<ul>
+<li><code>type</code>: <code>number</code> (<code>1</code> | <code>2</code> | <code>3</code>)</li>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>flowOrder</code>: <code>number</code></li>
+<li><code>token</code>: <code>string</code></li>
+<li><code>status</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>paymentData</code>, que incluye:<!-- -->
+<ul>
+<li><code>flowOrder</code>: <code>number</code></li>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>requestDate</code>: <code>string</code></li>
+<li><code>status</code> <code>number</code> (<code>1</code> | <code>2</code> | <code>3</code> | <code>4</code>)</li>
+<li><code>subject</code>: <code>string</code></li>
+<li><code>currency</code>: <code>string</code></li>
+<li><code>amount</code>: <code>number</code></li>
+<li><code>payer</code>: <code>string</code></li>
+<li><code>optional</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>pending_info</code>:<!-- -->
+<ul>
+<li><code>media</code> <code>string</code> <em>(opcional)</em></li>
+<li><code>date</code> <code>string</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li><code>paymentData</code>:<!-- -->
+<ul>
+<li><code>date</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>amount</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>currency</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>fee</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>balance</code>: <code>number</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li><code>merchantId</code>: <code>string</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Enviar cobros masivos</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">sendMassiveCharge</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowSendMassiveChargeCardRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowSendMassiveChargeCardResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowSendMassiveChargeCardRequest</code> incluye:</p>
+<ul>
+<li><code>urlCallBack</code>: <code>string</code></li>
+<li><code>urlConfirmation</code>: <code>string</code></li>
+<li><code>urlReturn</code>: <code>string</code></li>
+<li><code>batchRows</code>: arreglo que incluye:<!-- -->
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>subject</code>: <code>string</code></li>
+<li><code>amount</code>: <code>number</code></li>
+<li><code>currency</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>paymentMethod</code>: <code>string</code> <code>FlowPaymentMethods</code> <em>(opcional)</em> // Este parametro es un numero en la API de Flow, se hace una conversión interna a string</li>
+<li><code>optional</code>: <code>string</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li><code>byEmail</code>: <code>1</code> <em>(opcional)</em></li>
+<li><code>forward_days_after</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>forward_times</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>timeout</code>: <code>number</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowSendMassiveChargeCardResponse</code> incluye:</p>
+<ul>
+<li><code>token</code>: <code>string</code></li>
+<li><code>receivedRows</code>: <code>number</code></li>
+<li><code>acceptedRows</code>: <code>number</code></li>
+<li><code>rejectedRows</code>: arreglo que incluye:<!-- -->
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>rowNumber</code>: <code>number</code></li>
+<li><code>parameter</code>: <code>string</code></li>
+<li><code>errorCode</code>: <code>number</code> (<code>100</code> | <code>101</code> | <code>102</code> | <code>103</code> | <code>104</code> | <code>105</code> | <code>106</code> | <code>107</code> | <code>108</code> | <code>109</code> | <code>110</code>)</li>
+<li><code>errorMsg</code>: <code>string</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Estado de cobros masivos</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">massiveChargeStatus</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">token</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">string</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowMassiveChargeCardStatusResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>token</code></p>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowMassiveChargeCardStatusResponse</code> incluye:</p>
+<ul>
+<li><code>token</code>: <code>string</code></li>
+<li><code>createdDate</code>: <code>string</code> (fecha en formato <code>yyyy-mm-dd hh:mm:ss</code>)</li>
+<li><code>processedDate</code>: <code>string</code> (fecha en formato <code>yyyy-mm-dd hh:mm:ss</code>)</li>
+<li><code>status</code>: <code>string</code> (<code>&#x27;created&#x27;</code> | <code>&#x27;processing&#x27;</code> | <code>&#x27;processed&#x27;</code>)</li>
+<li><code>collectRows</code>: arreglo que incluye:<!-- -->
+<ul>
+<li><code>commerceOrder</code>: <code>string</code></li>
+<li><code>type</code>: <code>number</code> (<code>1</code> | <code>2</code> | <code>3</code>)</li>
+<li><code>flowOrder</code>: <code>number</code></li>
+<li><code>url</code>: <code>string</code></li>
+<li><code>token</code>: <code>string</code></li>
+<li><code>status</code>: (<code>&#x27;unprocessed&#x27;</code> | <code>&#x27;collected&#x27;</code> | <code>&#x27;uncollected&#x27;</code>)</li>
+<li><code>erroorCode</code>: <code>number</code></li>
+<li><code>errorMsg</code>: <code>string</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Revertir cobro</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">reverseCharge</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowReverseChargeCardRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowReverseChargeCardResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowReverseChargeCardRequest</code> incluye:</p>
+<ul>
+<li><code>commerceOrder</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>flowOrder</code>: <code>number</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowMassiveChargeCardStatusResponse</code> incluye:</p>
+<ul>
+<li><code>status</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>message</code>: <code>string</code></li>
+</ul>
+</li>
+<li>
+<p><code>FlowReverseChargeCardRequest</code>: <code>commerceOrder</code>, <code>flowOrder</code> (ambos opcionales).</p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="consultas-y-listados">Consultas y Listados<a href="#consultas-y-listados" class="hash-link" aria-label="Enlace directo al Consultas y Listados" title="Enlace directo al Consultas y Listados">​</a></h3>
+<ul>
+<li><strong>Listar cargos efectuados</strong>:</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">listCharges</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowListChargesRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowListChargesResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowListChargesRequest</code> incluye:</p>
+<ul>
+<li><code>customerId</code></li>
+<li><code>fromDate</code>: <code>string</code> (fecha en formato <code>&lt;yyyy-mm-dd&gt;</code>) <em>(opcional)</em></li>
+<li><code>start</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>limit</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>filter</code>: <code>string</code> <em>(opcional)</em></li>
+<li><code>status</code>: <code>number</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowListChargesResponse</code> incluye:</p>
+<ul>
+<li><code>total</code>: <code>number</code></li>
+<li><code>hasMore</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>data</code> (arreglo con cargos)</li>
+</ul>
+</li>
+<li>
+<p><strong>Listar intentos fallidos</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">listFailedCharges</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowListFailedChargesRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowListChargesResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>
+<p><strong>Request</strong>: <code>FlowListFailedChargesRequest</code> incluye:</p>
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>commerceOrder</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>fromDate</code>: <code>string</code> (fecha en formato <code>&lt;yyyy-mm-dd&gt;</code>) <em>(opcional)</em></li>
+<li><code>start</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>limit</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>filter</code>: <code>string</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Response</strong>: <code>FlowListChargesResponse</code> incluye:</p>
+<ul>
+<li><code>total</code>: <code>number</code></li>
+<li><code>hasMore</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>data</code> (arreglo con cargos)</li>
+</ul>
+</li>
+<li>
+<p><strong>Listar suscripciones</strong>:</p>
+</li>
+</ul>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">customers</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">card</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">subscriptions</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">list</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">data</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> FlowListPaginatedSubscriptionsRequest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">Promise</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">FlowListPaginatedSubscriptionsResponse</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copiar código" title="Copiar" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li><strong>Request</strong>: <code>FlowListPaginatedSubscriptionsRequest</code> incluye:<!-- -->
+<ul>
+<li><code>customerId</code>: <code>string</code></li>
+<li><code>start</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>limit</code>: <code>number</code> <em>(opcional)</em></li>
+<li><code>filter</code>: <code>string</code> <em>(opcional)</em></li>
+</ul>
+</li>
+<li><strong>Response</strong>: <code>FlowListChargesResponse</code> incluye:<!-- -->
+<ul>
+<li><code>total</code> <code>number</code></li>
+<li><code>hasMore</code>: <code>number</code> (<code>0</code> | <code>1</code>)</li>
+<li><code>data</code>: <code>string</code> (arreglo con cargos)</li>
+</ul>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="manejo-de-errores">Manejo de Errores<a href="#manejo-de-errores" class="hash-link" aria-label="Enlace directo al Manejo de Errores" title="Enlace directo al Manejo de Errores">​</a></h2>
+<table><thead><tr><th>Error</th><th>Descripción</th></tr></thead><tbody><tr><td><code>FlowAPIError</code></td><td>Error genérico de la API Flow.</td></tr><tr><td><code>FlowAuthenticationError</code></td><td>Error de autenticación.</td></tr><tr><td><code>FlowChargeCardError</code></td><td>Error al efectuar cobro automático.</td></tr><tr><td><code>FlowCreateCustomerError</code></td><td>Error al crear cliente.</td></tr><tr><td><code>FlowDeleteCardError</code></td><td>Error al eliminar tarjeta.</td></tr><tr><td><code>FlowDeleteCustomerError</code></td><td>Error al eliminar cliente.</td></tr><tr><td><code>FlowEditCustomerError</code></td><td>Error al editar cliente.</td></tr><tr><td><code>FlowGetCustomerError</code></td><td>Error al obtener cliente.</td></tr><tr><td><code>FlowGetCustomerListError</code></td><td>Error al listar clientes.</td></tr><tr><td><code>FlowListChargesCardError</code></td><td>Error al listar cargos.</td></tr><tr><td><code>FlowListFailedChargesCardError</code></td><td>Error al listar intentos fallidos.</td></tr><tr><td><code>FlowListPaginatedSubscriptionsError</code></td><td>Error al listar suscripciones.</td></tr><tr><td><code>FlowMassiveChargeCardStatusError</code></td><td>Error al obtener estado de cobros masivos.</td></tr><tr><td><code>FlowRegisterCardError</code></td><td>Error al registrar tarjeta.</td></tr><tr><td><code>FlowRegisterCardStatusError</code></td><td>Error al consultar estado de registro de tarjeta.</td></tr><tr><td><code>FlowReverseChargeCardError</code></td><td>Error al revertir cobro.</td></tr><tr><td><code>FlowSendChargeCardError</code></td><td>Error al enviar cobro único.</td></tr><tr><td><code>FlowSendMassiveChargeCardError</code></td><td>Error al enviar cobros masivos.</td></tr></tbody></table>
+<hr>
+<p>Para más detalles visita <a href="https://www.flow.cl/docs/api.html#tag/customer" target="_blank" rel="noopener noreferrer">Flow.cl API Docs</a>.</p>
+<p><strong>Nota:</strong> Maneja correctamente todas las excepciones en tu aplicación.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/nicotordev/flowcl-pagos/edit/main/docusaurus/docs/docs/customers.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Editar esta página</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Página del documento"><a class="pagination-nav__link pagination-nav__link--prev" href="/flowcl-pagos/docs/flow-refunds-api"><div class="pagination-nav__sublabel">Anterior</div><div class="pagination-nav__label">Reembolsos - FlowRefunds</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/flowcl-pagos/docs/flow-planes-api"><div class="pagination-nav__sublabel">Siguiente</div><div class="pagination-nav__label">Planes - FlowPlans</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#inicialización" class="table-of-contents__link toc-highlight">Inicialización</a></li><li><a href="#métodos-disponibles" class="table-of-contents__link toc-highlight">Métodos Disponibles</a><ul><li><a href="#clientes" class="table-of-contents__link toc-highlight">Clientes</a></li><li><a href="#tarjetas-de-crédito" class="table-of-contents__link toc-highlight">Tarjetas de Crédito</a></li><li><a href="#cobros" class="table-of-contents__link toc-highlight">Cobros</a></li><li><a href="#consultas-y-listados" class="table-of-contents__link toc-highlight">Consultas y Listados</a></li></ul></li><li><a href="#manejo-de-errores" class="table-of-contents__link toc-highlight">Manejo de Errores</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.flow.cl/docs/api.html#section/Introduccion" target="_blank" rel="noopener noreferrer" class="footer__link-item">Flow.cl</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">2025 @nicotordev</div></div></div></footer></div>
+</body>
+</html>
