@@ -108,7 +108,7 @@ merchants.getAssociatedMerchants(
 
 ---
 
-Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/merchants).
+Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/merchant).
 
 **Nota:** Asegúrate de manejar correctamente todas las excepciones en tu aplicación.
 

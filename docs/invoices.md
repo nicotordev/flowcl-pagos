@@ -104,6 +104,6 @@ invoices.retryOverdueInvoicePayment(invoiceId: string): Promise<FlowRetryOverdue
 
 ---
 
-Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/invoices).
+Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/invoice).
 
 **Nota:** Asegúrate de manejar correctamente todas las excepciones en tu aplicación.

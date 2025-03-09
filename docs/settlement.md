@@ -63,6 +63,6 @@ settlements.getLiquidationById(id: string): Promise<FlowGetLiquidationByIdRespon
 
 ---
 
-Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/settlements).
+Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/settlement).
 
 **Nota:** Asegúrate de manejar correctamente todas las excepciones en tu aplicación.
