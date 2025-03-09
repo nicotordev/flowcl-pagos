@@ -29,6 +29,8 @@ import {
   isValidPaymentReceivedByDate,
 } from '../utils/flow.utils';
 
+import qs from 'qs';
+
 /**
  * Cliente para interactuar con la API de pagos de Flow.
  * Permite crear órdenes de pago y consultar su estado.
@@ -171,14 +173,15 @@ export default class FlowPayments {
         apiKey: this.apiKey,
       } as Record<string, string>;
       const formData = generateFormData(allData, this.secretKey);
-
+      const formDataSearchParams = new URLSearchParams(formData);
       const response =
         method === 'post'
           ? await this.axiosInstance.post<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}`,
+              qs.stringify(formData),
             )
           : await this.axiosInstance.get<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}?${formDataSearchParams}`,
             );
 
       if (modifyResponse) {
@@ -188,6 +191,7 @@ export default class FlowPayments {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
+        console.log(err.response?.data);
         throw new FlowAPIError(err.response?.status || 500, err.message);
       }
       error(err);
