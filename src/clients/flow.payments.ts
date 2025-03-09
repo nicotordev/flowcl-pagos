@@ -10,7 +10,7 @@ import {
   FlowPaymentStatusResponse,
   FlowTransactionsReceivedByDateRequest,
   FlowTransactionsReceivedByDateResponse,
-} from '../types/flow';
+} from '../types/flow.payments';
 
 import {
   FlowAPIError,

@@ -1,164 +1,14 @@
-import { FlowPaymentMethods, FlowPaymentStatus } from './flow.common';
-
-/**
- * Datos requeridos para crear una orden de pago en Flow.
- * Basado en la documentación oficial de Flow.cl.
- */
-type FlowCreatePaymentRequest = {
-  /**
-   * Número único de orden del comercio (requerido).
-   */
-  commerceOrder: string;
-  /**
-   * Descripción de la orden (requerido).
-   */
-  subject: string;
-  /**
-   * Moneda de la orden (opcional, por defecto CLP).
-   */
-  currency?: string;
-  /**
-   * Monto de la orden en formato entero (requerido).
-   */
-  amount: number;
-  /**
-   * Email del pagador en formato válido (requerido).
-   */
-  email: string;
-  /**
-   * Identificador del medio de pago (opcional). "webpay-plus" | "mach" | "khipu" | "redpay" | "onepay" | "flow"
-   * - `webpay-plus` - Webpay
-   * - `mach` - Mach
-   * - `khipu` - Khipu
-   * - `redpay` - RedPay
-   * - `onepay` - Onepay
-   * - `flow` - Flow
-   */
-  paymentMethod?: FlowPaymentMethods;
-  /**
-   * URL de retorno del comercio para redirigir al pagador (requerido).
-   */
-  urlReturn: string;
-  /**
-   * URL callback del comercio para confirmar el pago (requerido).
-   */
-  urlConfirmation: string;
-  /**
-   * Datos opcionales en formato JSON clave=valor (opcional).
-   */
-  optional?: Record<string, string>;
-  /**
-   * Tiempo en segundos para que una orden expire (opcional).
-   */
-  timeout?: number;
-  /**
-   * ID del comercio asociado (opcional).
-   */
-  merchantId?: string;
-  /**
-   * Moneda en la que se espera que se pague la orden (opcional).
-   */
-  paymentCurrency?: string;
-};
+import {
+  FlowPaginatedData,
+  FlowPaymentMethods,
+  FlowPaymentStatus,
+  FlowSearchRequest,
+} from './flow.common';
 
 /**
  * Respuesta al crear una orden de pago en Flow.
  */
 type FlowCreatePaymentResponse = {
-  /**
-   * Token de la transacción generado por Flow.
-   */
-  token: string;
-  /**
-   * URL para redirigir al usuario y completar el pago.
-   * Se debe concatenar con el token: `url + "?token=" + token`
-   */
-  url: string;
-  /**
-   * Número de orden generado por Flow.
-   */
-  flowOrder: number;
-  /**
-   * URL completa de redirección para completar el pago.
-   */
-  redirectUrl: string;
-};
-
-/**
- * Tipo para representar una solicitud de pago por email en Flow.
- */
-type FlowCreatePaymentByEmailRequest = {
-  /**
-   * Orden del comercio (obligatorio)
-   */
-  commerceOrder: string;
-
-  /**
-   * Descripción de la orden (obligatorio)
-   */
-  subject: string;
-
-  /**
-   * Moneda de la orden (opcional)
-   */
-  currency?: string;
-
-  /**
-   * Monto de la orden (obligatorio)
-   */
-  amount: number;
-
-  /**
-   * Email del pagador (obligatorio)
-   */
-  email: string;
-
-  /**
-   * Identificador del medio de pago (opcional)
-   * Si se envía este identificador, el pagador será redirigido directamente al medio de pago.
-   * Si no se especifica, Flow presentará una página para seleccionar el medio de pago.
-   * Para indicar todos los medios de pago, utilice el identificador: 9.
-   */
-  paymentMethod?: FlowPaymentMethods;
-
-  /**
-   * URL de confirmación de pago donde Flow confirmará la transacción (obligatorio)
-   */
-  urlConfirmation: string;
-
-  /**
-   * URL de retorno al comercio donde Flow redirigirá al pagador tras el pago (obligatorio)
-   */
-  urlReturn: string;
-
-  /**
-   * Datos opcionales en formato JSON clave=valor (opcional)
-   * Ejemplo: {"rut":"9999999-9","nombre":"cliente 1"}
-   */
-  optional?: string;
-
-  /**
-   * Tiempo en segundos para que una orden expire después de ser creada (opcional)
-   * Si no se envía este parámetro, la orden no expirará y estará vigente indefinidamente.
-   */
-  timeout?: number;
-
-  /**
-   * ID de comercio asociado (opcional)
-   * Solo aplica si el comercio es integrador.
-   */
-  merchantId?: string;
-
-  /**
-   * Moneda en la que se espera que se pague la orden (opcional)
-   */
-  payment_currency?: string;
-};
-
-/**
- * Respuesta al crear una orden de pago en Flow.cl por email.
- */
-type FlowCreatePaymentByEmailResponse = {
   /**
    * Token de la transacción generado por Flow.
    */
@@ -299,57 +149,10 @@ type FlowPaymentStatusResponse = {
 };
 
 /**
- * Datos requeridos para consultar los pagos recibidos por una fecha específica.
- *
- */
-type FlowPaymentsReceivedByDateRequest = {
-  /**
-   * Fecha de los pagos a consultar.
-   * Formato: YYYY-MM-DD
-   */
-  date: string | Date;
-} & Omit<FlowSearchRequest, 'status' | 'filter'>;
-
-/**
- * Datos requeridos para consultar los pagos recibidos por una fecha específica.
- *
- */
-type FlowTransactionsReceivedByDateRequest = {
-  /**
-   * Fecha de los pagos a consultar.
-   * Formato: YYYY-MM-DD
-   */
-  date: string | Date;
-} & Omit<FlowSearchRequest, 'status' | 'filter'>;
-
-type FlowPaginatedData = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-  /**
-   * boolean
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * Array of object
-   * arreglo de registros de la página
-   * [{x list 1}{x list 2}{x list n..}
-   */
-  data: string;
-};
-
-/**
  * Tipo que representa la respuesta de la API al obtener el listado de transacciones recibidas en un día.
  */
 type FlowTransactionsReceivedByDateResponse = FlowPaginatedData;
 
-/**
- * Tipo que representa la respuesta de la API al obtener el listado de pagos recibidos en un día.
- */
-type FlowPaymentsReceivedByDateResponse = FlowPaginatedData;
 /**
  * Represents the response schema for a Flow payment status request.
  */
@@ -739,31 +542,6 @@ type FlowDeleteCustomerResponse = FlowCustomer;
  * Representa la respuesta de un cliente en el sistema de pagos.
  */
 type FlowGetCustomerResponse = FlowCustomer;
-
-type FlowSearchRequest = {
-  /**
-   * Número de registro de inicio de la página.
-   * Si se omite, el valor por defecto es 0.
-   */
-  start?: number;
-
-  /**
-   * Número de registros por página.
-   * Si se omite, el valor por defecto es 10.
-   * El valor máximo permitido es 100.
-   */
-  limit?: number;
-
-  /**
-   * Filtro por nombre
-   */
-  filter?: string;
-
-  /**
-   * Filtro por estado
-   */
-  status?: number;
-};
 
 type FlowGetCustomerListRequest = FlowSearchRequest;
 
@@ -3234,14 +3012,8 @@ type FlowGetAssociatedMerchantsRequest = {
 type FlowGetAssociatedMerchantsResponse = FlowPaginatedData;
 
 export type {
-  FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
-  FlowCreatePaymentByEmailRequest,
-  FlowCreatePaymentByEmailResponse,
   FlowPaymentStatusResponse,
-  FlowPaymentsReceivedByDateRequest,
-  FlowPaymentsReceivedByDateResponse,
-  FlowTransactionsReceivedByDateRequest,
   FlowTransactionsReceivedByDateResponse,
   FlowPaymentsStatusExtendedResponse,
   FlowPaymentMethods,

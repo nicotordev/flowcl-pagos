@@ -28,4 +28,54 @@ type FlowConstants = {
   FLOW_PAYMENT_STATUS_CODES: Record<number, FlowPaymentStatus>;
 };
 
-export type { FlowPaymentMethods, FlowPaymentStatus, FlowConstants };
+type FlowSearchRequest = {
+  /**
+   * Número de registro de inicio de la página.
+   * Si se omite, el valor por defecto es 0.
+   */
+  start?: number;
+
+  /**
+   * Número de registros por página.
+   * Si se omite, el valor por defecto es 10.
+   * El valor máximo permitido es 100.
+   */
+  limit?: number;
+
+  /**
+   * Filtro por nombre
+   */
+  filter?: string;
+
+  /**
+   * Filtro por estado
+   */
+  status?: number;
+};
+
+type FlowPaginatedData = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   * boolean
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * Array of object
+   * arreglo de registros de la página
+   * [{x list 1}{x list 2}{x list n..}
+   */
+  data: string;
+};
+
+export type {
+  FlowPaymentMethods,
+  FlowPaymentStatus,
+  FlowConstants,
+  FlowSearchRequest,
+  FlowPaginatedData,
+};
