@@ -28,7 +28,13 @@ subscriptionItems.get(itemId: string): Promise<FlowGetAdditionalSubscriptionItem
 - **Request**: 
   - `itemId`: `string` (ID del ítem adicional de suscripción)
 - **Response**: `FlowGetAdditionalSubscriptionItemResponse`
-- **Errores**: `FlowGetAdditionalSubscriptionItemError`, `FlowAPIError`
+  - `id`: `string` (ID del ítem adicional de suscripción)
+  - `name`: `string` (Nombre del ítem adicional)
+  - `amount`: `number` (Monto del ítem adicional)
+  - `currency`: `string` (Moneda del ítem adicional)
+  - `associatedSubscriptionsCount`: `number` (Número de suscripciones asociadas)
+  - `status`: `number` (`0` o `1` si está activo o inactivo)
+  - `createdAt`: `string` (Fecha de creación)
 
 ### Crear un nuevo ítem adicional de suscripción
 
@@ -41,7 +47,13 @@ subscriptionItems.create(data: FlowCreateAdditionalSubscriptionItemRequest): Pro
   - `currency`: `string` (Moneda del ítem adicional)
   - `amount`: `number` (Monto del ítem adicional, positivo para recargo, negativo para descuento)
 - **Response**: `FlowCreateAdditionalSubscriptionItemResponse`
-- **Errores**: `FlowCreateAdditionalSubscriptionItemError`, `FlowAPIError`
+  - `id`: `string` (ID del ítem adicional de suscripción)
+  - `name`: `string` (Nombre del ítem adicional)
+  - `amount`: `number` (Monto del ítem adicional)
+  - `currency`: `string` (Moneda del ítem adicional)
+  - `associatedSubscriptionsCount`: `number` (Número de suscripciones asociadas)
+  - `status`: `number` (`0` o `1` si está activo o inactivo)
+  - `createdAt`: `string` (Fecha de creación)
 
 ### Editar un ítem adicional de suscripción
 
@@ -54,8 +66,13 @@ subscriptionItems.edit(data: FlowEditAdditionalSubscriptionItemRequest): Promise
   - `amount`: `number` (Nuevo monto del ítem adicional)
   - `changeType`: `'to_future' | 'all'` (Aplicación del cambio solo a futuras suscripciones o a todas)
 - **Response**: `FlowEditAdditionalSubscriptionItemResponse`
-- **Errores**: `FlowEditAdditionalSubscriptionItemError`, `FlowAPIError`
-
+  - `id`: `string` (ID del ítem adicional de suscripción)
+  - `name`: `string` (Nombre del ítem adicional)
+  - `amount`: `number` (Monto del ítem adicional)
+  - `currency`: `string` (Moneda del ítem adicional)
+  - `associatedSubscriptionsCount`: `number` (Número de suscripciones asociadas)
+  - `status`: `number` (`0` o `1` si está activo o inactivo)
+  - `createdAt`: `string` (Fecha de creación)
 ### Eliminar un ítem adicional de suscripción
 
 ```typescript
@@ -66,8 +83,13 @@ subscriptionItems.delete(itemId: string, changeType: 'to_future' | 'all'): Promi
   - `itemId`: `string` (ID del ítem adicional de suscripción)
   - `changeType`: `'to_future' | 'all'` (Eliminar solo en futuras suscripciones o en todas)
 - **Response**: `FlowDeleteAdditionalSubscriptionItemResponse`
-- **Errores**: `FlowDeleteAdditionalSubscriptionItemError`, `FlowAPIError`
-
+  - `id`: `string` (ID del ítem adicional de suscripción)
+  - `name`: `string` (Nombre del ítem adicional)
+  - `amount`: `number` (Monto del ítem adicional)
+  - `currency`: `string` (Moneda del ítem adicional)
+  - `associatedSubscriptionsCount`: `number` (Número de suscripciones asociadas)
+  - `status`: `number` (`0` o `1` si está activo o inactivo)
+  - `createdAt`: `string` (Fecha de creación)
 ### Listar ítems adicionales de suscripción
 
 ```typescript
@@ -79,8 +101,9 @@ subscriptionItems.list(data: FlowListAdditionalSubscriptionItemRequest): Promise
   - `limit`: `number` (Número de ítems por página, opcional)
   - `filter`: `string` (Filtro por nombre, opcional)
 - **Response**: `FlowListAdditionalSubscriptionItemResponse`
-- **Errores**: `FlowListAdditionalSubscriptionItemError`, `FlowAPIError`
-
+  - `total`: `number` (Número total de ítems adicionales de suscripción)
+  - `hasMore`: `number` (`0` o `1` si hay más ítems)
+  - `data`: `string` (Array de ítems adicionales de suscripción)
 ## Manejo de Errores
 
 | Error                                        | Descripción                                        |
