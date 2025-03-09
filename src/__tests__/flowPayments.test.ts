@@ -22,8 +22,8 @@ describe('FlowPayments API Integration Tests', () => {
       subject: 'Test de pago',
       amount: 1000,
       email: 'nicotordev@gmail.com',
-      urlReturn: 'https://seguidoress.cl',
-      urlConfirmation: 'https://seguidoress.cl/confirmation',
+      urlReturn: 'https://nicotordev.com',
+      urlConfirmation: 'https://nicotordev.com/confirmation',
     };
 
     const response = await flowPayments.create(paymentData);
@@ -66,7 +66,7 @@ describe('FlowPayments API Integration Tests', () => {
       commerceOrder: 'order-002',
       subject: 'Cobro por email',
       amount: 2000,
-      email: 'testuser@example.com',
+      email: 'nicotordev@gmail.com',
       urlReturn: 'https://www.google.com',
       urlConfirmation: 'https://www.google.com',
     };
