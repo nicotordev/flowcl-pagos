@@ -1,4 +1,4 @@
-import { FlowConstants } from '../types/flow';
+import { FlowConstants } from '../types/flow.common';
 
 const flowConstants: FlowConstants = {
   FLOW_PAYMENT_METHOD_CODES: {
