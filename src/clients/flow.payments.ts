@@ -215,10 +215,10 @@ export default class FlowPayments {
       (e) => {
         throw new FlowPaymentStatusError((e as Error).message);
       },
-      (data) => {
+      (returnedData) => {
         return {
-          ...data,
-          statusStr: getPaymentStatus(data.status),
+          ...returnedData,
+          statusStr: getPaymentStatus(returnedData.status),
         };
       },
     );
@@ -241,10 +241,10 @@ export default class FlowPayments {
       (e) => {
         throw new FlowPaymentStatusError((e as Error).message);
       },
-      (data) => {
+      (returnedData) => {
         return {
-          ...data,
-          statusStr: getPaymentStatus(data.status),
+          ...returnedData,
+          statusStr: getPaymentStatus(returnedData.status),
         };
       },
     );
@@ -270,10 +270,10 @@ export default class FlowPayments {
       (e) => {
         throw new FlowPaymentStatusError((e as Error).message);
       },
-      (data) => {
+      (returnedData) => {
         return {
-          ...data,
-          statusStr: getPaymentStatus(data.status),
+          ...returnedData,
+          statusStr: getPaymentStatus(returnedData.status),
         };
       },
     ) as Promise<FlowPaymentStatusResponse>;
@@ -312,10 +312,10 @@ export default class FlowPayments {
       (e) => {
         throw new FlowStatusExtendedError((e as Error).message);
       },
-      (data) => {
+      (returnedData) => {
         return {
-          ...data,
-          statusStr: getPaymentStatus(data.status),
+          ...returnedData,
+          statusStr: getPaymentStatus(returnedData.status),
         };
       },
     );
@@ -338,10 +338,10 @@ export default class FlowPayments {
       (e) => {
         throw new FlowStatusExtendedError((e as Error).message);
       },
-      (data) => {
+      (returnedData) => {
         return {
-          ...data,
-          statusStr: getPaymentStatus(data.status),
+          ...returnedData,
+          statusStr: getPaymentStatus(returnedData.status),
         };
       },
     );
@@ -386,10 +386,10 @@ export default class FlowPayments {
       (e) => {
         throw new FlowCreatePaymentError((e as Error).message);
       },
-      (data) => {
+      (returnedData) => {
         return {
-          ...data,
-          redirectUrl: data.url + '?token=' + data.token,
+          ...returnedData,
+          redirectUrl: returnedData.url + '?token=' + returnedData.token,
         };
       },
     );
@@ -422,10 +422,10 @@ export default class FlowPayments {
       (e) => {
         throw new FlowCreatePaymentByEmailError((e as Error).message);
       },
-      (data) => {
+      (returnedData) => {
         return {
-          ...data,
-          redirectUrl: data.url + '?token=' + data.token,
+          ...returnedData,
+          redirectUrl: returnedData.url + '?token=' + returnedData.token,
         };
       },
     );
