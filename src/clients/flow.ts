@@ -3,6 +3,7 @@ import FlowCustomers from './flow.customers';
 import FlowPayments from './flow.payments';
 import FlowPlans from './flow.plans';
 import FlowRefunds from './flow.refunds';
+import FlowSubscriptions from './flow.subscriptions';
 /**
  * Cliente para interactuar con la API de Flow.
  */
@@ -24,6 +25,11 @@ class Flow {
    * Objecto que proporciona métodos para interactuar con los planes en Flow.
    */
   public plans: FlowPlans;
+
+  /**
+   * Objeto que proporciona metodos para interactuar con las suscripciones en Flow.
+   */
+  public subscriptions: FlowSubscriptions;
 
   /**
    * Constructor de la clase FlowClient.
@@ -50,6 +56,7 @@ class Flow {
     this.refunds = new FlowRefunds(apiKey, secretKey, baseURL);
     this.customers = new FlowCustomers(apiKey, secretKey, baseURL);
     this.plans = new FlowPlans(apiKey, secretKey, baseURL);
+    this.subscriptions = new FlowSubscriptions(apiKey, secretKey, baseURL);
   }
 }
 

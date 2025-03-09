@@ -2259,6 +2259,335 @@ type FlowListPlansResponse = {
   data: string;
 };
 
+type FlowCreateSubscriptionToPlanRequest = {
+  /**
+   * Identificador del Plan (requerido)
+   */
+  planId: string;
+
+  /**
+   * Identificador del cliente (requerido)
+   */
+  customerId: string;
+
+  /**
+   * La fecha de inicio de la suscripción en formato yyyy-mm-dd
+   */
+  subscription_start?: string;
+
+  /**
+   * Identificador del cupón de descuento (opcional)
+   */
+  couponId?: number;
+
+  /**
+   * Número de días de Trial. Si el parámetro viene presente, se utilizará lo enviado como la cantidad de días de Trial. En caso de no venir presente se utilizará el trial_periods_number configurado en el Plan asociado.
+   */
+  trial_period_days?: number;
+
+  /**
+   * Número de períodos de duración de la subscripción. Si null, entonces tomará el periods_number del plan.
+   */
+  periods_number?: number;
+};
+
+type FlowCreateSubscriptionToPlanResponse = {
+  /**
+   * Identificador de la suscripción
+   */
+  subscriptionId: string;
+
+  /**
+   * Identificador del plan
+   */
+  planId: string;
+
+  /**
+   * Nombre del plan
+   */
+  plan_name: string;
+
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación de la suscripción en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Fecha de inicio de la suscripción en formato yyyy-mm-dd hh:mm:ss
+   */
+  subscription_start: string;
+
+  /**
+   * Fecha de término de la suscripción en formato yyyy-mm-dd hh:mm:ss, si la suscripción no tiene término mostrará valor null.
+   */
+  subscription_end: string | null;
+
+  /**
+   * Fecha de inicio del período actual en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_start: string;
+
+  /**
+   * Fecha de término del período actual en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_end: string;
+
+  /**
+   * Fecha del siguiente cobro en formato yyyy-mm-dd hh:mm:ss
+   */
+  next_invoice_date: string;
+
+  /**
+   * Número de días de Trial
+   */
+  trial_period_days: number;
+
+  /**
+   * Fecha de inicio del trial en formato yyyy-mm-dd hh:mm:ss
+   */
+  trial_start: string;
+
+  /**
+   * Fecha de término del trial en formato yyyy-mm-dd hh:mm:ss
+   */
+  trial_end: string;
+
+  /**
+   * Si la suscripción será cancelada automáticamente al finalizar el período actual:
+   * 0 No
+   * 1 Si
+   */
+  cancel_at_period_end: number;
+
+  /**
+   * Fecha de cancelación de la suscripción
+   */
+  cancel_at: string;
+
+  /**
+   * Número de períodos de vigencia de la suscripción
+   */
+  periods_number: number;
+
+  /**
+   * Número de días pasados, después de generar un importe, para considerarlo vencido.
+   */
+  days_until_due: number;
+
+  /**
+   * Estado de la suscripción:
+   * 0 Inactivo (no iniciada)
+   * 1 Activa
+   * 2 En período de trial
+   * 4 Cancelada
+   */
+  status: number;
+
+  /**
+   * Monto de balance a favor en la suscripción
+   */
+  discount_balance: string;
+
+  /**
+   * Id del nuevo plan programado a cambiarse
+   */
+  newPlanId: number;
+
+  /**
+   * Fecha de cambio de plan programado
+   */
+  new_plan_scheduled_change_date: string;
+
+  /**
+   * Fecha de próximo intento de cambio de plan
+   */
+  in_new_plan_next_attempt_date: string;
+
+  /**
+   * Si la suscripción está morosa:
+   * 0 si todos los invoices están pagados.
+   * 1 si uno o más invoices están vencidos.
+   * 2 si uno o más invoices están pendientes de pago, pero no vencidos.
+   */
+  morose: number;
+
+  /**
+   * Descuento aplicado a una Suscripción
+   */
+  discount: {
+    /**
+     * Identificador del descuento
+     */
+    id: number;
+
+    /**
+     * Tipo de descuento puede ser de 2 tipos:
+     * Subscription discount
+     * Customer discount
+     */
+    type: string;
+
+    /**
+     * Fecha de creación del descuento
+     */
+    created: string;
+
+    /**
+     * Fecha de inicio del descuento
+     */
+    start: string;
+
+    /**
+     * Fecha de término del descuento
+     */
+    end: string;
+
+    /**
+     * Fecha en que se eliminó el descuento o null si está vigente
+     */
+    deleted: string | null;
+
+    /**
+     * Estado del descuento:
+     * 1 Activo
+     * 0 Inactivo
+     */
+    status: number;
+
+    /**
+     * Cupón asociado al descuento
+     */
+    coupon: object;
+  };
+
+  /**
+   * Lista de los importes efectuados a la suscripción
+   */
+  invoices: Array<{
+    /**
+     * Identificador del importe
+     */
+    id: number;
+
+    /**
+     * Identificador de la suscripción
+     */
+    subscriptionId: string;
+
+    /**
+     * Identificador del cliente
+     */
+    customerId: string;
+
+    /**
+     * Fecha de creación del importe en formato yyyy-mm-dd hh:mm:ss
+     */
+    created: string;
+
+    /**
+     * Descripción del importe
+     */
+    subject: string;
+
+    /**
+     * Moneda del importe
+     */
+    currency: string;
+
+    /**
+     * Monto del importe
+     */
+    amount: number;
+
+    /**
+     * Fecha de inicio del período del importe en formato yyyy-mm-dd hh:mm:ss
+     */
+    period_start: string;
+
+    /**
+     * Fecha de término del período del importe en formato yyyy-mm-dd hh:mm:ss
+     */
+    period_end: string;
+
+    /**
+     * Número de intentos de cobro del importe
+     */
+    attemp_count: number;
+
+    /**
+     * Si este importe se cobrará:
+     * 1 Se cobrará
+     * 0 No se cobrará
+     */
+    attemped: number;
+
+    /**
+     * Fecha del siguiente intento de cobro en formato yyyy-mm-dd hh:mm:ss
+     */
+    next_attemp_date: string;
+
+    /**
+     * Fecha en que este importe será considerado moroso en formato yyyy-mm-dd hh:mm:ss
+     */
+    due_date: string;
+
+    /**
+     * Estado del importe:
+     * 0 impago
+     * 1 pagado
+     * 2 anulado
+     */
+    status: number;
+
+    /**
+     * Si se produjo un error al intentar cobrar el invoice:
+     * 0 Sin error
+     * 1 Con error
+     */
+    error: number;
+
+    /**
+     * Fecha en que se produjo el error o null si no hay error en formato yyyy-mm-dd hh:mm:ss
+     */
+    errorDate: string | null;
+
+    /**
+     * Descripción de error o null si no hay error
+     */
+    errorDescription: string | null;
+
+    /**
+     * Items del invoice
+     */
+    items: Array<object>;
+
+    /**
+     * Objeto que representa un cobro y si está pagado su correspondiente pago
+     */
+    payment: object | null;
+
+    /**
+     * Objeto que muestra los datos de un pago por fuera
+     */
+    outsidePayment: object | null;
+
+    /**
+     * Link de pago. Cuando el invoice no está pagado
+     */
+    paymentLink: string;
+
+    /**
+     * Intentos de cargo fallidos
+     */
+    chargeAttemps: Array<object>;
+  }>;
+};
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -2313,4 +2642,6 @@ export type {
   FlowDeletePlanResponse,
   FlowListPlansRequest,
   FlowListPlansResponse,
+  FlowCreateSubscriptionToPlanRequest,
+  FlowCreateSubscriptionToPlanResponse,
 };
