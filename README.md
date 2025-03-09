@@ -28,6 +28,10 @@ con la API de [Flow.cl](https://www.flow.cl/) de manera sencilla y segura.
 npm install @nicotordev/flowcl-pagos
 ```
 
+```sh
+yarn add @nicotordev/flowcl-pagos
+```
+
 ## Uso
 
 ### Importar y configurar el cliente
