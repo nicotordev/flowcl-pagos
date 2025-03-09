@@ -282,15 +282,7 @@ type FlowPaymentsReceivedByDateRequest = {
    * Formato: YYYY-MM-DD
    */
   date: string | Date;
-  /**
-   * Número de página de inicio.
-   */
-  start?: number;
-  /**
-   * Límite de resultados por página.
-   */
-  limit?: number;
-};
+} & Omit<FlowSearchRequest, 'status' | 'filter'>;
 
 /**
  * Datos requeridos para consultar los pagos recibidos por una fecha específica.
@@ -302,58 +294,36 @@ type FlowTransactionsReceivedByDateRequest = {
    * Formato: YYYY-MM-DD
    */
   date: string | Date;
+} & Omit<FlowSearchRequest, 'status' | 'filter'>;
+
+type FlowPaginatedData = {
   /**
-   * Número de página de inicio.
+   * El número total de registros encontrados
    */
-  start?: number;
+  total: number;
   /**
-   * Límite de resultados por página.
+   * boolean
+   * 1 Si existen más páginas
+   * 0 Si es la última página
    */
-  limit?: number;
+  hasMore: 0 | 1;
+  /**
+   * Array of object
+   * arreglo de registros de la página
+   * [{x list 1}{x list 2}{x list n..}
+   */
+  data: string;
 };
 
 /**
  * Tipo que representa la respuesta de la API al obtener el listado de transacciones recibidas en un día.
  */
-type FlowTransactionsReceivedByDateResponse = {
-  /**
-   * El número total de registros encontrados.
-   */
-  total: number;
-
-  /**
-   * Indica si existen más páginas de resultados.
-   * `true` si hay más páginas disponibles, `false` si es la última página.
-   */
-  hasMore: 0 | 1;
-
-  /**
-   * Arreglo de registros de la página actual.
-   */
-  data: string;
-};
+type FlowTransactionsReceivedByDateResponse = FlowPaginatedData;
 
 /**
  * Tipo que representa la respuesta de la API al obtener el listado de pagos recibidos en un día.
  */
-type FlowPaymentsReceivedByDateResponse = {
-  /**
-   * El número total de registros encontrados.
-   */
-  total: number;
-
-  /**
-   * Indica si existen más páginas de resultados.
-   * `true` si hay más páginas disponibles, `false` si es la última página.
-   */
-  hasMore: 0 | 1;
-
-  /**
-   * Arreglo de registros de la página actual.
-   */
-  data: string;
-};
-
+type FlowPaymentsReceivedByDateResponse = FlowPaginatedData;
 /**
  * Represents the response schema for a Flow payment status request.
  */
@@ -911,7 +881,7 @@ type FlowGetCustomerResponse = {
   registerDate: string;
 };
 
-type FlowGetCustomerListRequest = {
+type FlowSearchRequest = {
   /**
    * Número de registro de inicio de la página.
    * Si se omite, el valor por defecto es 0.
@@ -936,23 +906,9 @@ type FlowGetCustomerListRequest = {
   status?: number;
 };
 
-type FlowGetCustomerListResponse = {
-  /**
-   *  El número total de registros encontrados.
-   */
-  total: number;
+type FlowGetCustomerListRequest = FlowSearchRequest;
 
-  /**
-   * Indica si existen más páginas de resultados.
-   * `true` si hay más páginas disponibles, `false` si es la última página.
-   */
-  hasMore: 0 | 1;
-
-  /**
-   * Arreglo de registros de la página actual.
-   */
-  data: string;
-};
+type FlowGetCustomerListResponse = FlowPaginatedData;
 /**
  * Representa la información de una tarjeta de crédito registrada en Flow.
  */
@@ -1587,46 +1543,14 @@ type FlowListChargesRequest = {
    */
   customerId: string;
   /**
-   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
-   */
-  start?: number;
-  /**
-   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
-   */
-  limit?: number;
-  /**
-   * Filtro por descripción del cargo
-   */
-  filter?: string;
-  /**
    * Filtro por fecha de inicio (<yyyy-mm-dd>)
    */
   fromDate?: string;
-  /**
-   * Filtro por estado del cargo
-   */
-  status?: number;
-};
+} & FlowSearchRequest;
 /**
  * Representa la respuesta de la API de Flow de la lista de cobros.
  */
-type FlowListChargesResponse = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-  /**
-   * El número total de registros encontrados
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * arreglo de registros de la página
-   * ej: [{item list 1}{item list 2}{item list n..}
-   */
-  data: string;
-};
+type FlowListChargesResponse = FlowPaginatedData;
 /**
  * Representa la información de los cobros fallidos en Flow.
  */
@@ -1636,18 +1560,6 @@ type FlowListFailedChargesRequest = {
    */
   customerId: string;
   /**
-   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
-   */
-  start?: number;
-  /**
-   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
-   */
-  limit?: number;
-  /**
-   * Filtro por descripción del error
-   */
-  filter?: string;
-  /**
    * Filtro por fecha de inicio (<yyyy-mm-dd>)
    */
   fromDate?: string;
@@ -1655,27 +1567,11 @@ type FlowListFailedChargesRequest = {
    * Filtro por el número de la orden del comercio
    */
   commerceOrder?: number;
-};
+} & Omit<FlowSearchRequest, 'status'>;
 /**
  * Representa la respuesta de la API de Flow de la lista de cobros fallidos.
  */
-type FlowListFailedChargesResponse = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-  /**
-   * El número total de registros encontrados
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * arreglo de registros de la página
-   * ej: [{item list 1}{item list 2}{item list n..}
-   */
-  data: string;
-};
+type FlowListFailedChargesResponse = FlowPaginatedData;
 /**
  * Lista paginada de suscripciones de un cliente
  */
@@ -1684,37 +1580,9 @@ type FlowListPaginatedSubscriptionsRequest = {
    * Identificador del cliente
    */
   customerId: string;
-  /**
-   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
-   */
-  start?: number;
-  /**
-   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
-   */
-  limit?: number;
-  /**
-   * filtro por el identificador de la suscripción
-   */
-  filter?: string;
-};
+} & Omit<FlowSearchRequest, 'status'>;
 
-type FlowListPaginatedSubscriptionsResponse = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-  /**
-   * El número total de registros encontrados
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * arreglo de registros de la página
-   * ej: [{item list 1}{item list 2}{item list n..}
-   */
-  data: string;
-};
+type FlowListPaginatedSubscriptionsResponse = FlowPaginatedData;
 /**
  * Representa la información de la creación de un plan.
  */
@@ -2218,46 +2086,9 @@ type FlowDeletePlanResponse = {
   public: 0 | 1;
 };
 
-type FlowListPlansRequest = {
-  /**
-   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
-   */
-  start?: number;
+type FlowListPlansRequest = FlowSearchRequest;
 
-  /**
-   * Número de registros por página. Si se omite el valor por omisión es 10. El valor máximo es de 100 registros por página.
-   */
-  limit?: number;
-
-  /**
-   * Filtro por el nombre del Plan (opcional)
-   */
-  filter?: string;
-
-  /**
-   * Filtro por el estado del Plan: 1 = Activo, 0 = Eliminado (opcional)
-   */
-  status?: number;
-};
-
-type FlowListPlansResponse = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-
-  /**
-   * Indica si existen más páginas de resultados.
-   * 1 si hay más páginas disponibles, 0 si es la última página.
-   */
-  hasMore: 0 | 1;
-
-  /**
-   * Arreglo de registros de la página actual.
-   * Ejemplo: [{item list 1}{item list 2}{item list n..}]
-   */
-  data: string;
-};
+type FlowListPlansResponse = FlowPaginatedData;
 
 type FlowCreateSubscriptionToPlanRequest = {
   /**
@@ -3388,41 +3219,13 @@ type FlowGetSubscriptionBySubscriptionIdResponse = {
 };
 
 type FlowGetPlanSubscriptionsRequest = {
+  /**
+   * Identificador del plan
+   */
   planId: string;
-  /**
-   *   número de registro de inicio de la página. Si se omite el valor por omisión es 0.
-   */
-  start?: number;
-  /**
-   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
-   */
-  limit?: number;
-  /**
-   * filtro por el nombre del cliente
-   */
-  filter: string;
-  /**
-   * Filtro por el estado de la suscripción
-   */
-  status: number;
-};
-type FlowGetPlanSubscriptionsResponse = {
-  /**
-   * El número total de registros encontrados.
-   */
-  total: number;
+} & FlowSearchRequest;
 
-  /**
-   * Indica si existen más páginas de resultados.
-   * `true` si hay más páginas disponibles, `false` si es la última página.
-   */
-  hasMore: 0 | 1;
-
-  /**
-   * Arreglo de registros de la página actual.
-   */
-  data: string;
-};
+type FlowGetPlanSubscriptionsResponse = FlowPaginatedData;
 /**
  *
  */
@@ -6041,48 +5844,9 @@ type FlowDeleteAdditionalSubscriptionItemResponse = {
   created: string;
 };
 
-type FlowListAdditionalSubscriptionItemRequest = {
-  /**
- * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+type FlowListAdditionalSubscriptionItemRequest = FlowSearchRequest;
 
- */
-  start?: number;
-  /**
- * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
-
- */
-  limit?: number;
-  /**
- * Filtro por el nombre del item adicional
-
- */
-  filter: string;
-  /** 
-    Filtro por el estado del item adicional:
-    1 Activo
-    0 Inactivo
-  */
-  status: 0 | 1;
-};
-
-type FlowListAdditionalSubscriptionItemResponse = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-  /**
-   *
-   * boolean
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * arreglo de registros de la página
-   * [{item list 1}{item list 2}{item list n..}
-   */
-  data: string;
-};
+type FlowListAdditionalSubscriptionItemResponse = FlowPaginatedData;
 
 type FlowCreateDiscountCouponRequest = {
   /**
@@ -6379,45 +6143,9 @@ type FlowGetDiscountCouponResponse = {
   redemptions: number;
 };
 
-type FlowListDiscountCouponsRequest = {
-  /**
-   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
-   */
-  start?: number;
-  /**
-   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
-   */
-  limit?: number;
-  /**
- * Filtro por el nombre del cupón
+type FlowListDiscountCouponsRequest = FlowSearchRequest;
 
- */
-  filter?: string;
-  /**
-   * Filtro por el estado del cupón:
-   * 1 Activo
-   * 0 Inactivo
-   */
-  status?: number;
-};
-
-type FlowListDiscountCouponsResponse = {
-  /**
- * El número total de registros encontrados
-
- */
-  total: number;
-  /**
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * arreglo de registros de la página
-   * [{coupon list 1}{coupon list 2}{coupon list n..}
-   *  */
-  data: string;
-};
+type FlowListDiscountCouponsResponse = FlowPaginatedData;
 
 type FlowGetInvoiceDataResponse = {
   /**
@@ -7400,39 +7128,12 @@ type FlowRecordExternalPaymentAndMarkInvoicePaidResponse = {
 
 type FlowGetOverdueInvoicesRequest = {
   /**
-   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
-   */
-  start?: number;
-  /**
-   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
-   */
-  limit?: number;
-  /**
-   * Filtro por asunto del Invoice (Importe).
-   */
-  filter?: string;
-  /**
-   * Identificador del Plan, si se agrega se filtrará para los invoices de este plan.
+   * Identificador del cliente
    */
   planId?: string;
-};
+} & Omit<FlowSearchRequest, 'status'>;
 
-type FlowGetOverdueInvoicesResponse = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-  /**
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * Array of object
-   * arreglo de registros de la página
-   */
-  data: string;
-};
+type FlowGetOverdueInvoicesResponse = FlowPaginatedData;
 
 type FlowRetryOverdueInvoicePaymentResponse = {
   /**
@@ -8039,41 +7740,26 @@ type FlowGetAssociatedMerchantsRequest = {
   /**
    * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
    */
-  start: number;
+  start?: number;
   /**
    * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
 
    */
-  limit: number;
+  limit?: number;
   /**
    * Filtro por nombre del comercio asociado
    */
-  filter: string;
+  filter?: string;
   /**
    * Filtro por estado del comercio asociado. Valores posibles:
    * 0: Pendiente de aprobación
    * 1: Aprobado
    * 2: Rechazado
    */
-  status: 0 | 1 | 2;
+  status?: 0 | 1 | 2;
 };
-type FlowGetAssociatedMerchantsResponse = {
-  /**
-   * El número total de registros encontrados
-   */
-  total: number;
-  /**
-   * boolean
-   * 1 Si existen más páginas
-   * 0 Si es la última página
-   */
-  hasMore: 0 | 1;
-  /**
-   * Array of object
-   * arreglo de registros de la página
-   */
-  data: string;
-};
+type FlowGetAssociatedMerchantsResponse = FlowPaginatedData;
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
