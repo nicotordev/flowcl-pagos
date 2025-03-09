@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - gh-pages
-  workflow_dispatch:
+  workflow_dispatch:  # Permite ejecución manual
 
 jobs:
   build:
@@ -18,17 +18,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: 📦 Movernos a Docusaurus
-        run: cd docusaurus
 
       - name: 📦 Instalar dependencias
+        working-directory: docusaurus
         run: npm install
 
       - name: 🏗️ Construir Docusaurus
+        working-directory: docusaurus
         run: npm run build
 
       - name: 🚀 Desplegar en GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docusaurus/build
+          publish_dir: docusaurus/build 
