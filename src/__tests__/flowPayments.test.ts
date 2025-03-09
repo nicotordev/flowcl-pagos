@@ -1,11 +1,11 @@
-import { FlowPayments } from '../src';
+import { FlowPayments } from '..';
 import dotenv from 'dotenv';
 import {
   FlowCreatePaymentRequest,
   FlowCreatePaymentByEmailRequest,
   FlowPaymentsReceivedByDateRequest,
   FlowTransactionsReceivedByDateRequest,
-} from '../src/types/flow';
+} from '../types/flow';
 dotenv.config();
 
 const API_KEY = process.env.FLOW_API_KEY!;

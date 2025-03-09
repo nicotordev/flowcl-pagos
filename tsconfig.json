@@ -34,7 +34,10 @@
     "skipLibCheck": true /* Omite la verificación de bibliotecas para reducir tiempo de compilación */,
     "incremental": true /* Habilita compilación incremental para mejorar rendimiento */
   },
-  "include": ["src", "jest.config.cjs"] /* Especifica los archivos a compilar */,
+  "include": [
+    "src",
+    "src/jest.config.cjs"
+  ] /* Especifica los archivos a compilar */,
   "exclude": [
     "node_modules",
     "dist",

@@ -1,11 +1,11 @@
-import FlowPlans from '../src/clients/flow.plans';
+import FlowPlans from '../clients/flow.plans';
 import dotenv from 'dotenv';
 import {
   FlowCreatePlanRequest,
   FlowCreatePlanResponse,
   FlowEditPlanRequest,
   FlowEditPlanResponse,
-} from '../src/types/flow';
+} from '../types/flow';
 
 dotenv.config(); // Carga las variables de entorno desde .env
 
