@@ -21,11 +21,11 @@ jobs:
         with:
           node-version: 18
           cache: npm
+          cache-dependency-path: docusaurus/package-lock.json  # Se asegura de que busca en docusaurus/
 
       - name: 📦 Instalar dependencias
         working-directory: docusaurus
-        run: npm install --no-package-lock
-
+        run: npm install
 
       - name: 🏗️ Construir Docusaurus
         working-directory: docusaurus
@@ -35,5 +35,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages  # Publica en gh-pages
-          publish_dir: docusaurus/build  # Se publica la carpeta build dentro de docusaurus
+          publish_branch: gh-pages  # Publica en la rama gh-pages
+          publish_dir: docusaurus/build  # Publica el contenido generado en build/
+
