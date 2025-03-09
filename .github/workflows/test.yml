@@ -24,3 +24,7 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          FLOW_SECRET_KEY: ${{ secrets.FLOW_SECRET_KEY }}
+          FLOW_API_KEY: ${{ secrets.FLOW_API_KEY }}
+          FLOW_BASE_URL: ${{ secrets.FLOW_BASE_URL }}
