@@ -1,5 +1,5 @@
 import flowConstants from '../constants/flow.constants';
-import { FlowPaymentStatus, FlowPaymentMethods } from '../types/flow';
+import { FlowPaymentMethods, FlowPaymentStatus } from '../types/flow';
 import { parse, isValid, format } from 'date-fns';
 import CryptoJS from 'crypto-js';
 
