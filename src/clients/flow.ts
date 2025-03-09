@@ -2,6 +2,7 @@ import { FlowAuthenticationError } from '../errors';
 import FlowCoupons from './flow.coupons';
 import FlowCustomers from './flow.customers';
 import FlowInvoices from './flow.invoices';
+import FlowMerchants from './flow.merchants';
 import FlowPayments from './flow.payments';
 import FlowPlans from './flow.plans';
 import FlowRefunds from './flow.refunds';
@@ -50,6 +51,10 @@ class Flow {
    * Objeto que proporciona métodos para interactuar con las liquidaciones en Flow.
    */
   public settlements: FlowSettlements;
+  /**
+   * Objecto que proporciona metodos para interactuar con los merchants en Flow.
+   */
+  public merchants: FlowMerchants;
 
   /**
    * Constructor de la clase FlowClient.
@@ -85,6 +90,7 @@ class Flow {
     this.coupons = new FlowCoupons(apiKey, secretKey, baseURL);
     this.invoices = new FlowInvoices(apiKey, secretKey, baseURL);
     this.settlements = new FlowSettlements(apiKey, secretKey, baseURL);
+    this.merchants = new FlowMerchants(apiKey, secretKey, baseURL);
   }
 }
 

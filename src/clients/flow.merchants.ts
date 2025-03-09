@@ -21,7 +21,7 @@ import {
  * Permite gestionar los comercios asociados
  *
  */
-export default class FlowMerchant {
+export default class FlowMerchants {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
