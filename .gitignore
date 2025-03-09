@@ -37,6 +37,3 @@ Thumbs.db
 # Archivos de compilación
 *.tsbuildinfo
 tsconfig.tsbuildinfo
-
-
-docusaurus
