@@ -20,15 +20,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
+          cache: npm
 
       - name: 📦 Instalar dependencias
         working-directory: docusaurus
-        run: yarn install --frozen-lockfile
+        run: npm install
 
       - name: 🏗️ Construir Docusaurus
         working-directory: docusaurus
-        run: yarn build
+        run: npm install
 
       - name: 🚀 Desplegar en GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
