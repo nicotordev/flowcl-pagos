@@ -261,6 +261,7 @@ export default class FlowCustomers {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
+        console.log(err.response?.data);
         throw new FlowAPIError(err.response?.status || 500, err.message);
       }
       error(err);
