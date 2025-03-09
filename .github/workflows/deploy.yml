@@ -1,10 +1,10 @@
-name: Deploy Docusaurus on Push to gh-pages
+name: Deploy Docusaurus
 
 on:
   push:
     branches:
-      - gh-pages
-  workflow_dispatch:  # Permite ejecución manual
+      - main  # O la rama donde tienes el código fuente
+  workflow_dispatch:
 
 jobs:
   build:
@@ -31,4 +31,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docusaurus/build 
+          publish_branch: gh-pages
+          publish_dir: docusaurus/build
