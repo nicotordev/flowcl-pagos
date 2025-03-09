@@ -65,8 +65,8 @@ const flow = new Flow(
 Explora la documentación detallada para aprovechar al máximo todas las funcionalidades del SDK:
 
 - [📘 Documentación Oficial](https://www.flow.cl/docs/api.html)
-- [🔍 Ejemplos prácticos y casos de uso](./examples)
-- [🛠️ Guía de Integración Rápida](./quickstart)
+<!-- - [🔍 Ejemplos prácticos y casos de uso](/docs/examples) -->
+- [🛠️ Guía de Integración Rápida](./quick-start)
 
 ---
 
