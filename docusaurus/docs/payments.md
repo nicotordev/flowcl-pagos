@@ -13,8 +13,8 @@ La clase `FlowPayments` permite interactuar con la API de Pagos de Flow.cl, prop
 ```typescript
 import Flow from '@nicotordev/flowcl-pagos';
 
-const flow = new Flow(
-  'tu_api_key',
+const flow: Flow = new Flow(
+  'tu_api_key', // string
   'tu_secret_key',
   'sandbox', // o 'production'
 );
@@ -28,46 +28,59 @@ const payments = flow.payments;
 
 #### Crear un pago
 
-Crea una orden de pago.
-
 ```typescript
 payments.create(data: FlowCreatePaymentRequest): Promise<FlowCreatePaymentResponse>
 ```
 
-- **Request**: `FlowCreatePaymentRequest` incluye:
+- **Request** (`FlowCreatePaymentRequest`):
 
-  - `commerceOrder`
-  - `subject`
-  - `currency`
-  - `amount`
-  - `email`
-  - `paymentMethod`
-  - `urlReturn`
-  - `urlConfirmation`
-  - `optional` (opcional)
-  - `timeout` (opcional)
-  - `merchantId` (opcional)
-  - `paymentCurrency` (opcional)
+  - `commerceOrder`: `string`
+  - `subject`: `string`
+  - `currency`: `string` _(opcional)_
+  - `amount`: `number`
+  - `email`: `string`
+  - `paymentMethod`: `string` `FlowPaymentMethods` _(opcional)_ // Este parametro es un numero en la API de Flow, se hace una conversión interna a string
+  - `urlReturn`: `string`
+  - `urlConfirmation`: `string`
+  - `optional`: `Record<string, string>` _(opcional)_
+  - `timeout`: `number` _(opcional)_
+  - `merchantId`: `string` _(opcional)_
+  - `paymentCurrency`: `string` _(opcional)_
 
-- **Response**: `FlowCreatePaymentResponse` incluye:
-  - `token`
-  - `url`
-  - `flowOrder`
-  - `redirectUrl`
+- **Response** (`FlowCreatePaymentResponse`):
+
+  - `token`: `string`
+  - `url`: `string`
+  - `flowOrder`: `number`
+  - `redirectUrl`: `string`
 
 ### Crear Pago por Email
-
-Envía un pago directamente al email del cliente.
 
 ```typescript
 payments.createByEmail(data: FlowCreatePaymentByEmailRequest): Promise<FlowCreatePaymentByEmailResponse>
 ```
 
-- **Request**: Similar a `FlowCreatePaymentRequest`, incluye:
+- **Request** (`FlowCreatePaymentByEmailRequest`):
 
-  - `payment_currency` (adicional).
+  - `commerceOrder`: `string`
+  - `subject`: `string`
+  - `currency`: `string` _(opcional)_
+  - `amount`: `number`
+  - `email`: `string`
+  - `paymentMethod`: `string` `FlowPaymentMethods` _(opcional)_ // Este parametro es un numero en la API de Flow, se hace una conversión interna a string
+  - `urlConfirmation`: `string`
+  - `urlReturn`: `string`
+  - `optional`: `string` _(opcional)_
+  - `timeout`: `number` _(opcional)_
+  - `merchantId`: `string` _(opcional)_
+  - `payment_currency`: `string` _(opcional)_
 
-- **Response**: Similar a `FlowCreatePaymentResponse`.
+- **Response** (`FlowCreatePaymentByEmailResponse`):
+
+  - `token`: `string`
+  - `url`: `string`
+  - `flowOrder`: `number`
+  - `redirectUrl`: `string`
 
 ## Consultar Estado del Pago
 
@@ -90,14 +103,35 @@ payments.status.byFlowOrder(flowOrder: number): Promise<FlowPaymentStatusRespons
 ```
 
 - **Response** (`FlowPaymentStatusResponse`):
-  - `token`
-  - `url`
-  - `flowOrder`
-  - `redirectUrl`
+
+  - `flowOrder`: `number`
+  - `commerceOrder`: `string`
+  - `requestDate`: `string`
+  - `status`: `number` `1 | 2 | 3 | 4`
+  - `statusStr`: `FlowPaymentStatus`
+  - `subject`: `string`
+  - `currency`: `string`
+  - `amount`: `number`
+  - `payer`: `string`
+  - `optional`: `string | null`
+  - `pendingInfo`: `{`
+    - `media`: `string`
+    - `date`: `string`
+      `}`
+  - `paymentData`: `{`
+    - `date`: string | null;
+    - `media`: string | null;
+    - `conversionDate`: string | null;
+    - `conversionRate`: number | null;
+    - `amount`: number | null;
+    - `currency`: string | null;
+    - `fee`: number | null;
+    - `balance`: number | null;
+    - `transferDate`: string | null;
+      `}` _(opcional)_
+  - `merchantId`: `string` _(opcional)_
 
 ### Estado Extendido del Pago
-
-Permite obtener información extendida y detallada de un pago específico.
 
 #### Por Token
 
@@ -111,16 +145,41 @@ payments.statusExtended.byToken(token: string): Promise<FlowPaymentsStatusExtend
 payments.statusExtended.byFlowOrder(flowOrder: number): Promise<FlowPaymentsStatusExtendedResponse>
 ```
 
-- **Response** (`FlowPaymentsStatusExtendedResponse`) incluye:
-  - `flowOrder`
-  - `commerceOrder`
-  - `requestDate`
-  - `status`
-  - `paymentData`
-  - `paymentCurrency`
-  - `paymentAmount`
-  - `paymentMethod`
-  - Otros detalles relacionados con la transacción.
+- **Response** (`FlowPaymentsStatusExtendedResponse`):
+  - `flowOrder`: `number`
+  - `commerceOrder`: `string`
+  - `requestDate`: `string`
+  - `status`: `1 | 2 | 3 | 4`
+  - `statusStr`: `FlowPaymentStatus`
+  - `subject`: `string`
+  - `currency`: `string`
+  - `amount`: `number`
+  - `payer`: `string`
+  - `optional`: `Record<string, unknown> | null`
+  - `pendingInfo`: `{`
+    - `media`: `string`
+    - `date`: `string`
+      `}`
+  - `paymentData`: `{`
+    - `date`: string | null;
+    - `media`: string | null;
+    - `conversionDate`: string | null;
+    - `conversionRate`: number | null;
+    - `amount`: number | null;
+    - `currency`: string | null;
+    - `fee`: number | null;
+    - `balance`: number | null;
+    - `transferDate`: string | null;
+      `}` _(opcional)_
+  - `paymentCurrency`: `string`
+  - `paymentAmount`: `number`
+  - `paymentMethod`: `string` `FlowPaymentMethods` _(opcional)_ // Este parametro es un numero en la API de Flow, se hace una conversión interna a string
+  - `merchantId`: `string` _(opcional)_
+  - `lastError`: `{`
+    - `medioCode`: `string`
+    - `code`: `string`
+    - `message`: `string`
+  `}`_(opcional)_
 
 ## Consultas de Pagos
 
@@ -132,18 +191,16 @@ payments.listPaymentsByDate(data: FlowPaymentsReceivedByDateRequest): Promise<Fl
 
 - **Request** (`FlowPaymentsReceivedByDateRequest`):
 
-  - `date` (formato `YYYY-MM-DD`)
-  - `start` (opcional)
-  - `limit` (opcional)
+  - `date`: `string | Date`
+  - `start`: `number` _(opcional)_
+  - `limit`: `number` _(opcional)_
 
 - **Response** (`FlowPaymentsReceivedByDateResponse`):
-  - `total`
-  - `hasMore`
-  - `data` (arreglo con pagos)
+  - `total`: `number`
+  - `hasMore`: `0 | 1`
+  - `data`: `string`
 
 ### Pagos Recibidos Extendidos por Fecha
-
-Permite listar pagos y transacciones extendidas por fecha indicada.
 
 ```typescript
 payments.listPaymentsExtendedByDate(data: FlowTransactionsReceivedByDateRequest): Promise<FlowTransactionsReceivedByDateResponse>
@@ -151,14 +208,14 @@ payments.listPaymentsExtendedByDate(data: FlowTransactionsReceivedByDateRequest)
 
 - **Request** (`FlowTransactionsReceivedByDateRequest`):
 
-  - `date` (formato `YYYY-MM-DD`)
-  - `start` (opcional, default: 0)
-  - `limit` (opcional)
+  - `date`: `string | Date`
+  - `start`: `number` _(opcional)_
+  - `limit`: `number` _(opcional)_
 
 - **Response** (`FlowTransactionsReceivedByDateResponse`):
-  - `total`
-  - `hasMore`
-  - `data`
+  - `total`: `number`
+  - `hasMore`: `0 | 1`
+  - `data`: `string`
 
 ## Manejo de Errores
 

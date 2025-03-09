@@ -261,11 +261,65 @@ type FlowPaymentStatusResponse = {
   /**
    * Información adicional en caso de pago pendiente (opcional).
    */
-  pendingInfo?: Record<string, string> | null;
+  pendingInfo?: {
+    /**
+     * Fecha de emisión del cupón de pago.
+     */
+    media?: string | null;
+    /**
+     * Medio de pago utilizado para emitir el cupón de pago.
+     */
+    date?: string | null;
+  } | null;
   /**
    * Datos específicos del pago realizado (opcional).
    */
-  paymentData?: Record<string, string> | null;
+  paymentData?: {
+    /**
+     * La fecha de pago
+     */
+    date?: string | null;
+
+    /**
+     * El medio de pago utilizado
+     */
+    media?: string | null;
+
+    /**
+     * La fecha de conversión de la moneda
+     */
+    conversionDate?: string | null;
+
+    /**
+     * La tasa de conversión
+     */
+    conversionRate?: number | null;
+
+    /**
+     * El monto pagado
+     */
+    amount?: number | null;
+
+    /**
+     * La moneda con que se pagó
+     */
+    currency?: string | null;
+
+    /**
+     * El costo del servicio
+     */
+    fee?: number | null;
+
+    /**
+     * El saldo a depositar
+     */
+    balance?: number | null;
+
+    /**
+     * La fecha de transferencia de los fondos a su cuenta bancaria
+     */
+    transferDate?: string | null;
+  };
   /**
    * ID del comercio asociado (puede ser `null`).
    */
