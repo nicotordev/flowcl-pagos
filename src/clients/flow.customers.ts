@@ -50,6 +50,8 @@ import {
 } from '../types/flow';
 import { generateFormData, getPaymentMethod } from '../utils/flow.utils';
 
+import qs from 'qs';
+
 /**
  * Cliente para interactuar con la API de clientes de Flow.
  * Permite realizar operaciones con clientes en Flow.
@@ -245,14 +247,15 @@ export default class FlowCustomers {
         apiKey: this.apiKey,
       } as Record<string, string>;
       const formData = generateFormData(allData, this.secretKey);
-
+      const formDataSearchParams = new URLSearchParams(formData);
       const response =
         method === 'post'
           ? await this.axiosInstance.post<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}`,
+              qs.stringify(formData),
             )
           : await this.axiosInstance.get<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}?${formDataSearchParams}`,
             );
 
       return response.data;

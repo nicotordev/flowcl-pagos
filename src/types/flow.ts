@@ -1772,7 +1772,7 @@ type FlowCreatePlanRequest = {
   /**
    * URL donde Flow notificará al comercio los pagos efectuados por este plan.
    */
-  urlCallback: string;
+  urlCallback?: string;
 
   /**
    * Número de reintentos de cargo. Por omisión es 3.

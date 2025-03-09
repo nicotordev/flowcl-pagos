@@ -74,12 +74,11 @@ function generateFormData<T extends Record<string, string>>(
   secretKey: string,
 ) {
   const signature = generateSignature(data, secretKey); // Generar firma
-  const formData = new URLSearchParams({
+
+  return {
     ...data,
     s: signature, // Agregar firma a los datos enviados
-  });
-
-  return formData;
+  };
 }
 
 export {

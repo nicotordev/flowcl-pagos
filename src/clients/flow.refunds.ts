@@ -13,7 +13,7 @@ import {
   FlowRefundStatusResponse,
 } from '../types/flow';
 import { generateFormData } from '../utils/flow.utils';
-
+import qs from 'qs';
 /**
  * Cliente para interactuar con la API de reembolsos de Flow.
  * Permite realizar reembolsos en Flow.
@@ -102,14 +102,15 @@ export default class FlowRefunds {
         apiKey: this.apiKey,
       } as Record<string, string>;
       const formData = generateFormData(allData, this.secretKey);
-
+      const formDataSearchParams = new URLSearchParams(formData);
       const response =
         method === 'post'
           ? await this.axiosInstance.post<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}`,
+              qs.stringify(formData),
             )
           : await this.axiosInstance.get<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}?${formDataSearchParams}`,
             );
 
       if (modifyResponse) {

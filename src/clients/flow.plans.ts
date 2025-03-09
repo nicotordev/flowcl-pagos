@@ -18,6 +18,8 @@ import {
   FlowListPlansResponse,
 } from '../types/flow';
 
+import qs from 'qs';
+
 /**
  * Cliente para interactuar con la API de pagos de Flow.
  * Permite crear planes de suscripción.
@@ -123,16 +125,16 @@ export default class FlowPlans {
         apiKey: this.apiKey,
       } as Record<string, string>;
       const formData = generateFormData(allData, this.secretKey);
-
+      const formDataSearchParams = new URLSearchParams(formData);
       const response =
         method === 'post'
           ? await this.axiosInstance.post<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}`,
+              qs.stringify(formData),
             )
           : await this.axiosInstance.get<T>(
-              `${endpoint}?${formData.toString()}`,
+              `${endpoint}?${formDataSearchParams}`,
             );
-
       if (modifyResponse) {
         return modifyResponse(data as P);
       }
