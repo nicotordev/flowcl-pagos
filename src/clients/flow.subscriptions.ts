@@ -2,23 +2,37 @@ import axios, { AxiosInstance } from 'axios';
 import { generateFormData } from '../utils/flow.utils';
 import qs from 'qs';
 import {
-  FlowAddDiscountToSubscription,
+  FlowAddDiscountToSubscriptionError,
+  FlowAddItemToSubscriptionError,
   FlowAPIError,
   FlowAuthenticationError,
+  FlowCancelScheduledPlanChangeError,
   FlowCancelSubscriptionError,
+  FlowChangeAssociatedPlanToSubscriptionError,
   FlowCreateSubscriptionToPlanError,
   FlowGetPlanSubscriptionsError,
   FlowGetSubscriptionBySubscriptionIdError,
+  FlowPreviewSubscriptionPlanChangeError,
+  FlowRemoveDiscountFromSubscriptionError,
+  FlowRemoveItemFromSubscriptionError,
   FlowUpdateSubscriptionTrialDaysError,
 } from '../errors';
 import {
   FlowAddDiscountToSubscriptionResponse,
+  FlowAddItemToSubscriptionResponse,
+  FlowCancelScheduledPlanChangeResponse,
   FlowCancelSubscriptionResponse,
+  FlowChangeAssociatedPlanToSubscriptionRequest,
+  FlowChangeAssociatedPlanToSubscriptionResponse,
   FlowCreateSubscriptionToPlanRequest,
   FlowCreateSubscriptionToPlanResponse,
   FlowGetPlanSubscriptionsRequest,
   FlowGetPlanSubscriptionsResponse,
   FlowGetSubscriptionBySubscriptionIdResponse,
+  FlowPreviewSubscriptionPlanChangeRequest,
+  FlowPreviewSubscriptionPlanChangeResponse,
+  FlowRemoveDiscountFromSubscriptionResponse,
+  FlowRemoveItemFromSubscriptionResponse,
   FlowUpdateSubscriptionTrialDays,
 } from '../types/flow';
 
@@ -116,6 +130,79 @@ export default class FlowSubscriptions {
     couponId: string,
   ) => Promise<FlowAddDiscountToSubscriptionResponse> =
     this._addDiscountToSubscription;
+
+  /**
+   * Este servicio permite eliminar el descuento que tenga la suscripción. El eliminar el descuento de la suscripción, no elimina el descuento que podría tenar asociado el cliente.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @returns {Promise<FlowRemoveDiscountFromSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowRemoveDiscountFromSubscriptionError} Si hay problemas al eliminar el descuento.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  public removeDiscountFromSubscription: (
+    subscriptionId: string,
+  ) => Promise<FlowRemoveDiscountFromSubscriptionResponse> =
+    this._removeDiscountFromSubscription.bind(this);
+  /**
+   * Este servicio permite agregar un item adicional a la suscripción.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @param {string} itemId ID del item.
+   * @returns {Promise<FlowAddItemToSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowAddItemToSubscriptionError} Si hay problemas al agregar el item.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  public addItemToSubscription: (
+    subscriptionId: string,
+    itemId: string,
+  ) => Promise<FlowAddItemToSubscriptionResponse> =
+    this._addItemToSubscription.bind(this);
+
+  /**
+   * Este servicio permite eliminar un item adicional que este agregado en una suscripción.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @param {string} itemId ID del item.
+   * @returns {Promise<FlowRemoveItemFromSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowRemoveItemFromSubscriptionError} Si hay problemas al eliminar el item.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  public removeItemFromSubscription: (
+    subscriptionId: string,
+    itemId: string,
+  ) => Promise<FlowRemoveItemFromSubscriptionResponse> =
+    this._removeItemFromSubscription.bind(this);
+  /**
+   * Este servicio permite modificar el plan que esta asociado a una suscripción. Se puede modificar el plan de una suscripción ingresando de manera opcional una fecha asocial al cambio de plan. Esta fecha deberá estar en el rango del ciclo de facturación actual de la suscripción, y puede ser a futuro.
+   * @param {FlowChangeAssociatedPlanToSubscriptionRequest} data Datos para cambiar el plan de la suscripción.
+   * @returns {Promise<FlowChangeAssociatedPlanToSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowChangeAssociatedPlanToSubscriptionError} Si hay problemas al cambiar el plan de la suscripción.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  public changeAssociatedPlanToSubscription: (
+    data: FlowChangeAssociatedPlanToSubscriptionRequest,
+  ) => Promise<FlowChangeAssociatedPlanToSubscriptionResponse> =
+    this._changeAssociatedPlanToSubscription.bind(this);
+
+  /**
+   * Este servicio permite previsualizar el modificar un plan que esta asociado a una suscripción. Se puede modificar el plan de una suscripción ingresando de manera opcional una fecha asocial al cambio de plan. Esta fecha deberá estar en el rango del ciclo de facturación actual de la suscripción, y puede ser a futuro.
+   * @param {FlowChangeAssociatedPlanToSubscriptionRequest} data Datos para cambiar el plan de la suscripción.
+   * @returns {Promise<FlowChangeAssociatedPlanToSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowPreviewSubscriptionPlanChangeError} Si hay problemas al cambiar el plan de la suscripción.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  public previewSubscriptionPlanChange: (
+    data: FlowPreviewSubscriptionPlanChangeRequest,
+  ) => Promise<FlowPreviewSubscriptionPlanChangeResponse> =
+    this._previewSubscriptionPlanChange.bind(this);
+  /**
+   * Este servicio permite cancelar un cambio de plan que haya sido programado para una suscripción.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @returns {Promise<FlowCancelScheduledPlanChangeResponse>} Respuesta de la API.
+   * @throws {FlowCancelScheduledPlanChangeError} Si hay problemas al cancelar el cambio de plan.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  public cancelScheduledPlanChange: (
+    subscriptionId: string,
+  ) => Promise<FlowCancelScheduledPlanChangeResponse> =
+    this._cancelScheduledPlanChange.bind(this);
 
   /**
    * Constructor de la clase FlowClient.
@@ -301,11 +388,137 @@ export default class FlowSubscriptions {
     couponId: string,
   ): Promise<FlowAddDiscountToSubscriptionResponse> {
     return await this.request<FlowAddDiscountToSubscriptionResponse>(
-      '/addDiscount',
+      '/addCoupon',
       { subscriptionId, couponId },
       'post',
       (err) => {
-        throw new FlowAddDiscountToSubscription((err as Error).message);
+        throw new FlowAddDiscountToSubscriptionError((err as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio permite eliminar el descuento que tenga la suscripción. El eliminar el descuento de la suscripción, no elimina el descuento que podría tenar asociado el cliente.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @returns {Promise<FlowRemoveDiscountFromSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowRemoveDiscountFromSubscriptionError} Si hay problemas al eliminar el descuento.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  private async _removeDiscountFromSubscription(
+    subscriptionId: string,
+  ): Promise<FlowRemoveDiscountFromSubscriptionResponse> {
+    return await this.request<FlowRemoveDiscountFromSubscriptionResponse>(
+      '/deleteCoupon',
+      { subscriptionId },
+      'post',
+      (err) => {
+        throw new FlowRemoveDiscountFromSubscriptionError(
+          (err as Error).message,
+        );
+      },
+    );
+  }
+  /**
+   * Este servicio permite agregar un item adicional a la suscripción.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @param {string} itemId ID del item.
+   * @returns {Promise<FlowAddItemToSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowAddItemToSubscriptionError} Si hay problemas al agregar el item.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  private async _addItemToSubscription(
+    subscriptionId: string,
+    itemId: string,
+  ): Promise<FlowAddItemToSubscriptionResponse> {
+    return await this.request<FlowAddItemToSubscriptionResponse>(
+      '/addItem',
+      { subscriptionId, itemId },
+      'post',
+      (err) => {
+        throw new FlowAddItemToSubscriptionError((err as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio permite eliminar un item adicional que este agregado en una suscripción.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @param {string} itemId ID del item.
+   * @returns {Promise<FlowRemoveItemFromSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowRemoveItemFromSubscriptionError} Si hay problemas al eliminar el item.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  private async _removeItemFromSubscription(
+    subscriptionId: string,
+    itemId: string,
+  ): Promise<FlowRemoveItemFromSubscriptionResponse> {
+    return await this.request<FlowRemoveItemFromSubscriptionResponse>(
+      '/deleteItem',
+      { subscriptionId, itemId },
+      'post',
+      (err) => {
+        throw new FlowRemoveItemFromSubscriptionError((err as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio permite modificar el plan que esta asociado a una suscripción. Se puede modificar el plan de una suscripción ingresando de manera opcional una fecha asocial al cambio de plan. Esta fecha deberá estar en el rango del ciclo de facturación actual de la suscripción, y puede ser a futuro.
+   * @param {FlowChangeAssociatedPlanToSubscriptionRequest} data Datos para cambiar el plan de la suscripción.
+   * @returns {Promise<FlowChangeAssociatedPlanToSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowChangeAssociatedPlanToSubscriptionError} Si hay problemas al cambiar el plan de la suscripción.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
+  private async _changeAssociatedPlanToSubscription(
+    data: FlowChangeAssociatedPlanToSubscriptionRequest,
+  ): Promise<FlowChangeAssociatedPlanToSubscriptionResponse> {
+    return await this.request<FlowChangeAssociatedPlanToSubscriptionResponse>(
+      '/changePlan',
+      data,
+      'post',
+      (err) => {
+        throw new FlowChangeAssociatedPlanToSubscriptionError(
+          (err as Error).message,
+        );
+      },
+    );
+  }
+  /**
+   * Este servicio permite previsualizar el modificar un plan que esta asociado a una suscripción. Se puede modificar el plan de una suscripción ingresando de manera opcional una fecha asocial al cambio de plan. Esta fecha deberá estar en el rango del ciclo de facturación actual de la suscripción, y puede ser a futuro.
+   * @param {FlowChangeAssociatedPlanToSubscriptionRequest} data Datos para cambiar el plan de la suscripción.
+   * @returns {Promise<FlowChangeAssociatedPlanToSubscriptionResponse>} Respuesta de la API.
+   * @throws {FlowPreviewSubscriptionPlanChangeError} Si hay problemas al cambiar el plan de la suscripción.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   *
+   */
+  private async _previewSubscriptionPlanChange(
+    data: FlowPreviewSubscriptionPlanChangeRequest,
+  ): Promise<FlowPreviewSubscriptionPlanChangeResponse> {
+    return await this.request<FlowPreviewSubscriptionPlanChangeResponse>(
+      '/changePlanPreview',
+      data,
+      'post',
+      (err) => {
+        throw new FlowPreviewSubscriptionPlanChangeError(
+          (err as Error).message,
+        );
+      },
+    );
+  }
+  /**
+   * Este servicio permite cancelar un cambio de plan que haya sido programado para una suscripción.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @returns {Promise<FlowCancelScheduledPlanChangeResponse>} Respuesta de la API.
+   * @throws {FlowCancelScheduledPlanChangeError} Si hay problemas al cancelar el cambio de plan.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   *
+   */
+  private async _cancelScheduledPlanChange(
+    subscriptionId: string,
+  ): Promise<FlowCancelScheduledPlanChangeResponse> {
+    return await this.request<FlowCancelScheduledPlanChangeResponse>(
+      '/changePlanCancel',
+      { subscriptionId },
+      'post',
+      (err) => {
+        throw new FlowCancelScheduledPlanChangeError((err as Error).message);
       },
     );
   }

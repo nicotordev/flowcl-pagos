@@ -371,9 +371,53 @@ export class FlowCancelSubscriptionError extends FlowError {
   }
 }
 
-export class FlowAddDiscountToSubscription extends FlowError {
+export class FlowAddDiscountToSubscriptionError extends FlowError {
   constructor(message: string) {
     super(`Error al agregar descuento a la suscripción: ${message}`);
     this.name = 'FlowAddDiscountToSubscription';
+  }
+}
+
+export class FlowRemoveDiscountFromSubscriptionError extends FlowError {
+  constructor(message: string) {
+    super(`Error al remover descuento de la suscripción: ${message}`);
+    this.name = 'FlowRemoveDiscountFromSubscription';
+  }
+}
+
+export class FlowAddItemToSubscriptionError extends FlowError {
+  constructor(message: string) {
+    super(`Error al agregar item a la suscripción: ${message}`);
+    this.name = 'FlowAddItemToSubscription';
+  }
+}
+
+export class FlowRemoveItemFromSubscriptionError extends FlowError {
+  constructor(message: string) {
+    super(`Error al remover item de la suscripción: ${message}`);
+    this.name = 'FlowRemoveItemFromSubscription';
+  }
+}
+
+export class FlowChangeAssociatedPlanToSubscriptionError extends FlowError {
+  constructor(message: string) {
+    super(`Error al cambiar plan asociado a la suscripción: ${message}`);
+    this.name = 'FlowChangeAssociatedPlanToSubscription';
+  }
+}
+
+export class FlowPreviewSubscriptionPlanChangeError extends FlowError {
+  constructor(message: string) {
+    super(
+      `Error al previsualizar cambio de plan de la suscripción: ${message}`,
+    );
+    this.name = 'FlowPreviewSubscriptionPlanChange';
+  }
+}
+
+export class FlowCancelScheduledPlanChangeError extends FlowError {
+  constructor(message: string) {
+    super(`Error al cancelar cambio plan programado: ${message}`);
+    this.name = 'FlowCancelScheduledPlanChange';
   }
 }
