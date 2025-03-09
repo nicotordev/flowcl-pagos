@@ -208,20 +208,17 @@ export default class FlowPayments {
   private async getPaymentStatusByToken(
     token: string,
   ): Promise<FlowPaymentStatusResponse> {
-    return this.request(
-      '/getStatus',
-      { token },
-      'get',
-      (e) => {
-        throw new FlowPaymentStatusError((e as Error).message);
-      },
-      (returnedData) => {
-        return {
-          ...returnedData,
-          statusStr: getPaymentStatus(returnedData.status),
-        };
-      },
-    );
+    const paymentStatus = await this.request<
+      FlowPaymentStatusResponse,
+      FlowPaymentStatusResponse
+    >('/getStatus', { token }, 'get', (e) => {
+      throw new FlowPaymentStatusError((e as Error).message);
+    });
+
+    return {
+      ...paymentStatus,
+      statusStr: getPaymentStatus(paymentStatus.status),
+    };
   }
 
   /**
@@ -234,20 +231,16 @@ export default class FlowPayments {
   private async getPaymentStatusByCommerceId(
     commerceId: string,
   ): Promise<FlowPaymentStatusResponse> {
-    return this.request(
-      '/getPaymentStatusByCommerceId',
-      { commerceId },
-      'get',
-      (e) => {
-        throw new FlowPaymentStatusError((e as Error).message);
-      },
-      (returnedData) => {
-        return {
-          ...returnedData,
-          statusStr: getPaymentStatus(returnedData.status),
-        };
-      },
-    );
+    const paymentStatus = await this.request<
+      FlowPaymentStatusResponse,
+      FlowPaymentStatusResponse
+    >('/getPaymentStatusByCommerceId', { commerceId }, 'get', (e) => {
+      throw new FlowPaymentStatusError((e as Error).message);
+    });
+    return {
+      ...paymentStatus,
+      statusStr: getPaymentStatus(paymentStatus.status),
+    };
   }
 
   /**
@@ -260,23 +253,16 @@ export default class FlowPayments {
   private async getPaymentStatusByFlowOrderNumber(
     flowOrder: number,
   ): Promise<FlowPaymentStatusResponse> {
-    return this.request<
+    const paymentStatus = await this.request<
       Omit<FlowPaymentStatusResponse, 'statusStr'>,
       FlowPaymentStatusResponse
-    >(
-      '/getStatusByFlowOrder',
-      { flowOrder },
-      'get',
-      (e) => {
-        throw new FlowPaymentStatusError((e as Error).message);
-      },
-      (returnedData) => {
-        return {
-          ...returnedData,
-          statusStr: getPaymentStatus(returnedData.status),
-        };
-      },
-    ) as Promise<FlowPaymentStatusResponse>;
+    >('/getStatusByFlowOrder', { flowOrder }, 'get', (e) => {
+      throw new FlowPaymentStatusError((e as Error).message);
+    });
+    return {
+      ...paymentStatus,
+      statusStr: getPaymentStatus(paymentStatus.status),
+    };
   }
   /**
    * Obtiene la lista de pagos recibidos en una fecha específica.
@@ -305,20 +291,16 @@ export default class FlowPayments {
   private async getStatusExtendedByToken(
     token: string,
   ): Promise<FlowPaymentsStatusExtendedResponse> {
-    return this.request(
-      '/getStatusExtended',
-      { token },
-      'get',
-      (e) => {
-        throw new FlowStatusExtendedError((e as Error).message);
-      },
-      (returnedData) => {
-        return {
-          ...returnedData,
-          statusStr: getPaymentStatus(returnedData.status),
-        };
-      },
-    );
+    const statusExtended = await this.request<
+      FlowPaymentsStatusExtendedResponse,
+      FlowPaymentsStatusExtendedResponse
+    >('/getStatusExtended', { token }, 'get', (e) => {
+      throw new FlowStatusExtendedError((e as Error).message);
+    });
+    return {
+      ...statusExtended,
+      statusStr: getPaymentStatus(statusExtended.status),
+    };
   }
   /**
    * Obtiene el estado extendido de un pago en base al flowOrder
@@ -331,20 +313,16 @@ export default class FlowPayments {
   private async getStatusExtendedByFlowOrder(
     flowOrder: number,
   ): Promise<FlowPaymentsStatusExtendedResponse> {
-    return this.request(
-      '/getStatusByFlowOrderExtended',
-      { flowOrder },
-      'get',
-      (e) => {
-        throw new FlowStatusExtendedError((e as Error).message);
-      },
-      (returnedData) => {
-        return {
-          ...returnedData,
-          statusStr: getPaymentStatus(returnedData.status),
-        };
-      },
-    );
+    const statusExtended = await this.request<
+      FlowPaymentsStatusExtendedResponse,
+      FlowPaymentsStatusExtendedResponse
+    >('/getStatusByFlowOrderExtended', { flowOrder }, 'get', (e) => {
+      throw new FlowStatusExtendedError((e as Error).message);
+    });
+    return {
+      ...statusExtended,
+      statusStr: getPaymentStatus(statusExtended.status),
+    };
   }
   /**
    * Obtiene la lista de transacciones recibidas en una fecha específica.
@@ -386,12 +364,6 @@ export default class FlowPayments {
       (e) => {
         throw new FlowCreatePaymentError((e as Error).message);
       },
-      (returnedData) => {
-        return {
-          ...returnedData,
-          redirectUrl: returnedData.url + '?token=' + returnedData.token,
-        };
-      },
     );
     return {
       ...response,
@@ -421,12 +393,6 @@ export default class FlowPayments {
       'post',
       (e) => {
         throw new FlowCreatePaymentByEmailError((e as Error).message);
-      },
-      (returnedData) => {
-        return {
-          ...returnedData,
-          redirectUrl: returnedData.url + '?token=' + returnedData.token,
-        };
       },
     );
     return {
