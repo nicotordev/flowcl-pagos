@@ -106,7 +106,7 @@ payments.statusExtended.byToken(token: string): Promise<FlowPaymentsStatusExtend
 payments.statusExtended.byFlowOrder(flowOrder: number): Promise<FlowPaymentsStatusExtendedResponse>
 ```
 
-- `FlowPaymentsStatusExtendedResponse`: proporciona detalles avanzados sobre el estado del pago incluyendo información adicional de pagos, conversión de moneda, impuestos, y otros detalles específicos del pago, por ejemplo 
+- `FlowPaymentsStatusExtendedResponse`: proporciona detalles avanzados sobre el estado del pago incluyendo información adicional de pagos, conversión de moneda, impuestos, y otros detalles específicos del pago, por ejemplo
 
 ```typescript
 type FlowPaymentsStatusExtendedResponse = {
@@ -152,7 +152,7 @@ type FlowPaymentsStatusExtendedResponse = {
 
 ---
 
-Para más detalles sobre tipos específicos, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#section/Introduccion).
+Para más detalles sobre tipos específicos, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/payment).
 
 ---
 
