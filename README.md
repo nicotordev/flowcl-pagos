@@ -5,6 +5,8 @@
 [![NPM Version](https://img.shields.io/npm/v/@nicotordev/flowcl-pagos.svg)](https://www.npmjs.com/package/@nicotordev/flowcl-pagos)
 [![License](https://img.shields.io/npm/l/@nicotordev/flowcl-pagos.svg)](LICENSE)
 ![Tests](https://github.com/nicotordev/flowcl-pagos/actions/workflows/test.yml/badge.svg?style=flat-square)
+![Bandera de Chile](https://upload.wikimedia.org/wikipedia/commons/7/78/Flag_of_Chile.svg)
+
 
 ## Descripción
 
