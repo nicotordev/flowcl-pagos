@@ -5882,6 +5882,208 @@ type FlowCancelScheduledPlanChangeResponse = {
   success: boolean;
 };
 
+type FlowCreateAdditionalSubscriptionItemRequest = {
+  /**
+   * Nombre del item adicional
+   */
+  name: string;
+  /**
+   * Moneda del item adicional.
+   */
+  currency: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+};
+
+type FlowCreateAdditionalSubscriptionItemResponse = {
+  /**
+   *   El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+   * Cantidad de suscripciones asociadas al item adicional
+   */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+
+type FlowGetAdditionalSubscriptionItemResponse = {
+  /**
+   * El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+ * Cantidad de suscripciones asociadas al item adicional
+
+ */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+
+type FlowEditAdditionalSubscriptionItemRequest = {
+  /**
+   * Nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * Requerido si name o amount es enviado.
+   * Tipo de cambio:
+   * to_future Solo para suscripciones futuras.
+   * all Actualiza para las suscripciones actuales y futuras.
+   */
+  changeType: string;
+};
+
+type FlowEditAdditionalSubscriptionItemResponse = {
+  /**
+   * El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+   * Cantidad de suscripciones asociadas al item adicional
+  
+   */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+type FlowDeleteAdditionalSubscriptionItemResponse = {
+  /**
+   * El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+    * Cantidad de suscripciones asociadas al item adicional
+   
+    */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+
+type FlowListAdditionalSubscriptionItemRequest = {
+  /**
+ * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+
+ */
+  start?: number;
+  /**
+ * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+
+ */
+  limit?: number;
+  /**
+ * Filtro por el nombre del item adicional
+
+ */
+  filter: string;
+  /** 
+    Filtro por el estado del item adicional:
+    1 Activo
+    0 Inactivo
+  */
+  status: 0 | 1;
+};
+
+type FlowListAdditionalSubscriptionItemResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   *
+   * boolean
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * arreglo de registros de la página
+   * [{item list 1}{item list 2}{item list n..}
+   */
+  data: string;
+};
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -5952,4 +6154,12 @@ export type {
   FlowPreviewSubscriptionPlanChangeRequest,
   FlowPreviewSubscriptionPlanChangeResponse,
   FlowCancelScheduledPlanChangeResponse,
+  FlowCreateAdditionalSubscriptionItemRequest,
+  FlowCreateAdditionalSubscriptionItemResponse,
+  FlowGetAdditionalSubscriptionItemResponse,
+  FlowEditAdditionalSubscriptionItemRequest,
+  FlowEditAdditionalSubscriptionItemResponse,
+  FlowDeleteAdditionalSubscriptionItemResponse,
+  FlowListAdditionalSubscriptionItemRequest,
+  FlowListAdditionalSubscriptionItemResponse,
 };

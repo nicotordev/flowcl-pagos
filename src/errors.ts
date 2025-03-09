@@ -421,3 +421,38 @@ export class FlowCancelScheduledPlanChangeError extends FlowError {
     this.name = 'FlowCancelScheduledPlanChange';
   }
 }
+
+export class FlowCreateAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear item adicional de suscripción: ${message}`);
+    this.name = 'FlowCreateAdditionalSubscriptionItemError';
+  }
+}
+
+export class FlowGetAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener item adicional de suscripción: ${message}`);
+    this.name = 'FlowGetAdditionalSubscriptionItemError';
+  }
+}
+
+export class FlowEditAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al editar item adicional de suscripción: ${message}`);
+    this.name = 'FlowEditAdditionalSubscriptionItemError';
+  }
+}
+
+export class FlowDeleteAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar item adicional de suscripción: ${message}`);
+    this.name = 'FlowDeleteAdditionalSubscriptionItem';
+  }
+}
+
+export class FlowListAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar items adicionales de suscripción: ${message}`);
+    this.name = 'FlowListAdditionalSubscriptionItemError';
+  }
+}
