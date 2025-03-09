@@ -1,0 +1,13 @@
+import { Bazel } from './bazel.js';
+import { Buck } from './buck.js';
+import { Gradle } from './gradle.js';
+import { Lage } from './lage.js';
+import { Lerna } from './lerna.js';
+import { Moon } from './moon.js';
+import { Nix } from './nix.js';
+import { Nx } from './nx.js';
+import { NPM, PNPM, Yarn } from './package-managers.js';
+import { Pants } from './pants.js';
+import { Rush } from './rush.js';
+import { Turbo } from './turbo.js';
+export declare const buildSystems: readonly [typeof Bazel, typeof Buck, typeof Gradle, typeof Lage, typeof Lerna, typeof Moon, typeof Nix, typeof Nx, typeof Pants, typeof Rush, typeof Turbo, typeof PNPM, typeof NPM, typeof Yarn];

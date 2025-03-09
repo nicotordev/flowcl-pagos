@@ -1,0 +1,1 @@
+{"version":3,"file":"go.js","sourceRoot":"","sources":["../../src/runtime/go.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,cAAc,CAAA;AAE1C,MAAM,OAAO,EAAG,SAAQ,WAAW;IACjC,EAAE,GAAG,IAAI,CAAA;IACT,IAAI,GAAG,IAAI,CAAA;IACX,WAAW,GAAG,CAAC,QAAQ,EAAE,aAAa,EAAE,SAAS,CAAC,CAAA;CACnD"}

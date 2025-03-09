@@ -1,0 +1,1 @@
+{"version":3,"file":"rust.js","sourceRoot":"","sources":["../../src/runtime/rust.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,cAAc,CAAA;AAE1C,MAAM,OAAO,IAAK,SAAQ,WAAW;IACnC,EAAE,GAAG,MAAM,CAAA;IACX,IAAI,GAAG,MAAM,CAAA;IACb,WAAW,GAAG,CAAC,YAAY,EAAE,YAAY,CAAC,CAAA;CAC3C"}

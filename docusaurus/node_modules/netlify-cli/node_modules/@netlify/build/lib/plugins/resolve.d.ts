@@ -1,0 +1,20 @@
+export function resolvePluginsPath({ pluginsOptions, siteInfo, buildDir, packagePath, nodePath, packageJson, userNodeVersion, mode, api, logs, debug, sendStatus, testOpts, featureFlags, integrations, context, systemLog, pluginsEnv, }: {
+    pluginsOptions: any;
+    siteInfo: any;
+    buildDir: any;
+    packagePath: any;
+    nodePath: any;
+    packageJson: any;
+    userNodeVersion: any;
+    mode: any;
+    api: any;
+    logs: any;
+    debug: any;
+    sendStatus: any;
+    testOpts: any;
+    featureFlags: any;
+    integrations: any;
+    context: any;
+    systemLog: any;
+    pluginsEnv: any;
+}): Promise<any[]>;

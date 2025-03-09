@@ -1,0 +1,23 @@
+import { BaseFramework, Category } from './framework.js';
+export class Gridsome extends BaseFramework {
+    id = 'gridsome';
+    name = 'Gridsome';
+    configFiles = ['gridsome.config.js'];
+    npmDependencies = ['gridsome'];
+    category = Category.SSG;
+    dev = {
+        command: 'gridsome develop',
+        port: 8080,
+        pollingStrategies: [{ name: 'TCP' }],
+    };
+    build = {
+        command: 'gridsome build',
+        directory: 'dist',
+    };
+    logo = {
+        default: '/logos/gridsome/default.svg',
+        light: '/logos/gridsome/light.svg',
+        dark: '/logos/gridsome/dark.svg',
+    };
+}
+//# sourceMappingURL=gridsome.js.map

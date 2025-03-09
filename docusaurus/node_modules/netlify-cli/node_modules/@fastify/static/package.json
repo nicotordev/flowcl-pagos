@@ -1,0 +1,73 @@
+{
+  "name": "@fastify/static",
+  "version": "7.0.4",
+  "description": "Plugin for serving static files as fast as possible.",
+  "main": "index.js",
+  "type": "commonjs",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "coverage": "npm run test:unit -- --coverage-report=html",
+    "lint": "npm run lint:javascript && npm run lint:typescript",
+    "lint:javascript": "standard | snazzy",
+    "lint:fix": "standard --fix && npm run lint:typescript -- --fix",
+    "lint:typescript": "eslint -c .eslintrc.json types/**/*.d.ts types/**/*.test-d.ts",
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:typescript": "tsd",
+    "test:unit": "tap",
+    "example": "node example/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastify/fastify-static.git"
+  },
+  "keywords": [
+    "fastify",
+    "static"
+  ],
+  "author": "Tommaso Allevi - @allevo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fastify/fastify-static/issues"
+  },
+  "homepage": "https://github.com/fastify/fastify-static",
+  "dependencies": {
+    "@fastify/accept-negotiator": "^1.0.0",
+    "@fastify/send": "^2.0.0",
+    "content-disposition": "^0.5.3",
+    "fastify-plugin": "^4.0.0",
+    "fastq": "^1.17.0",
+    "glob": "^10.3.4"
+  },
+  "devDependencies": {
+    "@fastify/compress": "^7.0.0",
+    "@fastify/pre-commit": "^2.0.2",
+    "@types/node": "^20.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "concat-stream": "^2.0.0",
+    "coveralls": "^3.0.4",
+    "eslint-plugin-typescript": "^0.14.0",
+    "fastify": "^4.0.0-rc.2",
+    "handlebars": "^4.7.6",
+    "pino": "^8.4.2",
+    "proxyquire": "^2.1.0",
+    "simple-get": "^4.0.0",
+    "snazzy": "^9.0.0",
+    "standard": "^17.0.0",
+    "tap": "^16.0.0",
+    "tsd": "^0.31.0",
+    "typescript": "^5.1.6"
+  },
+  "tsd": {
+    "directory": "test/types"
+  },
+  "eslintConfig": {
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "error"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"erlang.js","sourceRoot":"","sources":["../../src/runtime/erlang.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,cAAc,CAAA;AAE1C,MAAM,OAAO,MAAO,SAAQ,WAAW;IACrC,EAAE,GAAG,QAAQ,CAAA;IACb,IAAI,GAAG,QAAQ,CAAA;IACf,WAAW,GAAG,CAAC,cAAc,EAAE,YAAY,CAAC,CAAA;CAC7C"}
