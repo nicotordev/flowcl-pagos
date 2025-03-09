@@ -1,9 +1,14 @@
 import { FlowAuthenticationError } from '../errors';
+import FlowCoupons from './flow.coupons';
 import FlowCustomers from './flow.customers';
+import FlowInvoices from './flow.invoices';
+import FlowMerchants from './flow.merchants';
 import FlowPayments from './flow.payments';
 import FlowPlans from './flow.plans';
 import FlowRefunds from './flow.refunds';
+import FlowSettlements from './flow.settlement';
 import FlowSubscriptions from './flow.subscriptions';
+import FlowSubscriptionsItems from './flow.subscriptionsItems';
 /**
  * Cliente para interactuar con la API de Flow.
  */
@@ -30,6 +35,26 @@ class Flow {
    * Objeto que proporciona metodos para interactuar con las suscripciones en Flow.
    */
   public subscriptions: FlowSubscriptions;
+  /**
+   * Objecto que proporciona metodos para interactuar con los items de suscripciones en Flow.
+   */
+  public subscriptionsItems: FlowSubscriptionsItems;
+  /**
+   * Objecto que proporciona metodos para interactuar con los cupones en Flow.
+   */
+  public coupons: FlowCoupons;
+  /**
+   * Objeto que proporciona métodos para interactuar con los invoices en Flow.
+   */
+  public invoices: FlowInvoices;
+  /**
+   * Objeto que proporciona métodos para interactuar con las liquidaciones en Flow.
+   */
+  public settlements: FlowSettlements;
+  /**
+   * Objecto que proporciona metodos para interactuar con los merchants en Flow.
+   */
+  public merchants: FlowMerchants;
 
   /**
    * Constructor de la clase FlowClient.
@@ -57,6 +82,15 @@ class Flow {
     this.customers = new FlowCustomers(apiKey, secretKey, baseURL);
     this.plans = new FlowPlans(apiKey, secretKey, baseURL);
     this.subscriptions = new FlowSubscriptions(apiKey, secretKey, baseURL);
+    this.subscriptionsItems = new FlowSubscriptionsItems(
+      apiKey,
+      secretKey,
+      baseURL,
+    );
+    this.coupons = new FlowCoupons(apiKey, secretKey, baseURL);
+    this.invoices = new FlowInvoices(apiKey, secretKey, baseURL);
+    this.settlements = new FlowSettlements(apiKey, secretKey, baseURL);
+    this.merchants = new FlowMerchants(apiKey, secretKey, baseURL);
   }
 }
 

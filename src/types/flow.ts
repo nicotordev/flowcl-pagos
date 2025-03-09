@@ -5882,6 +5882,2198 @@ type FlowCancelScheduledPlanChangeResponse = {
   success: boolean;
 };
 
+type FlowCreateAdditionalSubscriptionItemRequest = {
+  /**
+   * Nombre del item adicional
+   */
+  name: string;
+  /**
+   * Moneda del item adicional.
+   */
+  currency: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+};
+
+type FlowCreateAdditionalSubscriptionItemResponse = {
+  /**
+   *   El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+   * Cantidad de suscripciones asociadas al item adicional
+   */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+
+type FlowGetAdditionalSubscriptionItemResponse = {
+  /**
+   * El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+ * Cantidad de suscripciones asociadas al item adicional
+
+ */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+
+type FlowEditAdditionalSubscriptionItemRequest = {
+  /**
+   * Nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * Requerido si name o amount es enviado.
+   * Tipo de cambio:
+   * to_future Solo para suscripciones futuras.
+   * all Actualiza para las suscripciones actuales y futuras.
+   */
+  changeType: string;
+};
+
+type FlowEditAdditionalSubscriptionItemResponse = {
+  /**
+   * El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+   * Cantidad de suscripciones asociadas al item adicional
+  
+   */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+type FlowDeleteAdditionalSubscriptionItemResponse = {
+  /**
+   * El identificador del item adicional
+   */
+  id: number;
+  /**
+   * El nombre del item adicional
+   */
+  name: string;
+  /**
+   * Monto del item adicional, si es negativo es un descuento, si es positivo un recargo
+   */
+  amount: number;
+  /**
+   * La moneda del item adicional
+   */
+  currency: string;
+  /**
+    * Cantidad de suscripciones asociadas al item adicional
+   
+    */
+  associatedSubscriptionsCount: number;
+  /**
+   * El estado del item adicional, Activo = 1, Inactivo = 0
+   */
+  status: 0 | 1;
+  /**
+   * La fecha de creación del item adicional
+   */
+  created: string;
+};
+
+type FlowListAdditionalSubscriptionItemRequest = {
+  /**
+ * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+
+ */
+  start?: number;
+  /**
+ * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+
+ */
+  limit?: number;
+  /**
+ * Filtro por el nombre del item adicional
+
+ */
+  filter: string;
+  /** 
+    Filtro por el estado del item adicional:
+    1 Activo
+    0 Inactivo
+  */
+  status: 0 | 1;
+};
+
+type FlowListAdditionalSubscriptionItemResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   *
+   * boolean
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * arreglo de registros de la página
+   * [{item list 1}{item list 2}{item list n..}
+   */
+  data: string;
+};
+
+type FlowCreateDiscountCouponRequest = {
+  /**
+   * Nombre del cupón
+   */
+  name: string;
+  /**
+   * Porcentaje del cupon. Número entre 0 y 100. Permite 2 decimales con punto decimal. Ejemplo 10.2. No se agrega el signo %
+   */
+  percent_off?: number;
+  /**
+   * Moneda del descuento. Solo agregue la moneda para cupones de monto.
+   */
+  currency?: string;
+  /**
+   * Monto del descuento
+   */
+  amount?: number;
+  /**
+   * Duración del cupón:
+   * 1 definida
+   * 0 indefinida
+   */
+  duration?: 0 | 1;
+  /**
+   * Si la duración del cupón es definida, este campo indica las veces de duración del cupón. Si el cupón se aplica a un cliente veces corresponderá a meses. Si l cupón se aplica a una suscripción, veces corresponderá a los períodos del Plan.
+   */
+  times?: number;
+  /**
+   * Número de veces de aplicación del cupón.
+   */
+  max_redemptions?: number;
+  /**
+   * Fecha de expiración del cupón en formato yyyy-mm-dd
+   */
+  expires: string;
+};
+
+type FlowCreateDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowEditDiscountCouponRequest = {
+  /**
+   * Identificador del cupón
+   */
+  couponId: string;
+  /**
+   * Nombre del cupón
+   */
+  name: string;
+};
+type FlowEditDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowDeleteDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowGetDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowListDiscountCouponsRequest = {
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start?: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+   */
+  limit?: number;
+  /**
+ * Filtro por el nombre del cupón
+
+ */
+  filter?: string;
+  /**
+   * Filtro por el estado del cupón:
+   * 1 Activo
+   * 0 Inactivo
+   */
+  status?: number;
+};
+
+type FlowListDiscountCouponsResponse = {
+  /**
+ * El número total de registros encontrados
+
+ */
+  total: number;
+  /**
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * arreglo de registros de la página
+   * [{coupon list 1}{coupon list 2}{coupon list n..}
+   *  */
+  data: string;
+};
+
+type FlowGetInvoiceDataResponse = {
+  /**
+   * Identificador del importe
+   */
+  id: number;
+
+  /**
+   * Identificador de la suscripción
+   */
+  subscriptionId: string;
+
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Descripción del importe
+   */
+  subject: string;
+
+  /**
+   * Moneda del importe
+   */
+  currency: string;
+
+  /**
+   * Monto del importe
+   */
+  amount: number;
+
+  /**
+   * Fecha de inicio del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_start: string;
+
+  /**
+   * Fecha de término del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_end: string;
+
+  /**
+   * Número de intentos de cobro del importe
+   */
+  attemp_count: number;
+
+  /**
+   * Si este importe se cobrará:
+   * 1 Se cobrará
+   * 0 No se cobrará
+   */
+  attemped: number;
+
+  /**
+   * Fecha del siguiente intento de cobro en formato yyyy-mm-dd hh:mm:ss
+   */
+  next_attemp_date: string;
+
+  /**
+   * Fecha en que este importe será considerado moroso en formato yyyy-mm-dd hh:mm:ss
+   */
+  due_date: string;
+
+  /**
+   * Estado del importe:
+   * 0 impago
+   * 1 pagado
+   * 2 anulado
+   */
+  status: number;
+
+  /**
+   * Si se produjo un error al intentar cobrar el invoice:
+   * 0 Sin error
+   * 1 Con error
+   */
+  error: number;
+
+  /**
+   * Fecha en que se produjo el error o null si no hay error en formato yyyy-mm-dd hh:mm:ss
+   */
+  errorDate: string | null;
+
+  /**
+   * Descripción de error o null si no hay error
+   */
+  errorDescription: string | null;
+
+  /**
+   * Items del invoice
+   */
+  items: Array<{
+    /**
+     * Identificador del InvoiceItem
+     */
+    id: number;
+
+    /**
+     * Descripción del InvoiceItem
+     */
+    subject: string;
+
+    /**
+     * Tipo de item:
+     * 1 Cargo por plan
+     * 2 Descuento
+     * 3 Item pendiente
+     * 9 Otros
+     */
+    type: 1 | 2 | 3 | 9;
+
+    /**
+     * Moneda del item
+     */
+    currency: string;
+
+    /**
+     * Monto del item
+     */
+    amount: number;
+  }>;
+
+  /**
+   * Objeto que representa un cobro y si está pagado su correspondiente pago
+   */
+  payment: {
+    /**
+     * El número de la orden de Flow
+     */
+    flowOrder: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La fecha de creación de la orden en formato yyyy-mm-dd hh:mm:ss
+     */
+    requestDate: string;
+
+    /**
+     * El estado de la orden:
+     * 1 pendiente de pago
+     * 2 pagada
+     * 3 rechazada
+     * 4 anulada
+     */
+    status: 1 | 2 | 3 | 4;
+
+    /**
+     * El concepto de la orden
+     */
+    subject: string;
+
+    /**
+     * La moneda
+     */
+    currency: string;
+
+    /**
+     * El monto de la orden
+     */
+    amount: number;
+
+    /**
+     * El email del pagador
+     */
+    payer: string;
+
+    /**
+     * Datos opcionales enviados por el comercio en el request de creación de pago en el parámetro optional en formato JSON
+     */
+    optional?: string | null;
+
+    /**
+     * Información para un pago pendiente cuando se generó un cupón de pago. Si no existen datos es que no se generó un cupón de pago.
+     */
+    pending_info?: {
+      /**
+       * El medio de pago utilizado para emitir el cupón de pago
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de emisión del cupón de pago
+       */
+      date?: string | null;
+    };
+
+    /**
+     * Los datos del pago
+     */
+    paymentData?: {
+      /**
+       * La fecha de pago
+       */
+      date?: string | null;
+
+      /**
+       * El medio de pago utilizado
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de conversión de la moneda
+       */
+      conversionDate?: string | null;
+
+      /**
+       * La tasa de conversión
+       */
+      conversionRate?: number | null;
+
+      /**
+       * El monto pagado
+       */
+      amount?: number | null;
+
+      /**
+       * La moneda con que se pagó
+       */
+      currency?: string | null;
+
+      /**
+       * El costo del servicio
+       */
+      fee?: number | null;
+
+      /**
+       * El saldo a depositar
+       */
+      balance?: number | null;
+
+      /**
+       * La fecha de transferencia de los fondos a su cuenta bancaria
+       */
+      transferDate?: string | null;
+    };
+
+    /**
+     * Id de comercio asociado. Solo aplica si usted es comercio integrador.
+     */
+    merchantId?: string | null;
+  } | null;
+
+  /**
+   * Objeto que muestra los datos de un pago por fuera
+   */
+  outsidePayment: {
+    /**
+     * Fecha del pago por fuera
+     */
+    date: string;
+
+    /**
+     * Descripción del pago por fuera
+     */
+    comment: string;
+  } | null;
+
+  /**
+   * Link de pago. Cuando el invoice no está pagado
+   */
+  paymentLink: string;
+
+  /**
+   * Intentos de cargo fallidos
+   */
+  chargeAttemps: Array<{
+    /**
+     * Identificador del intento
+     */
+    id: number;
+
+    /**
+     * Fecha del intento en formato yyyy-mm-dd hh:mm:ss
+     */
+    date: string;
+
+    /**
+     * Identificador del Customer
+     */
+    customerId: string;
+
+    /**
+     * Identificador del Invoice, si el intento no corresponde a un Invoice este vendrá vacío.
+     */
+    invoiceId: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La moneda del intento de cargo
+     */
+    currency: string;
+
+    /**
+     * El monto a cobrar especificado con 4 decimales
+     */
+    amount: number;
+
+    /**
+     * El código del error que se produjo en el intento de cargo
+     */
+    errorCode: number;
+
+    /**
+     * La descripción del error producido en el intento de cargo
+     */
+    errorDescription: string;
+  }>;
+};
+
+type FlowCancelInvoicePendingPaymentReponse = {
+  /**
+   * Identificador del importe
+   */
+  id: number;
+
+  /**
+   * Identificador de la suscripción
+   */
+  subscriptionId: string;
+
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Descripción del importe
+   */
+  subject: string;
+
+  /**
+   * Moneda del importe
+   */
+  currency: string;
+
+  /**
+   * Monto del importe
+   */
+  amount: number;
+
+  /**
+   * Fecha de inicio del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_start: string;
+
+  /**
+   * Fecha de término del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_end: string;
+
+  /**
+   * Número de intentos de cobro del importe
+   */
+  attemp_count: number;
+
+  /**
+   * Si este importe se cobrará:
+   * 1 Se cobrará
+   * 0 No se cobrará
+   */
+  attemped: number;
+
+  /**
+   * Fecha del siguiente intento de cobro en formato yyyy-mm-dd hh:mm:ss
+   */
+  next_attemp_date: string;
+
+  /**
+   * Fecha en que este importe será considerado moroso en formato yyyy-mm-dd hh:mm:ss
+   */
+  due_date: string;
+
+  /**
+   * Estado del importe:
+   * 0 impago
+   * 1 pagado
+   * 2 anulado
+   */
+  status: number;
+
+  /**
+   * Si se produjo un error al intentar cobrar el invoice:
+   * 0 Sin error
+   * 1 Con error
+   */
+  error: number;
+
+  /**
+   * Fecha en que se produjo el error o null si no hay error en formato yyyy-mm-dd hh:mm:ss
+   */
+  errorDate: string | null;
+
+  /**
+   * Descripción de error o null si no hay error
+   */
+  errorDescription: string | null;
+
+  /**
+   * Items del invoice
+   */
+  items: Array<{
+    /**
+     * Identificador del InvoiceItem
+     */
+    id: number;
+
+    /**
+     * Descripción del InvoiceItem
+     */
+    subject: string;
+
+    /**
+     * Tipo de item:
+     * 1 Cargo por plan
+     * 2 Descuento
+     * 3 Item pendiente
+     * 9 Otros
+     */
+    type: 1 | 2 | 3 | 9;
+
+    /**
+     * Moneda del item
+     */
+    currency: string;
+
+    /**
+     * Monto del item
+     */
+    amount: number;
+  }>;
+
+  /**
+   * Objeto que representa un cobro y si está pagado su correspondiente pago
+   */
+  payment: {
+    /**
+     * El número de la orden de Flow
+     */
+    flowOrder: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La fecha de creación de la orden en formato yyyy-mm-dd hh:mm:ss
+     */
+    requestDate: string;
+
+    /**
+     * El estado de la orden:
+     * 1 pendiente de pago
+     * 2 pagada
+     * 3 rechazada
+     * 4 anulada
+     */
+    status: 1 | 2 | 3 | 4;
+
+    /**
+     * El concepto de la orden
+     */
+    subject: string;
+
+    /**
+     * La moneda
+     */
+    currency: string;
+
+    /**
+     * El monto de la orden
+     */
+    amount: number;
+
+    /**
+     * El email del pagador
+     */
+    payer: string;
+
+    /**
+     * Datos opcionales enviados por el comercio en el request de creación de pago en el parámetro optional en formato JSON
+     */
+    optional?: string | null;
+
+    /**
+     * Información para un pago pendiente cuando se generó un cupón de pago. Si no existen datos es que no se generó un cupón de pago.
+     */
+    pending_info?: {
+      /**
+       * El medio de pago utilizado para emitir el cupón de pago
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de emisión del cupón de pago
+       */
+      date?: string | null;
+    };
+
+    /**
+     * Los datos del pago
+     */
+    paymentData?: {
+      /**
+       * La fecha de pago
+       */
+      date?: string | null;
+
+      /**
+       * El medio de pago utilizado
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de conversión de la moneda
+       */
+      conversionDate?: string | null;
+
+      /**
+       * La tasa de conversión
+       */
+      conversionRate?: number | null;
+
+      /**
+       * El monto pagado
+       */
+      amount?: number | null;
+
+      /**
+       * La moneda con que se pagó
+       */
+      currency?: string | null;
+
+      /**
+       * El costo del servicio
+       */
+      fee?: number | null;
+
+      /**
+       * El saldo a depositar
+       */
+      balance?: number | null;
+
+      /**
+       * La fecha de transferencia de los fondos a su cuenta bancaria
+       */
+      transferDate?: string | null;
+    };
+
+    /**
+     * Id de comercio asociado. Solo aplica si usted es comercio integrador.
+     */
+    merchantId?: string | null;
+  } | null;
+
+  /**
+   * Objeto que muestra los datos de un pago por fuera
+   */
+  outsidePayment: {
+    /**
+     * Fecha del pago por fuera
+     */
+    date: string;
+
+    /**
+     * Descripción del pago por fuera
+     */
+    comment: string;
+  } | null;
+
+  /**
+   * Link de pago. Cuando el invoice no está pagado
+   */
+  paymentLink: string;
+
+  /**
+   * Intentos de cargo fallidos
+   */
+  chargeAttemps: Array<{
+    /**
+     * Identificador del intento
+     */
+    id: number;
+
+    /**
+     * Fecha del intento en formato yyyy-mm-dd hh:mm:ss
+     */
+    date: string;
+
+    /**
+     * Identificador del Customer
+     */
+    customerId: string;
+
+    /**
+     * Identificador del Invoice, si el intento no corresponde a un Invoice este vendrá vacío.
+     */
+    invoiceId: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La moneda del intento de cargo
+     */
+    currency: string;
+
+    /**
+     * El monto a cobrar especificado con 4 decimales
+     */
+    amount: number;
+
+    /**
+     * El código del error que se produjo en el intento de cargo
+     */
+    errorCode: number;
+
+    /**
+     * La descripción del error producido en el intento de cargo
+     */
+    errorDescription: string;
+  }>;
+};
+type FlowRecordExternalPaymentAndMarkInvoicePaidRequest = {
+  /**
+   * Identificador del Invoice (Importe)
+   */
+  invoiceId: number;
+  /**
+   * Fecha de pago en formato "yyyy-mm-dd"
+   */
+  date: string;
+  /**
+   * Descripción del pago por fuera
+   */
+  comment?: string;
+};
+type FlowRecordExternalPaymentAndMarkInvoicePaidResponse = {
+  /**
+   * Identificador del importe
+   */
+  id: number;
+
+  /**
+   * Identificador de la suscripción
+   */
+  subscriptionId: string;
+
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Descripción del importe
+   */
+  subject: string;
+
+  /**
+   * Moneda del importe
+   */
+  currency: string;
+
+  /**
+   * Monto del importe
+   */
+  amount: number;
+
+  /**
+   * Fecha de inicio del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_start: string;
+
+  /**
+   * Fecha de término del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_end: string;
+
+  /**
+   * Número de intentos de cobro del importe
+   */
+  attemp_count: number;
+
+  /**
+   * Si este importe se cobrará:
+   * 1 Se cobrará
+   * 0 No se cobrará
+   */
+  attemped: number;
+
+  /**
+   * Fecha del siguiente intento de cobro en formato yyyy-mm-dd hh:mm:ss
+   */
+  next_attemp_date: string;
+
+  /**
+   * Fecha en que este importe será considerado moroso en formato yyyy-mm-dd hh:mm:ss
+   */
+  due_date: string;
+
+  /**
+   * Estado del importe:
+   * 0 impago
+   * 1 pagado
+   * 2 anulado
+   */
+  status: number;
+
+  /**
+   * Si se produjo un error al intentar cobrar el invoice:
+   * 0 Sin error
+   * 1 Con error
+   */
+  error: number;
+
+  /**
+   * Fecha en que se produjo el error o null si no hay error en formato yyyy-mm-dd hh:mm:ss
+   */
+  errorDate: string | null;
+
+  /**
+   * Descripción de error o null si no hay error
+   */
+  errorDescription: string | null;
+
+  /**
+   * Items del invoice
+   */
+  items: Array<{
+    /**
+     * Identificador del InvoiceItem
+     */
+    id: number;
+
+    /**
+     * Descripción del InvoiceItem
+     */
+    subject: string;
+
+    /**
+     * Tipo de item:
+     * 1 Cargo por plan
+     * 2 Descuento
+     * 3 Item pendiente
+     * 9 Otros
+     */
+    type: 1 | 2 | 3 | 9;
+
+    /**
+     * Moneda del item
+     */
+    currency: string;
+
+    /**
+     * Monto del item
+     */
+    amount: number;
+  }>;
+
+  /**
+   * Objeto que representa un cobro y si está pagado su correspondiente pago
+   */
+  payment: {
+    /**
+     * El número de la orden de Flow
+     */
+    flowOrder: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La fecha de creación de la orden en formato yyyy-mm-dd hh:mm:ss
+     */
+    requestDate: string;
+
+    /**
+     * El estado de la orden:
+     * 1 pendiente de pago
+     * 2 pagada
+     * 3 rechazada
+     * 4 anulada
+     */
+    status: 1 | 2 | 3 | 4;
+
+    /**
+     * El concepto de la orden
+     */
+    subject: string;
+
+    /**
+     * La moneda
+     */
+    currency: string;
+
+    /**
+     * El monto de la orden
+     */
+    amount: number;
+
+    /**
+     * El email del pagador
+     */
+    payer: string;
+
+    /**
+     * Datos opcionales enviados por el comercio en el request de creación de pago en el parámetro optional en formato JSON
+     */
+    optional?: string | null;
+
+    /**
+     * Información para un pago pendiente cuando se generó un cupón de pago. Si no existen datos es que no se generó un cupón de pago.
+     */
+    pending_info?: {
+      /**
+       * El medio de pago utilizado para emitir el cupón de pago
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de emisión del cupón de pago
+       */
+      date?: string | null;
+    };
+
+    /**
+     * Los datos del pago
+     */
+    paymentData?: {
+      /**
+       * La fecha de pago
+       */
+      date?: string | null;
+
+      /**
+       * El medio de pago utilizado
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de conversión de la moneda
+       */
+      conversionDate?: string | null;
+
+      /**
+       * La tasa de conversión
+       */
+      conversionRate?: number | null;
+
+      /**
+       * El monto pagado
+       */
+      amount?: number | null;
+
+      /**
+       * La moneda con que se pagó
+       */
+      currency?: string | null;
+
+      /**
+       * El costo del servicio
+       */
+      fee?: number | null;
+
+      /**
+       * El saldo a depositar
+       */
+      balance?: number | null;
+
+      /**
+       * La fecha de transferencia de los fondos a su cuenta bancaria
+       */
+      transferDate?: string | null;
+    };
+
+    /**
+     * Id de comercio asociado. Solo aplica si usted es comercio integrador.
+     */
+    merchantId?: string | null;
+  } | null;
+
+  /**
+   * Objeto que muestra los datos de un pago por fuera
+   */
+  outsidePayment: {
+    /**
+     * Fecha del pago por fuera
+     */
+    date: string;
+
+    /**
+     * Descripción del pago por fuera
+     */
+    comment: string;
+  } | null;
+
+  /**
+   * Link de pago. Cuando el invoice no está pagado
+   */
+  paymentLink: string;
+
+  /**
+   * Intentos de cargo fallidos
+   */
+  chargeAttemps: Array<{
+    /**
+     * Identificador del intento
+     */
+    id: number;
+
+    /**
+     * Fecha del intento en formato yyyy-mm-dd hh:mm:ss
+     */
+    date: string;
+
+    /**
+     * Identificador del Customer
+     */
+    customerId: string;
+
+    /**
+     * Identificador del Invoice, si el intento no corresponde a un Invoice este vendrá vacío.
+     */
+    invoiceId: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La moneda del intento de cargo
+     */
+    currency: string;
+
+    /**
+     * El monto a cobrar especificado con 4 decimales
+     */
+    amount: number;
+
+    /**
+     * El código del error que se produjo en el intento de cargo
+     */
+    errorCode: number;
+
+    /**
+     * La descripción del error producido en el intento de cargo
+     */
+    errorDescription: string;
+  }>;
+};
+
+type FlowGetOverdueInvoicesRequest = {
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start?: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+   */
+  limit?: number;
+  /**
+   * Filtro por asunto del Invoice (Importe).
+   */
+  filter?: string;
+  /**
+   * Identificador del Plan, si se agrega se filtrará para los invoices de este plan.
+   */
+  planId?: string;
+};
+
+type FlowGetOverdueInvoicesResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * Array of object
+   * arreglo de registros de la página
+   */
+  data: string;
+};
+
+type FlowRetryOverdueInvoicePaymentResponse = {
+  /**
+   * Identificador del importe
+   */
+  id: number;
+
+  /**
+   * Identificador de la suscripción
+   */
+  subscriptionId: string;
+
+  /**
+   * Identificador del cliente
+   */
+  customerId: string;
+
+  /**
+   * Fecha de creación del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  created: string;
+
+  /**
+   * Descripción del importe
+   */
+  subject: string;
+
+  /**
+   * Moneda del importe
+   */
+  currency: string;
+
+  /**
+   * Monto del importe
+   */
+  amount: number;
+
+  /**
+   * Fecha de inicio del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_start: string;
+
+  /**
+   * Fecha de término del período del importe en formato yyyy-mm-dd hh:mm:ss
+   */
+  period_end: string;
+
+  /**
+   * Número de intentos de cobro del importe
+   */
+  attemp_count: number;
+
+  /**
+   * Si este importe se cobrará:
+   * 1 Se cobrará
+   * 0 No se cobrará
+   */
+  attemped: number;
+
+  /**
+   * Fecha del siguiente intento de cobro en formato yyyy-mm-dd hh:mm:ss
+   */
+  next_attemp_date: string;
+
+  /**
+   * Fecha en que este importe será considerado moroso en formato yyyy-mm-dd hh:mm:ss
+   */
+  due_date: string;
+
+  /**
+   * Estado del importe:
+   * 0 impago
+   * 1 pagado
+   * 2 anulado
+   */
+  status: number;
+
+  /**
+   * Si se produjo un error al intentar cobrar el invoice:
+   * 0 Sin error
+   * 1 Con error
+   */
+  error: number;
+
+  /**
+   * Fecha en que se produjo el error o null si no hay error en formato yyyy-mm-dd hh:mm:ss
+   */
+  errorDate: string | null;
+
+  /**
+   * Descripción de error o null si no hay error
+   */
+  errorDescription: string | null;
+
+  /**
+   * Items del invoice
+   */
+  items: Array<{
+    /**
+     * Identificador del InvoiceItem
+     */
+    id: number;
+
+    /**
+     * Descripción del InvoiceItem
+     */
+    subject: string;
+
+    /**
+     * Tipo de item:
+     * 1 Cargo por plan
+     * 2 Descuento
+     * 3 Item pendiente
+     * 9 Otros
+     */
+    type: 1 | 2 | 3 | 9;
+
+    /**
+     * Moneda del item
+     */
+    currency: string;
+
+    /**
+     * Monto del item
+     */
+    amount: number;
+  }>;
+
+  /**
+   * Objeto que representa un cobro y si está pagado su correspondiente pago
+   */
+  payment: {
+    /**
+     * El número de la orden de Flow
+     */
+    flowOrder: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La fecha de creación de la orden en formato yyyy-mm-dd hh:mm:ss
+     */
+    requestDate: string;
+
+    /**
+     * El estado de la orden:
+     * 1 pendiente de pago
+     * 2 pagada
+     * 3 rechazada
+     * 4 anulada
+     */
+    status: 1 | 2 | 3 | 4;
+
+    /**
+     * El concepto de la orden
+     */
+    subject: string;
+
+    /**
+     * La moneda
+     */
+    currency: string;
+
+    /**
+     * El monto de la orden
+     */
+    amount: number;
+
+    /**
+     * El email del pagador
+     */
+    payer: string;
+
+    /**
+     * Datos opcionales enviados por el comercio en el request de creación de pago en el parámetro optional en formato JSON
+     */
+    optional?: string | null;
+
+    /**
+     * Información para un pago pendiente cuando se generó un cupón de pago. Si no existen datos es que no se generó un cupón de pago.
+     */
+    pending_info?: {
+      /**
+       * El medio de pago utilizado para emitir el cupón de pago
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de emisión del cupón de pago
+       */
+      date?: string | null;
+    };
+
+    /**
+     * Los datos del pago
+     */
+    paymentData?: {
+      /**
+       * La fecha de pago
+       */
+      date?: string | null;
+
+      /**
+       * El medio de pago utilizado
+       */
+      media?: string | null;
+
+      /**
+       * La fecha de conversión de la moneda
+       */
+      conversionDate?: string | null;
+
+      /**
+       * La tasa de conversión
+       */
+      conversionRate?: number | null;
+
+      /**
+       * El monto pagado
+       */
+      amount?: number | null;
+
+      /**
+       * La moneda con que se pagó
+       */
+      currency?: string | null;
+
+      /**
+       * El costo del servicio
+       */
+      fee?: number | null;
+
+      /**
+       * El saldo a depositar
+       */
+      balance?: number | null;
+
+      /**
+       * La fecha de transferencia de los fondos a su cuenta bancaria
+       */
+      transferDate?: string | null;
+    };
+
+    /**
+     * Id de comercio asociado. Solo aplica si usted es comercio integrador.
+     */
+    merchantId?: string | null;
+  } | null;
+
+  /**
+   * Objeto que muestra los datos de un pago por fuera
+   */
+  outsidePayment: {
+    /**
+     * Fecha del pago por fuera
+     */
+    date: string;
+
+    /**
+     * Descripción del pago por fuera
+     */
+    comment: string;
+  } | null;
+
+  /**
+   * Link de pago. Cuando el invoice no está pagado
+   */
+  paymentLink: string;
+
+  /**
+   * Intentos de cargo fallidos
+   */
+  chargeAttemps: Array<{
+    /**
+     * Identificador del intento
+     */
+    id: number;
+
+    /**
+     * Fecha del intento en formato yyyy-mm-dd hh:mm:ss
+     */
+    date: string;
+
+    /**
+     * Identificador del Customer
+     */
+    customerId: string;
+
+    /**
+     * Identificador del Invoice, si el intento no corresponde a un Invoice este vendrá vacío.
+     */
+    invoiceId: number;
+
+    /**
+     * El número de la orden del comercio
+     */
+    commerceOrder: string;
+
+    /**
+     * La moneda del intento de cargo
+     */
+    currency: string;
+
+    /**
+     * El monto a cobrar especificado con 4 decimales
+     */
+    amount: number;
+
+    /**
+     * El código del error que se produjo en el intento de cargo
+     */
+    errorCode: number;
+
+    /**
+     * La descripción del error producido en el intento de cargo
+     */
+    errorDescription: string;
+  }>;
+};
+
+type FlowGetLiquidationsByDateRangeRequest = {
+  /**
+   * Fecha inicio de rango
+   * <yyyy-mm-dd>
+   */
+  startDate: string;
+  /**
+   * Fecha fin de rango
+   * <yyyy-mm-dd>
+   */
+  endDate: string;
+  /**
+   * Moneda de liquidación
+   */
+  currency?: string;
+};
+
+type FlowGetLiquidationsByDateRangeResponse = {
+  /**
+   * Arreglo de registros de la liquidación
+   */
+  data: Array<{
+    /**
+     * Identificador de la liquidación
+     */
+    id: number;
+
+    /**
+     * Fecha de la liquidación en formato yyyy-mm-dd
+     */
+    date: string;
+
+    /**
+     * Identificador tributario
+     */
+    taxId: string;
+
+    /**
+     * Nombre del usuario de la cuenta Flow
+     */
+    name: string;
+
+    /**
+     * Cuenta de email del usuario de Flow
+     */
+    email: string;
+
+    /**
+     * Moneda de liquidación
+     */
+    currency: string;
+
+    /**
+     * Saldo inicial
+     */
+    initial_balance: number;
+
+    /**
+     * Saldo final
+     */
+    final_balance: number;
+
+    /**
+     * Total a depositar
+     */
+    transferred: number;
+
+    /**
+     * Monto neto a facturar
+     */
+    billed: number;
+  }>;
+};
+
+type FlowGetLiquidationByIdResponse = {
+  /**
+   * Identificador de la liquidación
+   */
+  id: number;
+
+  /**
+   * Fecha de la liquidación en formato yyyy-mm-dd
+   */
+  date: string;
+
+  /**
+   * Identificador tributario
+   */
+  taxId: string;
+
+  /**
+   * Nombre del usuario de la cuenta Flow
+   */
+  name: string;
+
+  /**
+   * Cuenta de email del usuario de Flow
+   */
+  email: string;
+
+  /**
+   * Moneda de liquidación
+   */
+  currency: string;
+
+  /**
+   * Saldo inicial
+   */
+  initial_balance: number;
+
+  /**
+   * Saldo final
+   */
+  final_balance: number;
+
+  /**
+   * Total a depositar
+   */
+  transferred: number;
+
+  /**
+   * Monto neto a facturar
+   */
+  billed: number;
+
+  /**
+   * Resumen de la liquidación
+   */
+  summary: object;
+
+  /**
+   * Detalle de la liquidación
+   */
+  detail: object;
+};
+
+type FlowCreateAssociatedMerchantRequest = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+  /**
+   * Nombre del comercio asociado
+   */
+  name: string;
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+};
+type FlowCreateAssociatedMerchantResponse = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+
+  /**
+   * Fecha de creación
+   */
+  createdate: string;
+
+  /**
+   * Estado del comercio. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: number;
+
+  /**
+   * Fecha de aprobación/rechazo
+   */
+  verifydate?: string | null;
+};
+
+type FlowEditAssociatedMerchantRequest = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+};
+
+type FlowEditAssociatedMerchantResponse = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+
+  /**
+   * Fecha de creación
+   */
+  createdate: string;
+
+  /**
+   * Estado del comercio. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: number;
+
+  /**
+   * Fecha de aprobación/rechazo
+   */
+  verifydate?: string | null;
+};
+type FlowDeleteAssociatedMerchantResponse = {
+  /**
+   * Estado de la operacion
+   */
+  status: string;
+  /**
+   * Mensaje asociado a la operacion
+   */
+  message: string;
+};
+
+type FlowGetAssociatedMerchantResponse = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+
+  /**
+   * Fecha de creación
+   */
+  createdate: string;
+
+  /**
+   * Estado del comercio. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: number;
+
+  /**
+   * Fecha de aprobación/rechazo
+   */
+  verifydate?: string | null;
+};
+type FlowGetAssociatedMerchantsRequest = {
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+
+   */
+  limit: number;
+  /**
+   * Filtro por nombre del comercio asociado
+   */
+  filter: string;
+  /**
+   * Filtro por estado del comercio asociado. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: 0 | 1 | 2;
+};
+type FlowGetAssociatedMerchantsResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   * boolean
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * Array of object
+   * arreglo de registros de la página
+   */
+  data: string;
+};
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -5952,4 +8144,38 @@ export type {
   FlowPreviewSubscriptionPlanChangeRequest,
   FlowPreviewSubscriptionPlanChangeResponse,
   FlowCancelScheduledPlanChangeResponse,
+  FlowCreateAdditionalSubscriptionItemRequest,
+  FlowCreateAdditionalSubscriptionItemResponse,
+  FlowGetAdditionalSubscriptionItemResponse,
+  FlowEditAdditionalSubscriptionItemRequest,
+  FlowEditAdditionalSubscriptionItemResponse,
+  FlowDeleteAdditionalSubscriptionItemResponse,
+  FlowListAdditionalSubscriptionItemRequest,
+  FlowListAdditionalSubscriptionItemResponse,
+  FlowCreateDiscountCouponRequest,
+  FlowCreateDiscountCouponResponse,
+  FlowEditDiscountCouponRequest,
+  FlowEditDiscountCouponResponse,
+  FlowDeleteDiscountCouponResponse,
+  FlowGetDiscountCouponResponse,
+  FlowListDiscountCouponsRequest,
+  FlowListDiscountCouponsResponse,
+  FlowGetInvoiceDataResponse,
+  FlowCancelInvoicePendingPaymentReponse,
+  FlowRecordExternalPaymentAndMarkInvoicePaidResponse,
+  FlowRecordExternalPaymentAndMarkInvoicePaidRequest,
+  FlowGetOverdueInvoicesRequest,
+  FlowGetOverdueInvoicesResponse,
+  FlowRetryOverdueInvoicePaymentResponse,
+  FlowGetLiquidationsByDateRangeRequest,
+  FlowGetLiquidationsByDateRangeResponse,
+  FlowGetLiquidationByIdResponse,
+  FlowCreateAssociatedMerchantRequest,
+  FlowCreateAssociatedMerchantResponse,
+  FlowEditAssociatedMerchantRequest,
+  FlowEditAssociatedMerchantResponse,
+  FlowDeleteAssociatedMerchantResponse,
+  FlowGetAssociatedMerchantResponse,
+  FlowGetAssociatedMerchantsRequest,
+  FlowGetAssociatedMerchantsResponse,
 };

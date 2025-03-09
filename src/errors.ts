@@ -421,3 +421,138 @@ export class FlowCancelScheduledPlanChangeError extends FlowError {
     this.name = 'FlowCancelScheduledPlanChange';
   }
 }
+
+export class FlowCreateAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear item adicional de suscripción: ${message}`);
+    this.name = 'FlowCreateAdditionalSubscriptionItemError';
+  }
+}
+
+export class FlowGetAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener item adicional de suscripción: ${message}`);
+    this.name = 'FlowGetAdditionalSubscriptionItemError';
+  }
+}
+
+export class FlowEditAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al editar item adicional de suscripción: ${message}`);
+    this.name = 'FlowEditAdditionalSubscriptionItemError';
+  }
+}
+
+export class FlowDeleteAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar item adicional de suscripción: ${message}`);
+    this.name = 'FlowDeleteAdditionalSubscriptionItem';
+  }
+}
+
+export class FlowListAdditionalSubscriptionItemError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar items adicionales de suscripción: ${message}`);
+    this.name = 'FlowListAdditionalSubscriptionItemError';
+  }
+}
+
+export class FlowCreateDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear cupón de descuento: ${message}`);
+    this.name = 'FlowCreateDiscountCouponError';
+  }
+}
+
+export class FlowEditDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al editar cupón de descuento: ${message}`);
+    this.name = 'FlowEditDiscountCouponError';
+  }
+}
+
+export class FlowDeleteDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar cupón de descuento: ${message}`);
+    this.name = 'FlowDeleteDiscountCouponError';
+  }
+}
+
+export class FlowGetDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener cupón de descuento: ${message}`);
+    this.name = 'FlowGetDiscountCouponError';
+  }
+}
+
+export class FlowListDiscountCouponsError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar cupones de descuento: ${message}`);
+    this.name = 'FlowListDiscountCouponsError';
+  }
+}
+
+export class FlowGetInvoiceDataError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener datos de la factura: ${message}`);
+    this.name = 'FlowGetInvoiceDataError';
+  }
+}
+
+export class FlowCancelInvoicePendingPaymentError extends FlowError {
+  constructor(message: string) {
+    super(`Error al cancelar factura pendiente de pago: ${message}`);
+    this.name = 'FlowCancelInvoicePendingPaymentError';
+  }
+}
+
+export class FlowRecordExternalPaymentAndMarkInvoicePaidError extends FlowError {
+  constructor(message: string) {
+    super(
+      `Error al registrar pago externo y marcar factura pagada: ${message}`,
+    );
+    this.name = 'FlowRecordExternalPaymentAndMarkInvoicePaidError';
+  }
+}
+
+export class FlowGetOverdueInvoicesError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener facturas vencidas: ${message}`);
+    this.name = 'FlowGetOverdueInvoicesError';
+  }
+}
+
+export class FlowRetryOverdueInvoicePaymentError extends FlowError {
+  constructor(message: string) {
+    super(`Error al reintentar pago de factura vencida: ${message}`);
+    this.name = 'FlowRetryOverdueInvoicePaymentError';
+  }
+}
+
+export class FlowGetLiquidationsByDateRangeError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener liquidaciones por rango de fecha: ${message}`);
+    this.name = 'FlowGetLiquidationsByDateRangeError';
+  }
+}
+
+export class FlowCreateAssociatedMerchantError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear comercio asociado: ${message}`);
+    this.name = 'FlowCreateAssociatedMerchantError';
+  }
+}
+
+export class FlowDeleteAssociatedMerchantError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar comercio asociado: ${message}`);
+    this.name = 'FlowDeleteAssociatedMerchantError';
+  }
+}
+
+export class FlowGetAssociatedMerchantError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener comercio asociado: ${message}`);
+    this.name = 'FlowGetAssociatedMerchantError';
+  }
+}

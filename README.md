@@ -8,12 +8,28 @@
 
 ## Descripción
 
-Este paquete proporciona un SDK en TypeScript para integrar pagos, clientes, planes de suscripción, reembolsos y suscripciones con la API de Flow.cl de manera sencilla y segura.
+Este paquete proporciona un SDK en TypeScript para integrar:
+
+- **Pagos**
+- **Clientes**
+- **Planes de suscripción**
+- **Suscripciones e ítems de suscripción**
+- **Reembolsos**
+- **Cupones**
+- **Facturas (Invoices)**
+- **Liquidaciones (Settlements)**
+- **Información del comercio (Merchant)**
+
+con la API de [Flow.cl](https://www.flow.cl/) de manera sencilla y segura.
 
 ## Instalación
 
 ```sh
 npm install @nicotordev/flowcl-pagos
+```
+
+```sh
+yarn add @nicotordev/flowcl-pagos
 ```
 
 ## Uso
@@ -65,6 +81,7 @@ const customer = await flow.customers.createCustomer({
   email: 'cliente@example.com',
   name: 'Juan Pérez',
 });
+console.log('Cliente creado:', customer);
 ```
 
 ### 3. Planes de suscripción
@@ -78,6 +95,7 @@ const plan = await flow.plans.createPlan({
   currency: 'CLP',
   frequency: 'monthly',
 });
+console.log('Plan creado:', plan);
 ```
 
 ### 4. Suscripciones
@@ -89,6 +107,7 @@ const subscription = await flow.subscriptions.createSubscription({
   planId: '1234',
   customerId: '5678',
 });
+console.log('Suscripción creada:', subscription);
 ```
 
 ### 5. Reembolsos
@@ -101,6 +120,65 @@ const refund = await flow.refunds.createRefund({
   amount: 5000,
   reason: 'Producto defectuoso',
 });
+console.log('Reembolso solicitado:', refund);
+```
+
+### 6. Cupones
+
+#### Crear un cupón
+
+```typescript
+const coupon = await flow.coupons.createCoupon({
+  couponCode: 'DESCUENTO10',
+  amountOff: 1000,
+  duration: 'once', // 'once' o 'repeating'
+});
+console.log('Cupón creado:', coupon);
+```
+
+### 7. Ítems de suscripción
+
+#### Agregar un ítem a una suscripción
+
+```typescript
+const subscriptionItem = await flow.subscriptionsItems.addItem({
+  subscriptionId: 'sub_1234',
+  name: 'Producto Adicional',
+  amount: 2000,
+});
+console.log('Ítem agregado a la suscripción:', subscriptionItem);
+```
+
+### 8. Facturas (Invoices)
+
+#### Crear una factura
+
+```typescript
+const invoice = await flow.invoices.createInvoice({
+  customerId: 'cust_5678',
+  items: [{ name: 'Producto 1', quantity: 2, price: 5000 }],
+});
+console.log('Factura creada:', invoice);
+```
+
+### 9. Liquidaciones (Settlements)
+
+#### Obtener una liquidación
+
+```typescript
+const settlement = await flow.settlement.getSettlement({
+  settlementId: 'stl_12345',
+});
+console.log('Liquidación:', settlement);
+```
+
+### 10. Información del comercio (Merchant)
+
+#### Obtener información del comercio
+
+```typescript
+const merchantInfo = await flow.merchant.getMerchantInfo();
+console.log('Información del comercio:', merchantInfo);
 ```
 
 ## Requisitos
