@@ -1,6 +1,7 @@
 import { FlowAuthenticationError } from '../errors';
 import FlowCoupons from './flow.coupons';
 import FlowCustomers from './flow.customers';
+import FlowInvoices from './flow.invoices';
 import FlowPayments from './flow.payments';
 import FlowPlans from './flow.plans';
 import FlowRefunds from './flow.refunds';
@@ -40,6 +41,10 @@ class Flow {
    * Objecto que proporciona metodos para interactuar con los cupones en Flow.
    */
   public coupons: FlowCoupons;
+  /**
+   * Objeto que proporciona métodos para interactuar con los invoices en Flow.
+   */
+  public invoices: FlowInvoices;
 
   /**
    * Constructor de la clase FlowClient.
@@ -73,6 +78,7 @@ class Flow {
       baseURL,
     );
     this.coupons = new FlowCoupons(apiKey, secretKey, baseURL);
+    this.invoices = new FlowInvoices(apiKey, secretKey, baseURL);
   }
 }
 

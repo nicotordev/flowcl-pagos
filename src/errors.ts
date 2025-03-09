@@ -491,3 +491,40 @@ export class FlowListDiscountCouponsError extends FlowError {
     this.name = 'FlowListDiscountCouponsError';
   }
 }
+
+export class FlowGetInvoiceDataError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener datos de la factura: ${message}`);
+    this.name = 'FlowGetInvoiceDataError';
+  }
+}
+
+export class FlowCancelInvoicePendingPaymentError extends FlowError {
+  constructor(message: string) {
+    super(`Error al cancelar factura pendiente de pago: ${message}`);
+    this.name = 'FlowCancelInvoicePendingPaymentError';
+  }
+}
+
+export class FlowRecordExternalPaymentAndMarkInvoicePaidError extends FlowError {
+  constructor(message: string) {
+    super(
+      `Error al registrar pago externo y marcar factura pagada: ${message}`,
+    );
+    this.name = 'FlowRecordExternalPaymentAndMarkInvoicePaidError';
+  }
+}
+
+export class FlowGetOverdueInvoicesError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener facturas vencidas: ${message}`);
+    this.name = 'FlowGetOverdueInvoicesError';
+  }
+}
+
+export class FlowRetryOverdueInvoicePaymentError extends FlowError {
+  constructor(message: string) {
+    super(`Error al reintentar pago de factura vencida: ${message}`);
+    this.name = 'FlowRetryOverdueInvoicePaymentError';
+  }
+}
