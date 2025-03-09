@@ -136,6 +136,6 @@ coupons.list(data: FlowListDiscountCouponsRequest): Promise<FlowListDiscountCoup
 
 ---
 
-Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/discount_coupons).
+Para más detalles, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/coupon).
 
 **Nota:** Asegúrate de manejar correctamente todas las excepciones en tu aplicación.
