@@ -1,0 +1,31 @@
+name: Deploy Docusaurus on Push to gh-pages
+
+on:
+  push:
+    branches:
+      - gh-pages  # Ejecutar el workflow cuando haya un push en gh-pages
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 📦 Instalar dependencias
+        run: npm install
+
+      - name: 🏗️ Construir Docusaurus
+        run: npm run build
+
+      - name: 🚀 Desplegar en GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docusaurus/build
