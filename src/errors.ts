@@ -339,3 +339,41 @@ export class FlowGetSubscriptionBySubscriptionIdError extends FlowError {
     this.name = 'FlowGetSubscriptionBySubscriptionIdError';
   }
 }
+
+/**
+ * Error cuando hay problemas al tratar de obtener las subscripciones de un plan
+ */
+export class FlowGetPlanSubscriptionsError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener las suscripciones del plan: ${message}`);
+    this.name = 'FlowGetPlanSubscriptionsError';
+  }
+}
+/**
+ * Error cuando hay problemas al tratar de obtener las subscripciones de un cliente
+ */
+export class FlowUpdateSubscriptionTrialDaysError extends FlowError {
+  constructor(message: string) {
+    super(
+      `Error al actualizar los días de prueba de la suscripción: ${message}`,
+    );
+    this.name = 'FlowUpdateSubscriptionTrialDaysError';
+  }
+}
+
+/**
+ * Error cuando hay problemas al tratar de cancelar una suscripción
+ */
+export class FlowCancelSubscriptionError extends FlowError {
+  constructor(message: string) {
+    super(`Error al cancelar la suscripción: ${message}`);
+    this.name = 'FlowCancelSubscriptionError';
+  }
+}
+
+export class FlowAddDiscountToSubscription extends FlowError {
+  constructor(message: string) {
+    super(`Error al agregar descuento a la suscripción: ${message}`);
+    this.name = 'FlowAddDiscountToSubscription';
+  }
+}
