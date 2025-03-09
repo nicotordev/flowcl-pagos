@@ -1,6 +1,5 @@
 # Dependencias de Node.js
 node_modules/
-package-lock.json
 
 # Salida de TypeScript
 dist/

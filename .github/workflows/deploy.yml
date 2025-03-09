@@ -24,7 +24,7 @@ jobs:
 
       - name: 📦 Instalar dependencias
         working-directory: docusaurus
-        run: npm install
+        run: npm install 
 
       - name: 🏗️ Construir Docusaurus
         working-directory: docusaurus
