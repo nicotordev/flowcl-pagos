@@ -74,7 +74,17 @@ coupons.edit(data: FlowEditDiscountCouponRequest): Promise<FlowEditDiscountCoupo
   - `couponId`: `string` (ID del cupón a editar)
   - `name`: `string` (Nuevo nombre del cupón)
 - **Response**: `FlowEditDiscountCouponResponse`
-  - Contiene la información del cupón editado.
+  - `id`: `string` (ID del cupón de descuento)
+  - `name`: `string` (Nombre del cupón)
+  - `percent_off`: `number | null` (Descuento en porcentaje, si aplica)
+  - `amount`: `number | null` (Monto del descuento, si aplica)
+  - `currency`: `string | null` (Moneda del descuento, si aplica)
+  - `status`: `number` (`0` o `1` si está activo o inactivo)
+  - `created`: `string` (Fecha de creación)
+  - `duration`: `number` (`0` o `1` si es indefinido o definido)
+  - `times`: `number | null` (Número de veces aplicable, si aplica)
+  - `max_redemptions`: `number | null` (Número máximo de usos, si aplica)
+  - `expires`: `string` (Fecha de expiración)
 
 ### Eliminar un cupón de descuento
 
@@ -85,7 +95,17 @@ coupons.delete(couponId: string): Promise<FlowDeleteDiscountCouponResponse>
 - **Request**:
   - `couponId`: `string` (ID del cupón a eliminar)
 - **Response**: `FlowDeleteDiscountCouponResponse`
-  - Contiene la información del cupón eliminado.
+  - `id`: `string` (ID del cupón de descuento)
+  - `name`: `string` (Nombre del cupón)
+  - `percent_off`: `number | null` (Descuento en porcentaje, si aplica)
+  - `amount`: `number | null` (Monto del descuento, si aplica)
+  - `currency`: `string | null` (Moneda del descuento, si aplica)
+  - `status`: `number` (`0` o `1` si está activo o inactivo)
+  - `created`: `string` (Fecha de creación)
+  - `duration`: `number` (`0` o `1` si es indefinido o definido)
+  - `times`: `number | null` (Número de veces aplicable, si aplica)
+  - `max_redemptions`: `number | null` (Número máximo de usos, si aplica)
+  - `expires`: `string` (Fecha de expiración)
 
 ### Listar cupones de descuento
 
@@ -100,7 +120,7 @@ coupons.list(data: FlowListDiscountCouponsRequest): Promise<FlowListDiscountCoup
 - **Response**: `FlowListDiscountCouponsResponse`
   - `total`: `number` (Número total de cupones de descuento)
   - `hasMore`: `number` (`0` o `1` si hay más cupones)
-  - `data`: `FlowCoupon[]` (Array de cupones de descuento)
+  - `data`: `string` (Array de cupones de descuento)
 
 ## Manejo de Errores
 
