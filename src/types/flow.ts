@@ -2269,7 +2269,7 @@ type FlowAddItemToSubscriptionResponse = {
   /**
    * Identificador de la suscripción
    */
-  sub_i: string;
+  sub_id: string;
   /**
    * Identificador del item
    */
@@ -2284,7 +2284,7 @@ type FlowRemoveItemFromSubscriptionResponse = {
   /**
    * Identificador de la suscripción
    */
-  sub_i: string;
+  sub_id: string;
   /**
    * Identificador del item
    */
