@@ -1,9 +1,11 @@
 import { FlowAuthenticationError } from '../errors';
+import FlowCoupons from './flow.coupons';
 import FlowCustomers from './flow.customers';
 import FlowPayments from './flow.payments';
 import FlowPlans from './flow.plans';
 import FlowRefunds from './flow.refunds';
 import FlowSubscriptions from './flow.subscriptions';
+import FlowSubscriptionsItems from './flow.subscriptionsItems';
 /**
  * Cliente para interactuar con la API de Flow.
  */
@@ -30,6 +32,14 @@ class Flow {
    * Objeto que proporciona metodos para interactuar con las suscripciones en Flow.
    */
   public subscriptions: FlowSubscriptions;
+  /**
+   * Objecto que proporciona metodos para interactuar con los items de suscripciones en Flow.
+   */
+  public subscriptionsItems: FlowSubscriptionsItems;
+  /**
+   * Objecto que proporciona metodos para interactuar con los cupones en Flow.
+   */
+  public coupons: FlowCoupons;
 
   /**
    * Constructor de la clase FlowClient.
@@ -57,6 +67,12 @@ class Flow {
     this.customers = new FlowCustomers(apiKey, secretKey, baseURL);
     this.plans = new FlowPlans(apiKey, secretKey, baseURL);
     this.subscriptions = new FlowSubscriptions(apiKey, secretKey, baseURL);
+    this.subscriptionsItems = new FlowSubscriptionsItems(
+      apiKey,
+      secretKey,
+      baseURL,
+    );
+    this.coupons = new FlowCoupons(apiKey, secretKey, baseURL);
   }
 }
 

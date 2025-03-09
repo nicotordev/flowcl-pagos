@@ -23,7 +23,7 @@ import qs from 'qs';
 /**
  * Permite asociar items adicionales a suscripciones.
  */
-export default class FlowSubscribeItems {
+export default class FlowSubscriptionsItems {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;

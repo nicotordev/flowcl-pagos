@@ -456,3 +456,38 @@ export class FlowListAdditionalSubscriptionItemError extends FlowError {
     this.name = 'FlowListAdditionalSubscriptionItemError';
   }
 }
+
+export class FlowCreateDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear cupón de descuento: ${message}`);
+    this.name = 'FlowCreateDiscountCouponError';
+  }
+}
+
+export class FlowEditDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al editar cupón de descuento: ${message}`);
+    this.name = 'FlowEditDiscountCouponError';
+  }
+}
+
+export class FlowDeleteDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar cupón de descuento: ${message}`);
+    this.name = 'FlowDeleteDiscountCouponError';
+  }
+}
+
+export class FlowGetDiscountCouponError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener cupón de descuento: ${message}`);
+    this.name = 'FlowGetDiscountCouponError';
+  }
+}
+
+export class FlowListDiscountCouponsError extends FlowError {
+  constructor(message: string) {
+    super(`Error al listar cupones de descuento: ${message}`);
+    this.name = 'FlowListDiscountCouponsError';
+  }
+}

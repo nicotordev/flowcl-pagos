@@ -6084,6 +6084,341 @@ type FlowListAdditionalSubscriptionItemResponse = {
   data: string;
 };
 
+type FlowCreateDiscountCouponRequest = {
+  /**
+   * Nombre del cupón
+   */
+  name: string;
+  /**
+   * Porcentaje del cupon. Número entre 0 y 100. Permite 2 decimales con punto decimal. Ejemplo 10.2. No se agrega el signo %
+   */
+  percent_off?: number;
+  /**
+   * Moneda del descuento. Solo agregue la moneda para cupones de monto.
+   */
+  currency?: string;
+  /**
+   * Monto del descuento
+   */
+  amount?: number;
+  /**
+   * Duración del cupón:
+   * 1 definida
+   * 0 indefinida
+   */
+  duration?: 0 | 1;
+  /**
+   * Si la duración del cupón es definida, este campo indica las veces de duración del cupón. Si el cupón se aplica a un cliente veces corresponderá a meses. Si l cupón se aplica a una suscripción, veces corresponderá a los períodos del Plan.
+   */
+  times?: number;
+  /**
+   * Número de veces de aplicación del cupón.
+   */
+  max_redemptions?: number;
+  /**
+   * Fecha de expiración del cupón en formato yyyy-mm-dd
+   */
+  expires: string;
+};
+
+type FlowCreateDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowEditDiscountCouponRequest = {
+  /**
+   * Identificador del cupón
+   */
+  couponId: string;
+  /**
+   * Nombre del cupón
+   */
+  name: string;
+};
+type FlowEditDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowDeleteDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowGetDiscountCouponResponse = {
+  /**
+   * El identificador del cupón
+   */
+  id: number;
+
+  /**
+   * El nombre del cupón
+   */
+  name: string;
+
+  /**
+   * Si el cupón es del tipo porcentaje, en este campo indica el porcentaje de descuento, sino, muestra vacío.
+   */
+  percent_off: number | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va la moneda, sino, muestra vacío
+   */
+  currency: string | null;
+
+  /**
+   * Si el cupón es del tipo monto, aquí va el monto de descuento, sino, muestra vacío
+   */
+  amount: number | null;
+
+  /**
+   * La fecha de creación del cupón
+   */
+  created: string;
+
+  /**
+   * Si el cupón es de duración indefinida = 0, o es de duración definida = 1
+   */
+  duration: number;
+
+  /**
+   * Si el cupón es de duración definida, en este campo va el número de veces de duración. Si el cupón es aplicado a un cliente, el número de duración equivale a meses, si el cupón es aplicado a una suscripción, el número de duración será los períodos del plan de suscripción
+   */
+  times: number;
+
+  /**
+   * Es el número de veces que puede ser aplicado este cupón, ya sea a clientes o a suscripciones. Una vez que se completa el número de veces, ya no queda disponible para ser aplicado.
+   */
+  max_redemptions: number;
+
+  /**
+   * Si el cupón se creó con fecha de expiración aquí va la fecha en formato yyyy-mm-dd hh:mm:ss
+   */
+  expires: string;
+
+  /**
+   * El estado del cupón, Activo = 1, Inactivo = 0
+   */
+  status: number;
+
+  /**
+   * El número de veces que se ha aplicado este cupón
+   */
+  redemptions: number;
+};
+
+type FlowListDiscountCouponsRequest = {
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start?: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+   */
+  limit?: number;
+  /**
+ * Filtro por el nombre del cupón
+
+ */
+  filter?: string;
+  /**
+   * Filtro por el estado del cupón:
+   * 1 Activo
+   * 0 Inactivo
+   */
+  status?: number;
+};
+
+type FlowListDiscountCouponsResponse = {
+  /**
+ * El número total de registros encontrados
+
+ */
+  total: number;
+  /**
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * arreglo de registros de la página
+   * [{coupon list 1}{coupon list 2}{coupon list n..}
+   *  */
+  data: string;
+};
+
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -6162,4 +6497,12 @@ export type {
   FlowDeleteAdditionalSubscriptionItemResponse,
   FlowListAdditionalSubscriptionItemRequest,
   FlowListAdditionalSubscriptionItemResponse,
+  FlowCreateDiscountCouponRequest,
+  FlowCreateDiscountCouponResponse,
+  FlowEditDiscountCouponRequest,
+  FlowEditDiscountCouponResponse,
+  FlowDeleteDiscountCouponResponse,
+  FlowGetDiscountCouponResponse,
+  FlowListDiscountCouponsRequest,
+  FlowListDiscountCouponsResponse,
 };
