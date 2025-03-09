@@ -91,7 +91,7 @@ export default class FlowCustomers {
    * Permite obtener los datos de un cliente en base a su customerId.
    * @param {string} customerId Identificador del cliente a obtener.
    * @returns {Promise<FlowGetCustomerResponse>} Objeto con la información del cliente.
-   * @throws {FlowCreateCustomerError} Si hay problemas al crear el cliente.
+   * @throws {FlowGetCustomerError} Si hay problemas al crear el cliente.
    * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    */
   public get = this.getCustomer.bind(this);
@@ -101,7 +101,7 @@ export default class FlowCustomers {
    * status: filtro por estado del cliente
    * @param {FlowGetCustomerListRequest} data Datos de la petición de la lista de clientes.
    * @returns {Promise<FloeGetCustomerListResponse>} Objeto con la información de la lista de clientes.
-   * @throws {FlowGetCustomerError} Si hay problemas al obtener la lista de clientes.
+   * @throws {FlowGetCustomerListError} Si hay problemas al obtener la lista de clientes.
    * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    */
   public list = this.getCustomerList.bind(this);
@@ -122,14 +122,14 @@ export default class FlowCustomers {
      * @throws {FlowAPIError}
      */
     status: this.registerCardStatus.bind(this),
-    /**
+    /**|
      * Elimina el registro de la tarjeta de crédito de un cliente.
      * @param {string} customerId Identificador del cliente.
      * @returns {Promise<FlowDeleteCardResponse>} Información del registro de tarjeta eliminado.
      * @throws {FlowDeleteCardError} Si hay problemas al eliminar el registro de la tarjeta.
      * @throws {FlowDeleteCardError} Si hay problemas al eliminar el registro de la tarjeta.
      */
-    deleteCard: this.deleteCard.bind(this),
+    delete: this.deleteCard.bind(this),
     /**
      * Este servicio permite efectuar un cargo automático en la tarjeta de crédito previamente registrada por el cliente. Si el cliente no tiene registrada una tarjeta el metodo retornará error.
      * @param {FlowChargeCardRequest} data Datos de la petición de cargo.
@@ -200,7 +200,7 @@ export default class FlowCustomers {
      * @throws {FlowListPaginatedSubscriptionsError} Si hay problemas al listar las suscripciones.
      * @throws {FlowAPIError} Si hay problemas con la API de Flow.
      */
-    listPaginated: this.listPaginatedSubscriptions.bind(this),
+    list: this.listPaginatedSubscriptions.bind(this),
   };
 
   /**

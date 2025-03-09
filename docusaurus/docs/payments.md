@@ -1,12 +1,12 @@
 ---
 id: flow-payments-api
-sidebar_position: 2
-title: API de Pagos - FlowPayments
+sidebar_position: 3
+title: Pagos - FlowPayments
 ---
 
 # API de Pagos - FlowPayments
 
-El objeto `FlowPayments` permite interactuar con la API de pagos de Flow.cl, proporcionando métodos para crear pagos, consultar su estado y realizar otras operaciones relacionadas.
+La clase `FlowPayments` permite interactuar con la API de Pagos de Flow.cl, proporcionando métodos para crear, consultar y gestionar pagos realizados mediante la plataforma.
 
 ## Inicialización
 
@@ -24,136 +24,155 @@ const payments = flow.payments;
 
 ## Métodos Disponibles
 
-### Crear un pago
+### Crear Pagos
 
-Permite crear una orden de pago en Flow.
+#### Crear un pago
+
+Crea una orden de pago.
 
 ```typescript
 payments.create(data: FlowCreatePaymentRequest): Promise<FlowCreatePaymentResponse>
 ```
 
-- `FlowCreatePaymentRequest`: incluye campos como `commerceOrder`, `subject`, `currency`, `amount`, `email`, `paymentMethod`, `urlReturn`, `urlConfirmation`, `optional`, `timeout`, `merchantId` y `paymentCurrency`.
-- `FlowCreatePaymentResponse`: incluye `token`, `url`, `flowOrder`, `redirectUrl`.
+- **Request**: `FlowCreatePaymentRequest` incluye:
 
-### Crear un pago por email
+  - `commerceOrder`
+  - `subject`
+  - `currency`
+  - `amount`
+  - `email`
+  - `paymentMethod`
+  - `urlReturn`
+  - `urlConfirmation`
+  - `optional` (opcional)
+  - `timeout` (opcional)
+  - `merchantId` (opcional)
+  - `paymentCurrency` (opcional)
 
-Genera un cobro enviando un email al pagador.
+- **Response**: `FlowCreatePaymentResponse` incluye:
+  - `token`
+  - `url`
+  - `flowOrder`
+  - `redirectUrl`
+
+### Crear Pago por Email
+
+Envía un pago directamente al email del cliente.
 
 ```typescript
 payments.createByEmail(data: FlowCreatePaymentByEmailRequest): Promise<FlowCreatePaymentByEmailResponse>
 ```
 
-- `FlowCreatePaymentByEmailRequest`: incluye `commerceOrder`, `subject`, `currency`, `amount`, `email`, `paymentMethod`, `urlConfirmation`, `urlReturn`, `optional`, `timeout`, `merchantId`, `payment_currency`.
-- `FlowCreatePaymentByEmailResponse`: incluye `token`, `url`, `flowOrder`, `redirectUrl`.
+- **Request**: Similar a `FlowCreatePaymentRequest`, incluye:
 
-### Consultar estado de pago
+  - `payment_currency` (adicional).
 
-#### Por token
+- **Response**: Similar a `FlowCreatePaymentResponse`.
+
+## Consultar Estado del Pago
+
+### Estado por Token
 
 ```typescript
 payments.status.byToken(token: string): Promise<FlowPaymentStatusResponse>
 ```
 
-- `FlowPaymentStatusResponse`: incluye `token`, `url`, `flowOrder`, `redirectUrl`.
-
-#### Por identificador de comercio
+### Estado por ID del Comercio
 
 ```typescript
 payments.status.byCommerceId(commerceId: string): Promise<FlowPaymentStatusResponse>
 ```
 
-- `FlowPaymentStatusResponse`: incluye `token`, `url`, `flowOrder`, `redirectUrl`.
-
-#### Por número de orden de Flow
+### Estado por Número de Orden Flow
 
 ```typescript
-payments.status.byFlowOrderNumber(flowOrder: number): Promise<FlowPaymentStatusResponse>
+payments.status.byFlowOrder(flowOrder: number): Promise<FlowPaymentStatusResponse>
 ```
 
-- `FlowPaymentStatusResponse`: incluye información como `flowOrder`, `commerceOrder`, `requestDate`, `status`, `statusStr`, `subject`, `currency`, `amount`, `payer`, `optional`, `pendingInfo`, `paymentData`, `merchantId`.
+- **Response** (`FlowPaymentStatusResponse`):
+  - `token`
+  - `url`
+  - `flowOrder`
+  - `redirectUrl`
 
-### Obtener pagos recibidos por fecha
+### Estado Extendido del Pago
 
-```typescript
-payments.listPaymentsByDate(data: FlowPaymentsReceivedByDateRequest): Promise<FlowPaymentsReceivedByDateResponse>
-```
+Permite obtener información extendida y detallada de un pago específico.
 
-- `FlowPaymentsReceivedByDateRequest`: requiere una fecha en formato `YYYY-MM-DD`.
-- `FlowPaymentsReceivedByDateResponse`: incluye paginación con `total`, `hasMore`, y los datos específicos recibidos en la fecha indicada.
-
-### Obtener transacciones recibidas por fecha
-
-```typescript
-payments.listTransactionsByDate(data: FlowTransactionsReceivedByDateRequest): Promise<FlowTransactionsReceivedByDateResponse>
-```
-
-- `FlowTransactionsReceivedByDateRequest`: requiere `date` (una fecha en formato `YYYY-MM-DD`), `start` (Número de registro de inicio de la página. Si se omite, el valor por defecto es `0`.) y `limit` (Número de registros por página).
-- `FlowTransactionsReceivedByDateResponse`: incluye paginación con `total`, `hasMore`, y los datos específicos recibidos en la fecha indicada.
-
-- Similar a la respuesta anterior, pero para transacciones específicas.
-
-### Estado extendido del pago
-
-#### Por token
+#### Por Token
 
 ```typescript
 payments.statusExtended.byToken(token: string): Promise<FlowPaymentsStatusExtendedResponse>
 ```
 
-#### Por número de orden de Flow
+#### Por número de orden Flow
 
 ```typescript
 payments.statusExtended.byFlowOrder(flowOrder: number): Promise<FlowPaymentsStatusExtendedResponse>
 ```
 
-- `FlowPaymentsStatusExtendedResponse`: proporciona detalles avanzados sobre el estado del pago incluyendo información adicional de pagos, conversión de moneda, impuestos, y otros detalles específicos del pago, por ejemplo
+- **Response** (`FlowPaymentsStatusExtendedResponse`) incluye:
+  - `flowOrder`
+  - `commerceOrder`
+  - `requestDate`
+  - `status`
+  - `paymentData`
+  - `paymentCurrency`
+  - `paymentAmount`
+  - `paymentMethod`
+  - Otros detalles relacionados con la transacción.
+
+## Consultas de Pagos
+
+### Listar Pagos Recibidos por Fecha
 
 ```typescript
-type FlowPaymentsStatusExtendedResponse = {
-  /**
-   * The Flow order number.
-   */
-  flowOrder: number;
-
-  /**
-   * The commerce order number.
-   */
-  commerceOrder: string;
-
-  /**
-   * The order creation date in format yyyy-mm-dd hh:mm:ss.
-   */
-  requestDate: string;
-
-  /**
-   * The order status:
-   * 1 - Pending payment
-   * 2 - Paid
-   * 3 - Rejected
-   * 4 - Canceled
-   */
-  status: 1 | 2 | 3 | 4;
-
-  ...otherProps
-}
+payments.listPaymentsByDate(data: FlowPaymentsReceivedByDateRequest): Promise<FlowPaymentsReceivedByDateResponse>
 ```
+
+- **Request** (`FlowPaymentsReceivedByDateRequest`):
+
+  - `date` (formato `YYYY-MM-DD`)
+  - `start` (opcional)
+  - `limit` (opcional)
+
+- **Response** (`FlowPaymentsReceivedByDateResponse`):
+  - `total`
+  - `hasMore`
+  - `data` (arreglo con pagos)
+
+### Pagos Recibidos Extendidos por Fecha
+
+Permite listar pagos y transacciones extendidas por fecha indicada.
+
+```typescript
+payments.listPaymentsExtendedByDate(data: FlowTransactionsReceivedByDateRequest): Promise<FlowTransactionsReceivedByDateResponse>
+```
+
+- **Request** (`FlowTransactionsReceivedByDateRequest`):
+
+  - `date` (formato `YYYY-MM-DD`)
+  - `start` (opcional, default: 0)
+  - `limit` (opcional)
+
+- **Response** (`FlowTransactionsReceivedByDateResponse`):
+  - `total`
+  - `hasMore`
+  - `data`
 
 ## Manejo de Errores
 
-| Error                                 | Descripción                                    |
-| ------------------------------------- | ---------------------------------------------- |
-| `FlowCreatePaymentError`              | Error al crear el pago.                        |
-| `FlowCreatePaymentByEmailError`       | Error al crear el pago por email.              |
-| `FlowPaymentStatusError`              | Error al obtener el estado del pago.           |
-| `FlowPaymentsReceivedByDateError`     | Error al obtener pagos por fecha.              |
-| `FlowTransactionsReceivedByDateError` | Error al obtener transacciones por fecha.      |
-| `FlowStatusExtendedError`             | Error al obtener el estado extendido del pago. |
-| `FlowAPIError`                        | Errores relacionados con la API de Flow.       |
+| Error                             | Descripción                                    |
+| --------------------------------- | ---------------------------------------------- |
+| `FlowAPIError`                    | Error general de API de Flow.                  |
+| `FlowCreatePaymentError`          | Error al crear un pago.                        |
+| `FlowCreatePaymentByEmailError`   | Error al crear un pago por email.              |
+| `FlowPaymentStatusError`          | Error al obtener el estado del pago.           |
+| `FlowPaymentsListError`           | Error al listar pagos por fecha.               |
+| `FlowPaymentsStatusExtendedError` | Error al obtener el estado extendido del pago. |
 
 ---
 
-Para más detalles sobre tipos específicos, visita [Flow.cl API Docs](https://www.flow.cl/docs/api.html#tag/payment).
+Para información adicional, visita la documentación oficial: [Flow.cl API Docs - Payments](https://www.flow.cl/docs/api.html#tag/payment).
 
----
-
-**Nota:** Asegúrate de manejar correctamente todas las excepciones en tu aplicación.
+**Nota:** Implementa siempre control de errores robusto en tu aplicación.
