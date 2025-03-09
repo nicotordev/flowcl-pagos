@@ -1,5 +1,0 @@
-export PATH=$(npm bin):$PATH
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-npx lint-staged

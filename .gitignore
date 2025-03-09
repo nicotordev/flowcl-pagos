@@ -1,38 +1,20 @@
-# Dependencias de Node.js
-node_modules/
+# Dependencies
+/node_modules
 
-# Salida de TypeScript
-dist/
+# Production
+/build
 
-# Archivos de entorno
-.env
+# Generated files
+.docusaurus
+.cache-loader
+
+# Misc
+.DS_Store
 .env.local
-.env.development
-.env.production
-.env.test
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Archivos de logs y depuración
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-debug.log
-.DS_Store
-
-# Caché de herramientas de desarrollo
-.vscode/
-.idea/
-out/
-coverage/
-
-# Archivos de compilación de Jest
-jest-cache/
-jest-output/
-
-# Archivos temporales del sistema
-Thumbs.db
-
-# Archivos de compilación
-*.tsbuildinfo
-tsconfig.tsbuildinfo
