@@ -1,0 +1,38 @@
+name: Deploy Docusaurus from "docusaurus" folder to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Se ejecuta cuando hay un push en la rama principal
+  workflow_dispatch:  # Permite ejecución manual desde GitHub Actions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar el repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏗️ Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: 📦 Instalar dependencias
+        working-directory: docusaurus
+        run: yarn install --frozen-lockfile
+
+      - name: 🏗️ Construir Docusaurus
+        working-directory: docusaurus
+        run: yarn build
+
+      - name: 🚀 Desplegar en GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages  # Publica en gh-pages
+          publish_dir: docusaurus/build  # Se publica la carpeta build dentro de docusaurus
