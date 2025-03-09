@@ -277,7 +277,7 @@ export default class FlowPayments {
     if (!isValidPaymentReceivedByDate(data.date)) {
       throw new FlowPaymentsReceivedByDateError('Fecha no válida');
     }
-    return this.request('/getPayments', data, 'get', (e) => {
+    return await this.request('/getPayments', data, 'get', (e) => {
       throw new FlowPaymentsReceivedByDateError((e as Error).message);
     });
   }
@@ -337,7 +337,7 @@ export default class FlowPayments {
     if (!isValidPaymentReceivedByDate(data.date)) {
       throw new FlowTransactionsReceivedByDateError('Fecha no válida');
     }
-    return this.request('/getTransactions', data, 'get', (e) => {
+    return await this.request('/getTransactions', data, 'get', (e) => {
       throw new FlowTransactionsReceivedByDateError((e as Error).message);
     });
   }

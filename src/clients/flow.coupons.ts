@@ -160,7 +160,7 @@ export default class FlowCoupons {
   private async createDiscountCoupon(
     data: FlowCreateDiscountCouponRequest,
   ): Promise<FlowCreateDiscountCouponResponse> {
-    return this.request<FlowCreateDiscountCouponResponse>(
+    return await this.request<FlowCreateDiscountCouponResponse>(
       '/create',
       data,
       'post',
@@ -179,7 +179,7 @@ export default class FlowCoupons {
   private async editDiscountCoupon(
     data: FlowEditDiscountCouponRequest,
   ): Promise<FlowEditDiscountCouponResponse> {
-    return this.request<FlowEditDiscountCouponResponse>(
+    return await this.request<FlowEditDiscountCouponResponse>(
       '/edit',
       data,
       'post',
@@ -198,7 +198,7 @@ export default class FlowCoupons {
   private async deleteDiscountCoupon(
     couponId: string,
   ): Promise<FlowDeleteDiscountCouponResponse> {
-    return this.request<FlowDeleteDiscountCouponResponse>(
+    return await this.request<FlowDeleteDiscountCouponResponse>(
       '/delete',
       { couponId },
       'post',
@@ -217,7 +217,7 @@ export default class FlowCoupons {
   private async getDiscountCoupon(
     couponId: string,
   ): Promise<FlowGetDiscountCouponResponse> {
-    return this.request<FlowGetDiscountCouponResponse>(
+    return await this.request<FlowGetDiscountCouponResponse>(
       '/get',
       { couponId },
       'get',
@@ -236,7 +236,7 @@ export default class FlowCoupons {
   private async listDiscountCoupons(
     data: FlowListDiscountCouponsRequest,
   ): Promise<FlowListDiscountCouponsResponse> {
-    return this.request<FlowListDiscountCouponsResponse>(
+    return await this.request<FlowListDiscountCouponsResponse>(
       '/list',
       data,
       'get',

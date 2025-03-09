@@ -227,7 +227,7 @@ export default class FlowInvoices {
   private async getOverdueInvoices(
     data: FlowGetOverdueInvoicesRequest,
   ): Promise<FlowGetOverdueInvoicesResponse> {
-    return this.request<FlowGetOverdueInvoicesResponse>(
+    return await this.request<FlowGetOverdueInvoicesResponse>(
       '/getOverDue',
       data,
       'get',
@@ -244,7 +244,7 @@ export default class FlowInvoices {
    * @throws {FlowAPIError} Si hay problemas con la API de Flow.
    */
   private async _retryOverdueInvoicePayment(invoiceId: string) {
-    return this.request<FlowRetryOverdueInvoicePaymentResponse>(
+    return await this.request<FlowRetryOverdueInvoicePaymentResponse>(
       '/retryToCollect',
       {
         invoiceId,

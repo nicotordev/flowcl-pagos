@@ -135,7 +135,7 @@ export default class FlowRefunds {
   private async createRefund(
     data: FlowCreateRefundRequest,
   ): Promise<FlowCreateRefundResponse> {
-    return this.request('/create', data, 'post', (e) => {
+    return await this.request('/create', data, 'post', (e) => {
       throw new FlowCreateRefundError((e as Error).message);
     });
   }
@@ -147,7 +147,7 @@ export default class FlowRefunds {
    * @throws {FlowCancelRefundError} Si hay un error al cancelar el reembolso.
    */
   private async cancelRefund(token: string): Promise<FlowCancelRefundResponse> {
-    return this.request('/cancel', { token }, 'post', (e) => {
+    return await this.request('/cancel', { token }, 'post', (e) => {
       throw new FlowCancelRefundError((e as Error).message);
     });
   }
@@ -161,7 +161,7 @@ export default class FlowRefunds {
   private async getRefundStatus(
     token: string,
   ): Promise<FlowRefundStatusResponse> {
-    return this.request('/getStatus', { token }, 'get', (e) => {
+    return await this.request('/getStatus', { token }, 'get', (e) => {
       throw new FlowRefundStatusError((e as Error).message);
     });
   }

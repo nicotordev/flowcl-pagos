@@ -162,7 +162,7 @@ export default class FlowSubscriptionsItems {
   public async createAdditionalSubscriptionItem(
     data: FlowCreateAdditionalSubscriptionItemRequest,
   ): Promise<FlowCreateAdditionalSubscriptionItemResponse> {
-    return this.request<FlowCreateAdditionalSubscriptionItemResponse>(
+    return await this.request<FlowCreateAdditionalSubscriptionItemResponse>(
       '/create',
       data,
       'post',
@@ -183,7 +183,7 @@ export default class FlowSubscriptionsItems {
   private async getAdditionalSubscriptionItem(
     itemId: string,
   ): Promise<FlowGetAdditionalSubscriptionItemResponse> {
-    return this.request<FlowGetAdditionalSubscriptionItemResponse>(
+    return await this.request<FlowGetAdditionalSubscriptionItemResponse>(
       `/get`,
       { itemId },
       'get',
@@ -204,7 +204,7 @@ export default class FlowSubscriptionsItems {
   private async editAdditionalSubscriptionItem(
     data: FlowEditAdditionalSubscriptionItemRequest,
   ): Promise<FlowEditAdditionalSubscriptionItemResponse> {
-    return this.request<FlowEditAdditionalSubscriptionItemResponse>(
+    return await this.request<FlowEditAdditionalSubscriptionItemResponse>(
       '/edit',
       data,
       'post',
@@ -227,7 +227,7 @@ export default class FlowSubscriptionsItems {
     itemId: string,
     changeType: 'to_future' | 'all',
   ): Promise<FlowDeleteAdditionalSubscriptionItemResponse> {
-    return this.request<FlowDeleteAdditionalSubscriptionItemResponse>(
+    return await this.request<FlowDeleteAdditionalSubscriptionItemResponse>(
       '/delete',
       { itemId, changeType },
       'post',
@@ -249,7 +249,7 @@ export default class FlowSubscriptionsItems {
   private async listAdditionalSubscriptionItem(
     data: FlowListAdditionalSubscriptionItemRequest,
   ): Promise<FlowListAdditionalSubscriptionItemResponse> {
-    return this.request<FlowListAdditionalSubscriptionItemResponse>(
+    return await this.request<FlowListAdditionalSubscriptionItemResponse>(
       '/list',
       data,
       'get',

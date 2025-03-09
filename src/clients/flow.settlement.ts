@@ -114,7 +114,7 @@ export default class FlowSettlements {
   private async _getLiquidationsByDateRange(
     data: FlowGetLiquidationsByDateRangeRequest,
   ): Promise<FlowGetLiquidationsByDateRangeResponse> {
-    return this.request<FlowGetLiquidationsByDateRangeResponse>(
+    return await this.request<FlowGetLiquidationsByDateRangeResponse>(
       '/search',
       data,
       'post',
@@ -133,7 +133,7 @@ export default class FlowSettlements {
   private async _getLiquidationById(
     id: string,
   ): Promise<FlowGetLiquidationByIdResponse> {
-    return this.request<FlowGetLiquidationByIdResponse>(
+    return await this.request<FlowGetLiquidationByIdResponse>(
       `/getByIdv2`,
       { id },
       'get',
