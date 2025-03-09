@@ -7891,6 +7891,189 @@ type FlowGetLiquidationByIdResponse = {
    */
   detail: object;
 };
+
+type FlowCreateAssociatedMerchantRequest = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+  /**
+   * Nombre del comercio asociado
+   */
+  name: string;
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+};
+type FlowCreateAssociatedMerchantResponse = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+
+  /**
+   * Fecha de creación
+   */
+  createdate: string;
+
+  /**
+   * Estado del comercio. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: number;
+
+  /**
+   * Fecha de aprobación/rechazo
+   */
+  verifydate?: string | null;
+};
+
+type FlowEditAssociatedMerchantRequest = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+};
+
+type FlowEditAssociatedMerchantResponse = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+
+  /**
+   * Fecha de creación
+   */
+  createdate: string;
+
+  /**
+   * Estado del comercio. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: number;
+
+  /**
+   * Fecha de aprobación/rechazo
+   */
+  verifydate?: string | null;
+};
+type FlowDeleteAssociatedMerchantResponse = {
+  /**
+   * Estado de la operacion
+   */
+  status: string;
+  /**
+   * Mensaje asociado a la operacion
+   */
+  message: string;
+};
+
+type FlowGetAssociatedMerchantResponse = {
+  /**
+   * Id de comercio asociado
+   */
+  id: string;
+
+  /**
+   * Nombre de comercio asociado
+   */
+  name: string;
+
+  /**
+   * Url del comercio asociado
+   */
+  url: string;
+
+  /**
+   * Fecha de creación
+   */
+  createdate: string;
+
+  /**
+   * Estado del comercio. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: number;
+
+  /**
+   * Fecha de aprobación/rechazo
+   */
+  verifydate?: string | null;
+};
+type FlowGetAssociatedMerchantsRequest = {
+  /**
+   * Número de registro de inicio de la página. Si se omite el valor por omisión es 0.
+   */
+  start: number;
+  /**
+   * Número de registros por página. Si se omite el valor por omisón es 10. El valor máximo es de 100 registros por página.
+
+   */
+  limit: number;
+  /**
+   * Filtro por nombre del comercio asociado
+   */
+  filter: string;
+  /**
+   * Filtro por estado del comercio asociado. Valores posibles:
+   * 0: Pendiente de aprobación
+   * 1: Aprobado
+   * 2: Rechazado
+   */
+  status: 0 | 1 | 2;
+};
+type FlowGetAssociatedMerchantsResponse = {
+  /**
+   * El número total de registros encontrados
+   */
+  total: number;
+  /**
+   * boolean
+   * 1 Si existen más páginas
+   * 0 Si es la última página
+   */
+  hasMore: 0 | 1;
+  /**
+   * Array of object
+   * arreglo de registros de la página
+   */
+  data: string;
+};
 export type {
   FlowCreatePaymentRequest,
   FlowCreatePaymentResponse,
@@ -7987,4 +8170,12 @@ export type {
   FlowGetLiquidationsByDateRangeRequest,
   FlowGetLiquidationsByDateRangeResponse,
   FlowGetLiquidationByIdResponse,
+  FlowCreateAssociatedMerchantRequest,
+  FlowCreateAssociatedMerchantResponse,
+  FlowEditAssociatedMerchantRequest,
+  FlowEditAssociatedMerchantResponse,
+  FlowDeleteAssociatedMerchantResponse,
+  FlowGetAssociatedMerchantResponse,
+  FlowGetAssociatedMerchantsRequest,
+  FlowGetAssociatedMerchantsResponse,
 };

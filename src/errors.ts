@@ -535,3 +535,24 @@ export class FlowGetLiquidationsByDateRangeError extends FlowError {
     this.name = 'FlowGetLiquidationsByDateRangeError';
   }
 }
+
+export class FlowCreateAssociatedMerchantError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear comercio asociado: ${message}`);
+    this.name = 'FlowCreateAssociatedMerchantError';
+  }
+}
+
+export class FlowDeleteAssociatedMerchantError extends FlowError {
+  constructor(message: string) {
+    super(`Error al eliminar comercio asociado: ${message}`);
+    this.name = 'FlowDeleteAssociatedMerchantError';
+  }
+}
+
+export class FlowGetAssociatedMerchantError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener comercio asociado: ${message}`);
+    this.name = 'FlowGetAssociatedMerchantError';
+  }
+}
