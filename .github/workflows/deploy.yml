@@ -3,7 +3,8 @@ name: Deploy Docusaurus on Push to gh-pages
 on:
   push:
     branches:
-      - gh-pages  # Ejecutar el workflow cuando haya un push en gh-pages
+      - gh-pages
+  workflow_dispatch:
 
 jobs:
   build:
