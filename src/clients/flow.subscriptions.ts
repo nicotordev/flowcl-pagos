@@ -5,10 +5,12 @@ import {
   FlowAPIError,
   FlowAuthenticationError,
   FlowCreateSubscriptionToPlanError,
+  FlowGetSubscriptionBySubscriptionIdError,
 } from '../errors';
 import {
   FlowCreateSubscriptionToPlanRequest,
   FlowCreateSubscriptionToPlanResponse,
+  FlowGetSubscriptionBySubscriptionIdResponse,
 } from '../types/flow';
 /**
  * Cliente para interactuar con la API de pagos de Flow.
@@ -18,11 +20,33 @@ export default class FlowSubscriptions {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
-
+  /**
+   * Este servicio permite crear una nueva suscripción de un cliente a un Plan. Para crear una nueva suscripción, basta con enviar los parámetros planId y customerId
+   * @param {FlowCreateSubscriptionToPlanRequest} data Datos para crear la suscripción.
+   * @returns {Promise<FlowCreateSubscriptionToPlanResponse>} Respuesta de la API.
+   * @throws {FlowCreateSubscriptionToPlanError} Si hay problemas al crear la suscripción.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   */
   public createToPlan: (
     data: FlowCreateSubscriptionToPlanRequest,
   ) => Promise<FlowCreateSubscriptionToPlanResponse> =
     this.createSubscriptionToPlan.bind(this);
+
+  public get: {
+    /**
+     * Este servicio permite obtener los datos de una suscripción.
+     * @param {string} subscriptionId ID de la suscripción.
+     * @returns {Promise<FlowGetSubscriptionBySubscriptionIdResponse>} Respuesta de la API.
+     * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+     * @throws {FlowGetSubscriptionBySubscriptionIdError} Si hay problemas al obtener la suscripción.
+     *
+     */
+    bySubscriptionId: (
+      subscriptionId: string,
+    ) => Promise<FlowGetSubscriptionBySubscriptionIdResponse>;
+  } = {
+    bySubscriptionId: this.getSubscriptionBySubscriptionId.bind(this),
+  };
   /**
    * Constructor de la clase FlowClient.
    * @param {string} apiKey Clave de API proporcionada por Flow.
@@ -104,6 +128,28 @@ export default class FlowSubscriptions {
       'post',
       (err) => {
         throw new FlowCreateSubscriptionToPlanError((err as Error).message);
+      },
+    );
+  }
+  /**
+   * Este servicio permite obtener los datos de una suscripción.
+   * @param {string} subscriptionId ID de la suscripción.
+   * @returns {Promise<FlowGetSubscriptionBySubscriptionIdResponse>} Respuesta de la API.
+   * @throws {FlowAPIError} Si hay problemas con la API de Flow.
+   * @throws {FlowGetSubscriptionBySubscriptionIdError} Si hay problemas al obtener la suscripción.
+   *
+   */
+  private async getSubscriptionBySubscriptionId(
+    subscriptionId: string,
+  ): Promise<FlowGetSubscriptionBySubscriptionIdResponse> {
+    return await this.request<FlowCreateSubscriptionToPlanResponse>(
+      '/get',
+      { subscriptionId },
+      'get',
+      (err) => {
+        throw new FlowGetSubscriptionBySubscriptionIdError(
+          (err as Error).message,
+        );
       },
     );
   }

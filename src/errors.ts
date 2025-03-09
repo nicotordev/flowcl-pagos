@@ -320,10 +320,22 @@ export class FlowListPlansError extends FlowError {
     this.name = 'FlowListPlansError';
   }
 }
-
+/**
+ * Error cuando hay problemas al tratar de obtener una suscripción
+ */
 export class FlowCreateSubscriptionToPlanError extends FlowError {
   constructor(message: string) {
     super(`Error al crear la suscripción al plan: ${message}`);
     this.name = 'FlowCreateSubscriptionToPlanError';
+  }
+}
+/**
+ * Error cuando hay problemas al tratar de obtener una subscripción por ID
+ *
+ */
+export class FlowGetSubscriptionBySubscriptionIdError extends FlowError {
+  constructor(message: string) {
+    super(`Error al obtener la suscripción por ID: ${message}`);
+    this.name = 'FlowGetSubscriptionBySubscriptionIdError';
   }
 }
