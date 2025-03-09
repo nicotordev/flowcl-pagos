@@ -729,12 +729,12 @@ type FlowSearchRequest = {
   limit?: number;
 
   /**
-   * Filtro por nombre del cliente.
+   * Filtro por nombre
    */
   filter?: string;
 
   /**
-   * Filtro por estado del cliente.
+   * Filtro por estado
    */
   status?: number;
 };
@@ -1529,7 +1529,66 @@ type FlowCreatePlanResponse = FlowPlan;
 
 type FlowGetPlanResponse = FlowPlan;
 
-type FlowEditPlanRequest = FlowPlan;
+type FlowEditPlanRequest = {
+  /**
+   * Identificador del Plan
+   */
+  planId: string;
+  /**
+   * Nombre del Plan
+   */
+  name?: string;
+  /**
+   * Moneda del Plan
+   */
+  currency?: string;
+  /**
+   * Monto del Plan
+   */
+  amount?: number;
+  /**
+   * Frecuencia de cobros
+   * 1 = diario
+   * 2 = semanal
+   * 3 = mensual
+   * 4 = anual
+   */
+  interval?: 1 | 2 | 3 | 4;
+  /**
+   * Número de intervalos de frecuencia de cobros.
+   * Ejemplo: interval = 2 y interval_count = 2 → frecuencia quincenal.
+   */
+  interval_count?: number;
+  /**
+   * Número de días de prueba (trial)
+   * Por omisión es 0.
+   * */
+  trial_period_days?: number;
+  /**
+   * Número de días pasados, después de generar un importe, para considerarlo vencido.
+   * Por omisión es 3.
+   */
+  days_until_due?: number;
+  /**
+   * Número de períodos de duración del plan.
+   * Si el plan tiene vencimiento, especificarlo aquí.
+   */
+  periods_number?: number;
+  /**
+   * URL donde Flow notificará al comercio los pagos efectuados por este plan.
+   * */
+  urlCallback?: string;
+  /**
+   * Número de reintentos de cargo. Por omisión es 3.
+   */
+  charges_retries_number?: number;
+  /**
+   * Opción de conversión de moneda:
+   * 1 = al pago (default)
+   * 2 = al importe (invoice)
+   */
+  currency_convert_option?: 1 | 2;
+};
 
 type FlowEditPlanResponse = FlowPlan;
 
