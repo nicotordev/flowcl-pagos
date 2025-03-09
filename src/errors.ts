@@ -320,3 +320,10 @@ export class FlowListPlansError extends FlowError {
     this.name = 'FlowListPlansError';
   }
 }
+
+export class FlowCreateSubscriptionToPlanError extends FlowError {
+  constructor(message: string) {
+    super(`Error al crear la suscripción al plan: ${message}`);
+    this.name = 'FlowCreateSubscriptionToPlanError';
+  }
+}
