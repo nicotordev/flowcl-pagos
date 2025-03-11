@@ -4,9 +4,9 @@ sidebar_position: 1
 title: Guía Rápida de Integración
 ---
 
-# 🚀 Guía Rápida de Integración del SDK Flow.cl
+# 🚀 Guía Rápida de Integración del Cliente API Flow.cl
 
-Esta guía rápida te permitirá integrar pagos fácilmente en tu aplicación Node.js utilizando el SDK open-source para Flow.cl.
+Esta guía rápida te permitirá integrar pagos fácilmente en tu aplicación Node.js utilizando el Cliente API open-source para Flow.cl.
 
 ## ✅ Instalación
 
@@ -59,4 +59,4 @@ Tu aplicación ya está preparada para recibir pagos online con Flow.cl. Para de
 
 - Explorar cómo gestionar [clientes](./flow-customers-api) y [reembolsos](./flow-refunds-api).
 
-¡Continúa explorando las demás secciones para aprovechar al máximo el SDK!
+¡Continúa explorando las demás secciones para aprovechar al máximo el Cliente API!

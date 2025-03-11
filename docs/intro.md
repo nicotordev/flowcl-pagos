@@ -1,10 +1,10 @@
 ---
 id: intro
 sidebar_position: 2
-title: Flow.cl SDK para Node.js
+title: Flow.cl - Cliente API para Node.js
 ---
 
-# Flow.cl SDK para Node.js
+# Flow.cl - Cliente API para Node.js
 
 ![Flow.cl](https://www.flow.cl/images/header/logo-flow.svg)
 
@@ -12,9 +12,9 @@ title: Flow.cl SDK para Node.js
 [![License](https://img.shields.io/npm/l/@nicotordev/flowcl-pagos.svg)](https://nicotordev.github.io/flowcl-pagos/license/LICENSE)
 ![Tests](https://github.com/nicotordev/flowcl-pagos/actions/workflows/test.yml/badge.svg?style=flat-square)
 
-## 🚀 ¿Qué es este SDK?
+## 🚀 ¿Qué es este Cliente API?
 
-Este SDK proporciona una forma sencilla y eficiente de integrar la API de [Flow.cl](https://www.flow.cl/) en aplicaciones Node.js y TypeScript, facilitando procesos de pagos y gestión de transacciones.
+Este Cliente API proporciona una forma sencilla y eficiente de integrar la API de [Flow.cl](https://www.flow.cl/) en aplicaciones Node.js y TypeScript, facilitando procesos de pagos y gestión de transacciones.
 
 ## 📚 Funcionalidades principales
 
@@ -62,7 +62,7 @@ const flow = new Flow(
 
 ## 📖 Documentación Completa
 
-Explora la documentación detallada para aprovechar al máximo todas las funcionalidades del SDK:
+Explora la documentación detallada para aprovechar al máximo todas las funcionalidades del Cliente API:
 
 - [📘 Documentación Oficial](https://www.flow.cl/docs/api.html)
 <!-- - [🔍 Ejemplos prácticos y casos de uso](/docs/examples) -->
