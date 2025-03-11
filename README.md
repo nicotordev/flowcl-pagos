@@ -1,4 +1,4 @@
-# Flow.cl SDK para Node.js
+# Flow.cl - Cliente API para Node.js
 
 ![Flow.cl](https://www.flow.cl/images/header/logo-flow.svg)
 
@@ -10,7 +10,7 @@
 
 ## Descripción
 
-Este paquete proporciona un SDK en TypeScript para integrar:
+Este paquete proporciona un Cliente API en TypeScript para integrar:
 
 - **Pagos**
 - **Clientes**
