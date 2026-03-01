@@ -1,78 +1,83 @@
-// import FlowPlans from '../clients/flow.plans';
-// import dotenv from 'dotenv';
-// import {
-//   FlowCreatePlanRequest,
-//   FlowCreatePlanResponse,
-//   FlowEditPlanRequest,
-//   FlowEditPlanResponse,
-// } from '../types/flow';
+import 'dotenv/config';
+import FlowPlans from '../clients/flow.plans';
+import {
+  FlowCreatePlanRequest,
+  FlowCreatePlanResponse,
+  FlowEditPlanRequest,
+  FlowEditPlanResponse,
+} from '../types/flow';
+import {
+  describeFlowIntegration,
+  flowIntegrationConfig,
+} from '../test-utils/flowIntegration';
 
-// dotenv.config(); // Carga las variables de entorno desde .env
+describeFlowIntegration('Flow API Integration Tests', () => {
+  let flowPlans: FlowPlans;
+  let createdPlanId: string;
 
-// const API_KEY = process.env.FLOW_API_KEY!;
-// const SECRET_KEY = process.env.FLOW_SECRET_KEY!;
-// const BASE_URL = process.env.FLOW_BASE_URL!;
+  beforeAll(() => {
+    flowPlans = new FlowPlans(
+      flowIntegrationConfig.apiKey,
+      flowIntegrationConfig.secretKey,
+      flowIntegrationConfig.baseUrl,
+    );
+  });
 
-// const flowPlans = new FlowPlans(API_KEY, SECRET_KEY, BASE_URL);
+  test('✅ Crea un plan de suscripción exitosamente', async () => {
+    const planData: FlowCreatePlanRequest = {
+      planId: `test-plan-${Date.now()}`, // Evita colisiones
+      name: 'Plan de Prueba',
+      amount: 10000,
+      interval: 3,
+    };
 
-// describe('Flow API Integration Tests', () => {
-//   let createdPlanId: string;
+    const expected: Partial<FlowCreatePlanResponse> = {
+      planId: planData.planId,
+    };
 
-//   test('✅ Crea un plan de suscripción exitosamente', async () => {
-//     const planData: FlowCreatePlanRequest = {
-//       planId: `test-plan-${Date.now()}`, // Evita colisiones
-//       name: 'Plan de Prueba',
-//       amount: 10000,
-//       interval: 3,
-//     };
+    const response = await flowPlans.create(planData);
+    expect(response).toHaveProperty('planId');
+    expect(response.planId).toBe(expected.planId);
+    createdPlanId = response.planId;
+  });
 
-//     const expected: Partial<FlowCreatePlanResponse> = {
-//       planId: planData.planId,
-//     };
+  test('✅ Obtiene los detalles del plan creado', async () => {
+    if (!createdPlanId) throw new Error('Plan ID no disponible');
 
-//     const response = await flowPlans.create(planData);
-//     expect(response).toHaveProperty('planId');
-//     expect(response.planId).toBe(expected.planId);
-//     createdPlanId = response.planId;
-//   });
+    const response = await flowPlans.get(createdPlanId);
+    expect(response).toHaveProperty('planId', createdPlanId);
+    expect(response.name).toBe('Plan de Prueba');
+  });
 
-//   test('✅ Obtiene los detalles del plan creado', async () => {
-//     if (!createdPlanId) throw new Error('Plan ID no disponible');
+  test('✅ Lista los planes de suscripción', async () => {
+    const response = await flowPlans.list({ start: 0, limit: 10 });
+    expect(response).toHaveProperty('total');
+    expect(response).toHaveProperty('data');
+  });
 
-//     const response = await flowPlans.get(createdPlanId);
-//     expect(response).toHaveProperty('planId', createdPlanId);
-//     expect(response.name).toBe('Plan de Prueba');
-//   });
+  test('✅ Edita un plan de suscripción', async () => {
+    if (!createdPlanId) throw new Error('Plan ID no disponible');
 
-//   test('✅ Lista los planes de suscripción', async () => {
-//     const response = await flowPlans.list({ start: 0, limit: 10 });
-//     expect(response).toHaveProperty('total');
-//     expect(response).toHaveProperty('data');
-//   });
+    const editData: FlowEditPlanRequest = {
+      planId: createdPlanId,
+      name: 'Plan Modificado',
+      amount: 12000,
+    };
 
-//   test('✅ Edita un plan de suscripción', async () => {
-//     if (!createdPlanId) throw new Error('Plan ID no disponible');
+    const expected: Partial<FlowEditPlanResponse> = {
+      planId: createdPlanId,
+    };
 
-//     const editData: FlowEditPlanRequest = {
-//       planId: createdPlanId,
-//       name: 'Plan Modificado',
-//       amount: 12000,
-//     };
+    const response = await flowPlans.edit(editData);
+    expect(response).toHaveProperty('planId', createdPlanId);
+    expect(response.planId).toBe(expected.planId);
+  });
 
-//     const expected: Partial<FlowEditPlanResponse> = {
-//       planId: createdPlanId,
-//     };
+  test('✅ Elimina un plan de suscripción', async () => {
+    if (!createdPlanId) throw new Error('Plan ID no disponible');
 
-//     const response = await flowPlans.edit(editData);
-//     expect(response).toHaveProperty('planId', createdPlanId);
-//     expect(response.planId).toBe(expected.planId);
-//   });
-
-//   test('✅ Elimina un plan de suscripción', async () => {
-//     if (!createdPlanId) throw new Error('Plan ID no disponible');
-
-//     const response = await flowPlans.delete(createdPlanId);
-//     expect(response).toHaveProperty('planId', createdPlanId);
-//     expect(response.status).toBe(0); // 0 indica plan eliminado
-//   });
-// });
+    const response = await flowPlans.delete(createdPlanId);
+    expect(response).toHaveProperty('planId', createdPlanId);
+    expect(response.status).toBe(0); // 0 indica plan eliminado
+  });
+});
