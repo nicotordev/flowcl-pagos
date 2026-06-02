@@ -18,11 +18,23 @@ export const flowIntegrationConfig = {
     process.env.FLOW_BASE_URL || process.env.FLOW_API_URL || DEFAULT_BASE_URL,
 };
 
-const shouldRunIntegrationTests = process.env.FLOW_RUN_INTEGRATION_TESTS === 'true';
-
 export const hasFlowIntegrationCredentials =
   hasRealCredential(flowIntegrationConfig.apiKey) &&
   hasRealCredential(flowIntegrationConfig.secretKey);
 
-export const describeFlowIntegration =
-  shouldRunIntegrationTests && hasFlowIntegrationCredentials ? describe : describe.skip;
+/** Desactiva integración con `FLOW_RUN_INTEGRATION_TESTS=false`. */
+export const shouldRunIntegrationTests =
+  process.env.FLOW_RUN_INTEGRATION_TESTS !== 'false' &&
+  hasFlowIntegrationCredentials;
+
+export const describeFlowIntegration = shouldRunIntegrationTests
+  ? describe
+  : describe.skip;
+
+/** Requiere cuenta integrador en Flow (`FLOW_RUN_MERCHANT_TESTS=true`). */
+export const shouldRunMerchantIntegrationTests =
+  shouldRunIntegrationTests && process.env.FLOW_RUN_MERCHANT_TESTS === 'true';
+
+export const describeFlowMerchantIntegration = shouldRunMerchantIntegrationTests
+  ? describe
+  : describe.skip;

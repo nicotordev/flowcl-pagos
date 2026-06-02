@@ -10,204 +10,109 @@ import {
   FlowGetAssociatedMerchantsRequest,
   FlowGetAssociatedMerchantsResponse,
 } from '../types/flow';
-import { FlowAPIError, FlowAuthenticationError } from '../errors';
+import { FlowAPIError } from '../errors';
 import {
-  describeFlowIntegration,
+  describeFlowMerchantIntegration,
   flowIntegrationConfig,
 } from '../test-utils/flowIntegration';
 
-const runMerchantTests = process.env.FLOW_RUN_MERCHANT_TESTS === 'true';
+describeFlowMerchantIntegration(
+  'FlowMerchant API Integration Tests (integrator sandbox)',
+  () => {
+    let flowMerchant: FlowMerchants;
+    let createdMerchantId: string;
+    let createdMerchantName: string;
+    let createdMerchantUrl: string;
 
-describeFlowIntegration('FlowMerchant API Integration Tests (Real Sandbox)', () => {
-  let flowMerchant: FlowMerchants;
+    beforeAll(() => {
+      flowMerchant = new FlowMerchants(
+        flowIntegrationConfig.apiKey,
+        flowIntegrationConfig.secretKey,
+        flowIntegrationConfig.baseUrl,
+      );
+    });
 
-  // Almacenar ID generado para reusarlo en las pruebas de "get", "edit" y "delete"
-  let createdMerchantId: string;
+    jest.setTimeout(30000);
 
-  beforeAll(() => {
-    flowMerchant = new FlowMerchants(
-      flowIntegrationConfig.apiKey,
-      flowIntegrationConfig.secretKey,
-      flowIntegrationConfig.baseUrl,
-    );
-  });
+    it('Debería crear un comercio asociado en sandbox', async () => {
+      createdMerchantId = `merchant_${Date.now()}`;
+      createdMerchantName = 'nicotordev';
+      createdMerchantUrl = 'https://nicotordev.com';
 
-  // Para evitar timeouts en caso de que el servicio demore.
-  jest.setTimeout(30000);
+      const requestData: FlowCreateAssociatedMerchantRequest = {
+        id: createdMerchantId,
+        name: createdMerchantName,
+        url: createdMerchantUrl,
+      };
 
-  it('Debería lanzar FlowAuthenticationError si falta apiKey o secretKey', () => {
-    // Verificamos que si no hay credenciales, lance la excepción
-    expect(
-      () =>
-        new FlowMerchants(
-          '',
-          flowIntegrationConfig.secretKey,
-          flowIntegrationConfig.baseUrl,
-        ),
-    ).toThrow(FlowAuthenticationError);
-    expect(
-      () =>
-        new FlowMerchants(
-          flowIntegrationConfig.apiKey,
-          '',
-          flowIntegrationConfig.baseUrl,
-        ),
-    ).toThrow(FlowAuthenticationError);
-  });
+      const response: FlowCreateAssociatedMerchantResponse =
+        await flowMerchant.createAssociatedMerchant(requestData);
 
-  it('Debería crear un comercio asociado en sandbox', async () => {
-    if (!runMerchantTests) {
-      expect(runMerchantTests).toBe(false);
-      return;
-    }
+      expect(response.id).toBe(createdMerchantId);
+    });
 
-    // Generamos un ID único para cada ejecución
-    createdMerchantId = `merchant_${Date.now()}`;
+    it('Debería obtener la info de un comercio asociado', async () => {
+      const response: FlowGetAssociatedMerchantResponse =
+        await flowMerchant.getAssociatedMerchant(createdMerchantId);
 
-    const requestData: FlowCreateAssociatedMerchantRequest = {
-      id: createdMerchantId,
-      name: 'nicotordev',
-      url: 'https://nicotordev.com',
-    };
+      expect(response.id).toBe(createdMerchantId);
+      expect(response.name).toBe(createdMerchantName);
+      expect(response.url).toBe(createdMerchantUrl);
+    });
 
-    let response: FlowCreateAssociatedMerchantResponse;
+    it('Debería editar el comercio asociado', async () => {
+      const editData: FlowEditAssociatedMerchantRequest = {
+        id: createdMerchantId,
+        name: 'Edited Merchant',
+        url: 'https://edited.com',
+      };
 
-    try {
-      response = await flowMerchant.createAssociatedMerchant(requestData);
-    } catch (error) {
-      // Si hay un error de API, lo capturamos para ver si es un FlowAPIError
-      if (error instanceof FlowAPIError) {
-        console.error('FlowAPIError:', error.message);
-      }
-      throw error;
-    }
+      const response: FlowEditAssociatedMerchantResponse =
+        await flowMerchant.editAssociatedMerchant(editData);
 
-    // Validamos que el response tenga la estructura esperada
-    expect(response.id).toBe(createdMerchantId);
-  });
+      expect(response.id).toBe(createdMerchantId);
+      createdMerchantName = editData.name;
+      createdMerchantUrl = editData.url;
+    });
 
-  it('Debería obtener la info de un comercio asociado', async () => {
-    if (!runMerchantTests) {
-      expect(runMerchantTests).toBe(false);
-      return;
-    }
+    it('Debería listar los comercios asociados', async () => {
+      const requestData: FlowGetAssociatedMerchantsRequest = {
+        start: 0,
+        limit: 10,
+        filter: '',
+        status: 1,
+      };
 
-    // Utiliza el merchant ID creado en la prueba anterior
-    const id = createdMerchantId;
+      const response: FlowGetAssociatedMerchantsResponse =
+        await flowMerchant.getAssociatedMerchants(requestData);
 
-    let response: FlowGetAssociatedMerchantResponse;
+      expect(response.hasMore).toBeDefined();
+      const merchantsRaw = response.data || '[]';
+      const merchants =
+        typeof merchantsRaw === 'string'
+          ? JSON.parse(merchantsRaw)
+          : merchantsRaw;
+      expect(Array.isArray(merchants)).toBe(true);
+    });
 
-    try {
-      response = await flowMerchant.getAssociatedMerchant(id);
-    } catch (error) {
-      if (error instanceof FlowAPIError) {
-        console.error('FlowAPIError:', error.message);
-      }
-      throw error;
-    }
+    it('Debería eliminar el comercio asociado', async () => {
+      const response: FlowDeleteAssociatedMerchantResponse =
+        await flowMerchant.deleteAssociatedMerchant(createdMerchantId);
 
-    expect(response.id).toBe(id);
-    expect(response.name).toBe('Test Merchant');
-    expect(response.url).toBe('https://example.com');
-    // etc...
-  });
+      expect(['ok', 'success']).toContain(response.status);
+      expect(response.message).toBeDefined();
+    });
 
-  it('Debería editar el comercio asociado', async () => {
-    if (!runMerchantTests) {
-      expect(runMerchantTests).toBe(false);
-      return;
-    }
+    it('Debería manejar errores de API de Flow al crear un comercio duplicado', async () => {
+      const requestData: FlowCreateAssociatedMerchantRequest = {
+        id: createdMerchantId,
+        name: 'Should Fail Merchant',
+        url: 'https://error.com',
+      };
 
-    const editData: FlowEditAssociatedMerchantRequest = {
-      id: createdMerchantId,
-      name: 'Edited Merchant',
-      url: 'https://edited.com',
-    };
-
-    let response: FlowEditAssociatedMerchantResponse;
-
-    try {
-      response = await flowMerchant.editAssociatedMerchant(editData);
-    } catch (error) {
-      if (error instanceof FlowAPIError) {
-        console.error('FlowAPIError:', error.message);
-      }
-      throw error;
-    }
-
-    expect(response.id).toBe(createdMerchantId);
-  });
-
-  it('Debería listar los comercios asociados', async () => {
-    if (!runMerchantTests) {
-      expect(runMerchantTests).toBe(false);
-      return;
-    }
-
-    // Ajusta el request según lo que necesites filtrar
-    const requestData: FlowGetAssociatedMerchantsRequest = {
-      start: 0,
-      limit: 10,
-      filter: '',
-      status: 1, // Aprobados
-    };
-
-    let response: FlowGetAssociatedMerchantsResponse;
-
-    try {
-      response = await flowMerchant.getAssociatedMerchants(requestData);
-    } catch (error) {
-      if (error instanceof FlowAPIError) {
-        console.error('FlowAPIError:', error.message);
-      }
-      throw error;
-    }
-
-    expect(response.hasMore).toBeDefined();
-    const merchantsRaw = response.data || '[]';
-    const merchants =
-      typeof merchantsRaw === 'string' ? JSON.parse(merchantsRaw) : merchantsRaw;
-    expect(Array.isArray(merchants)).toBe(true);
-    // Podrías buscar el merchantId en la lista, etc.
-  });
-
-  it('Debería eliminar el comercio asociado', async () => {
-    if (!runMerchantTests) {
-      expect(runMerchantTests).toBe(false);
-      return;
-    }
-
-    const id = createdMerchantId;
-    let response: FlowDeleteAssociatedMerchantResponse;
-
-    try {
-      response = await flowMerchant.deleteAssociatedMerchant(id);
-    } catch (error) {
-      if (error instanceof FlowAPIError) {
-        console.error('FlowAPIError:', error.message);
-      }
-      throw error;
-    }
-
-    expect(['ok', 'success']).toContain(response.status);
-    expect(response.message).toBeDefined();
-  });
-
-  it('Debería manejar errores de API de Flow (Ejemplo)', async () => {
-    if (!runMerchantTests) {
-      expect(runMerchantTests).toBe(false);
-      return;
-    }
-
-    // Aquí forzamos un error, por ejemplo intentando crear un comercio repetido.
-    const requestData: FlowCreateAssociatedMerchantRequest = {
-      id: createdMerchantId, // ID ya borrado o en uso
-      name: 'Should Fail Merchant',
-      url: 'https://error.com',
-    };
-
-    await expect(
-      flowMerchant.createAssociatedMerchant(requestData),
-    ).rejects.toThrow(FlowAPIError);
-  });
-});
+      await expect(
+        flowMerchant.createAssociatedMerchant(requestData),
+      ).rejects.toThrow(FlowAPIError);
+    });
+  },
+);

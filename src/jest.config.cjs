@@ -5,6 +5,7 @@ module.exports = {
   testEnvironment: 'node',
   rootDir: path.join(__dirname, '..'),
   roots: ['<rootDir>/src'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   setupFiles: ['<rootDir>/src/jest.setup.ts'],
   testTimeout: 15000,
 };
