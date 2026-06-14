@@ -9,6 +9,7 @@ import FlowRefunds from './flow.refunds';
 import FlowSettlements from './flow.settlement';
 import FlowSubscriptions from './flow.subscriptions';
 import FlowSubscriptionsItems from './flow.subscriptionsItems';
+import FlowWebhooks from './flow.webhooks';
 /**
  * Cliente para interactuar con la API de Flow.
  */
@@ -55,6 +56,10 @@ class Flow {
    * Objecto que proporciona metodos para interactuar con los merchants en Flow.
    */
   public merchants: FlowMerchants;
+  /**
+   * Helpers para verificar callbacks entrantes de Flow.
+   */
+  public webhooks: FlowWebhooks;
 
   /**
    * Constructor de la clase FlowClient.
@@ -99,6 +104,7 @@ class Flow {
     this.invoices = new FlowInvoices(apiKey, secretKey, baseURL, options);
     this.settlements = new FlowSettlements(apiKey, secretKey, baseURL, options);
     this.merchants = new FlowMerchants(apiKey, secretKey, baseURL, options);
+    this.webhooks = new FlowWebhooks(this.payments);
   }
 }
 

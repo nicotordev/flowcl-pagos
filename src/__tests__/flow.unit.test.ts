@@ -1,7 +1,13 @@
 import Flow from '../clients/flow';
 import FlowMerchants from '../clients/flow.merchants';
 import FlowPayments from '../clients/flow.payments';
-import { FlowAuthenticationError, createFlowAPIError } from '../errors';
+import FlowWebhooks from '../clients/flow.webhooks';
+import {
+  FlowAPIError,
+  FlowAuthenticationError,
+  createFlowAPIError,
+} from '../errors';
+import { FlowPaymentStatusResponse } from '../types/flow.payments';
 import {
   generateFormData,
   generateSignature,
@@ -10,6 +16,18 @@ import {
 import { flowIntegrationConfig } from '../test-utils/flowIntegration';
 
 describe('Flow SDK (unit)', () => {
+  const paidPayment: FlowPaymentStatusResponse = {
+    flowOrder: 123,
+    commerceOrder: 'order-123',
+    requestDate: '2026-06-14 10:00:00',
+    status: 2,
+    statusStr: 'Pagada',
+    subject: 'Orden de prueba',
+    currency: 'CLP',
+    amount: 1000,
+    payer: 'cliente@example.com',
+  };
+
   it('lanza FlowAuthenticationError sin apiKey o secretKey', () => {
     expect(
       () => new Flow('', flowIntegrationConfig.secretKey, 'sandbox'),
@@ -204,5 +222,73 @@ describe('Flow SDK (unit)', () => {
     );
 
     consoleError.mockRestore();
+  });
+
+  it('verifica callbacks de pago consultando el token contra Flow', async () => {
+    const byToken = jest.fn().mockResolvedValue(paidPayment);
+    const webhooks = new FlowWebhooks({
+      status: { byToken },
+    } as unknown as FlowPayments);
+
+    const result = await webhooks.verifyPaymentConfirmation(
+      { token: 'callback-token' },
+      {
+        expectedCommerceOrder: 'order-123',
+        expectedAmount: 1000,
+        expectedCurrency: 'CLP',
+      },
+    );
+
+    expect(result.valid).toBe(true);
+    expect(byToken).toHaveBeenCalledWith('callback-token');
+    if (result.valid) {
+      expect(result.payment).toBe(paidPayment);
+    }
+  });
+
+  it('rechaza callbacks sin token', async () => {
+    const byToken = jest.fn();
+    const webhooks = new FlowWebhooks({
+      status: { byToken },
+    } as unknown as FlowPayments);
+
+    await expect(webhooks.verifyPaymentConfirmation({})).resolves.toEqual({
+      valid: false,
+      reason: 'missing_token',
+    });
+    expect(byToken).not.toHaveBeenCalled();
+  });
+
+  it('rechaza tokens que Flow no reconoce', async () => {
+    const flowError = new FlowAPIError(400, 'invalid token');
+    const webhooks = new FlowWebhooks({
+      status: {
+        byToken: jest.fn().mockRejectedValue(flowError),
+      },
+    } as unknown as FlowPayments);
+
+    await expect(
+      webhooks.verifyPaymentConfirmation({ token: 'fake-token' }),
+    ).resolves.toEqual({
+      valid: false,
+      reason: 'flow_api_error',
+      error: flowError,
+    });
+  });
+
+  it('rechaza tokens validos que no coinciden con la orden esperada', async () => {
+    const webhooks = new FlowWebhooks({
+      status: { byToken: jest.fn().mockResolvedValue(paidPayment) },
+    } as unknown as FlowPayments);
+
+    await expect(
+      webhooks.verifyPaymentConfirmation('callback-token', {
+        expectedCommerceOrder: 'otra-orden',
+      }),
+    ).resolves.toEqual({
+      valid: false,
+      reason: 'commerce_order_mismatch',
+      payment: paidPayment,
+    });
   });
 });
