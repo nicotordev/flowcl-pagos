@@ -14,7 +14,7 @@ type FlowPaymentStatusClient = Pick<FlowPayments, 'status'>;
  */
 export default class FlowWebhooks {
   /**
-   * Verifica un callback de confirmacion de pago consultando el token contra Flow.
+   * Verifica un callback de confirmación de pago consultando el token contra Flow.
    */
   public paymentConfirmation = this.verifyPaymentConfirmation.bind(this);
   public verifyCallback = this.verifyPaymentConfirmation.bind(this);
@@ -23,7 +23,7 @@ export default class FlowWebhooks {
   constructor(private payments: FlowPaymentStatusClient) {}
 
   /**
-   * Flow envia a urlConfirmation solo un token por POST. Este helper no confia
+   * Flow envía a urlConfirmation solo un token por POST. Este helper no confía
    * en el callback: consulta payment/getStatus con las credenciales del SDK y
    * valida el estado y, opcionalmente, los datos esperados de la orden local.
    */

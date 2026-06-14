@@ -15,19 +15,19 @@ type FlowWebhookVerificationFailureReason =
 
 type FlowVerifyPaymentConfirmationOptions = {
   /**
-   * Estado requerido para considerar valido el callback. Por defecto exige pago exitoso: 2 (Pagada).
+   * Estado requerido para considerar válido el callback. Por defecto exige pago exitoso: 2 (Pagada).
    */
   expectedStatus?: FlowPaymentStatusResponse['status'];
   /**
-   * Orden local esperada. Evita aceptar tokens validos de otra orden.
+   * Orden local esperada. Evita aceptar tokens válidos de otra orden.
    */
   expectedCommerceOrder?: string;
   /**
-   * Monto local esperado. Evita aceptar tokens validos con otro monto.
+   * Monto local esperado. Evita aceptar tokens válidos con otro monto.
    */
   expectedAmount?: number;
   /**
-   * Moneda local esperada. Evita aceptar tokens validos con otra moneda.
+   * Moneda local esperada. Evita aceptar tokens válidos con otra moneda.
    */
   expectedCurrency?: string;
 };
