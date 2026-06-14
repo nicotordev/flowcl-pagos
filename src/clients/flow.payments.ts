@@ -171,7 +171,7 @@ export default class FlowPayments {
       const allData = {
         ...data,
         apiKey: this.apiKey,
-      } as Record<string, string>;
+      };
       const formData = generateFormData(allData, this.secretKey);
       const formDataSearchParams = new URLSearchParams(formData);
       const response =
@@ -191,8 +191,14 @@ export default class FlowPayments {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.log(err.response?.data);
-        throw new FlowAPIError(err.response?.status || 500, err.message);
+        const flowBody = err.response?.data as
+          | { code?: number; message?: string }
+          | undefined;
+        throw new FlowAPIError(
+          err.response?.status || 500,
+          err.message,
+          flowBody,
+        );
       }
       error(err);
     }

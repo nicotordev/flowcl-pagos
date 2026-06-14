@@ -45,11 +45,24 @@ export class FlowPaymentStatusError extends FlowError {
  */
 export class FlowAPIError extends FlowError {
   statusCode: number;
+  flowCode?: number;
+  flowMessage?: string;
 
-  constructor(statusCode: number, message: string) {
-    super(`Error de API (${statusCode}): ${message}`);
+  constructor(
+    statusCode: number,
+    message: string,
+    flowBody?: { code?: number; message?: string },
+  ) {
+    const flowMessage = flowBody?.message;
+    const detail = flowMessage ?? message;
+    const codeSuffix =
+      flowBody?.code !== undefined ? ` (código ${flowBody.code})` : '';
+
+    super(`Error de API (${statusCode}): ${detail}${codeSuffix}`);
     this.name = 'FlowAPIError';
     this.statusCode = statusCode;
+    this.flowCode = flowBody?.code;
+    this.flowMessage = flowMessage;
   }
 }
 

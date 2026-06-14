@@ -275,8 +275,9 @@ type FlowCreatePaymentRequest = {
   urlConfirmation: string;
   /**
    * Datos opcionales en formato JSON clave=valor (opcional).
+   * Puede enviarse como objeto; el SDK lo serializa a JSON string.
    */
-  optional?: Record<string, string>;
+  optional?: string | Record<string, string>;
   /**
    * Tiempo en segundos para que una orden expire (opcional).
    */
