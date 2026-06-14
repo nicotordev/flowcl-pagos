@@ -48,6 +48,25 @@ const flow = new Flow(
 );
 ```
 
+### Logging de errores
+
+Por defecto el SDK no escribe errores de Flow en consola. Si necesitas logging,
+actívalo explícitamente; los eventos emitidos no incluyen el payload HTTP crudo.
+
+```typescript
+const flow = new Flow('tu_api_key', 'tu_secret_key', 'sandbox', {
+  logging: true,
+});
+
+const flowWithLogger = new Flow('tu_api_key', 'tu_secret_key', 'sandbox', {
+  logger: {
+    error(event) {
+      // Enviar a tu logger/APM. Evento sanitizado: endpoint, method, statusCode, message, flowCode.
+    },
+  },
+});
+```
+
 ## Funcionalidades principales
 
 ### 1. Pagos

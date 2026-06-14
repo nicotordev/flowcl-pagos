@@ -66,6 +66,99 @@ export class FlowAPIError extends FlowError {
   }
 }
 
+export type FlowRequestMethod = 'post' | 'get';
+
+export type FlowAPIErrorLogEvent = {
+  type: 'flow_api_error';
+  endpoint: string;
+  method: FlowRequestMethod;
+  statusCode: number;
+  message: string;
+  flowCode?: number;
+};
+
+export type FlowLogger = {
+  error: (event: FlowAPIErrorLogEvent) => void;
+};
+
+export type FlowClientOptions = {
+  logging?: boolean;
+  logger?: FlowLogger;
+};
+
+function emitFlowAPIErrorLog(emit: () => void): void {
+  try {
+    emit();
+  } catch {
+    // Logging must never mask the original FlowAPIError.
+  }
+}
+
+export function getFlowErrorBody(
+  data: unknown,
+): { code?: number; message?: string } | undefined {
+  if (!data || typeof data !== 'object') {
+    return undefined;
+  }
+
+  const body = data as { code?: unknown; message?: unknown };
+
+  return {
+    code: typeof body.code === 'number' ? body.code : undefined,
+    message: typeof body.message === 'string' ? body.message : undefined,
+  };
+}
+
+export function createFlowAPIError({
+  statusCode,
+  message,
+  body,
+  endpoint,
+  method,
+  options,
+}: {
+  statusCode: number;
+  message: string;
+  body: unknown;
+  endpoint: string;
+  method: FlowRequestMethod;
+  options?: FlowClientOptions;
+}): FlowAPIError {
+  const flowBody = getFlowErrorBody(body);
+  const error = new FlowAPIError(statusCode, message, flowBody);
+
+  if (options?.logging === false) {
+    return error;
+  }
+
+  if (options?.logger) {
+    emitFlowAPIErrorLog(() => {
+      options.logger?.error({
+        type: 'flow_api_error',
+        endpoint,
+        method,
+        statusCode,
+        message,
+        flowCode: flowBody?.code,
+      });
+    });
+  } else if (options?.logging) {
+    const logger = globalThis.console;
+    emitFlowAPIErrorLog(() => {
+      logger.error('[flowcl-pagos]', {
+        type: 'flow_api_error',
+        endpoint,
+        method,
+        statusCode,
+        message,
+        flowCode: flowBody?.code,
+      });
+    });
+  }
+
+  return error;
+}
+
 /**
  * Error cuando hay problemas al obtener los pagos recibidos por fecha.
  */

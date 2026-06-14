@@ -1,4 +1,4 @@
-import { FlowAuthenticationError } from '../errors';
+import { FlowAuthenticationError, FlowClientOptions } from '../errors';
 import FlowCoupons from './flow.coupons';
 import FlowCustomers from './flow.customers';
 import FlowInvoices from './flow.invoices';
@@ -61,12 +61,14 @@ class Flow {
    * @param apiKey Clave de API proporcionada por Flow.
    * @param secretKey Clave secreta proporcionada por Flow.
    * @param enviroment Entorno de Flow ('sandbox' o 'production').
+   * @param options Opciones del cliente, incluyendo logging sanitizado.
    * @throws FlowAuthenticationError Si no se proporciona apiKey o secretKey.
    */
   constructor(
     apiKey: string,
     secretKey: string,
     enviroment: 'sandbox' | 'production' = 'sandbox',
+    options?: FlowClientOptions,
   ) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
@@ -77,20 +79,26 @@ class Flow {
         ? 'https://sandbox.flow.cl/api'
         : 'https://www.flow.cl/api';
 
-    this.payments = new FlowPayments(apiKey, secretKey, baseURL);
-    this.refunds = new FlowRefunds(apiKey, secretKey, baseURL);
-    this.customers = new FlowCustomers(apiKey, secretKey, baseURL);
-    this.plans = new FlowPlans(apiKey, secretKey, baseURL);
-    this.subscriptions = new FlowSubscriptions(apiKey, secretKey, baseURL);
+    this.payments = new FlowPayments(apiKey, secretKey, baseURL, options);
+    this.refunds = new FlowRefunds(apiKey, secretKey, baseURL, options);
+    this.customers = new FlowCustomers(apiKey, secretKey, baseURL, options);
+    this.plans = new FlowPlans(apiKey, secretKey, baseURL, options);
+    this.subscriptions = new FlowSubscriptions(
+      apiKey,
+      secretKey,
+      baseURL,
+      options,
+    );
     this.subscriptionsItems = new FlowSubscriptionsItems(
       apiKey,
       secretKey,
       baseURL,
+      options,
     );
-    this.coupons = new FlowCoupons(apiKey, secretKey, baseURL);
-    this.invoices = new FlowInvoices(apiKey, secretKey, baseURL);
-    this.settlements = new FlowSettlements(apiKey, secretKey, baseURL);
-    this.merchants = new FlowMerchants(apiKey, secretKey, baseURL);
+    this.coupons = new FlowCoupons(apiKey, secretKey, baseURL, options);
+    this.invoices = new FlowInvoices(apiKey, secretKey, baseURL, options);
+    this.settlements = new FlowSettlements(apiKey, secretKey, baseURL, options);
+    this.merchants = new FlowMerchants(apiKey, secretKey, baseURL, options);
   }
 }
 

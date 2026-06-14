@@ -1,8 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 import {
-  FlowAPIError,
   FlowAuthenticationError,
+  FlowClientOptions,
   FlowGetLiquidationsByDateRangeError,
+  createFlowAPIError,
 } from '../errors';
 import { generateFormData } from '../utils/flow.utils';
 import qs from 'qs';
@@ -18,6 +19,7 @@ export default class FlowSettlements {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
+  private options?: FlowClientOptions;
   /**
    * Este método se utiliza para obtener el(los) encabezado(s) de liquidación(es) dentro del rango de fechas ingresado (permite filtrar también por la moneda). Para obtener la liquidación completa (encabezado y detalles) utilizar el servicio /settlement/getByIdv2
    * @param {FlowGetSettlementHeadersByDateRangeRequest} data Datos de la petición.
@@ -47,13 +49,19 @@ export default class FlowSettlements {
    * @param {string} baseURL URL base de la API de Flow.
    * @throws {FlowAuthenticationError} Si no se proporciona apiKey o secretKey.
    */
-  constructor(apiKey: string, secretKey: string, baseURL: string) {
+  constructor(
+    apiKey: string,
+    secretKey: string,
+    baseURL: string,
+    options?: FlowClientOptions,
+  ) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
     this.secretKey = secretKey;
+    this.options = options;
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
@@ -99,7 +107,14 @@ export default class FlowSettlements {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        throw new FlowAPIError(err.response?.status || 500, err.message);
+        throw createFlowAPIError({
+          statusCode: err.response?.status || 500,
+          message: err.message,
+          body: err.response?.data,
+          endpoint,
+          method,
+          options: this.options,
+        });
       }
       error(err);
     }
