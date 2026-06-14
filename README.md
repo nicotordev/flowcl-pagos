@@ -67,6 +67,30 @@ const flowWithLogger = new Flow('tu_api_key', 'tu_secret_key', 'sandbox', {
 });
 ```
 
+### Verificar callbacks de Flow
+
+Flow notifica `urlConfirmation` con un `token` por POST. No proceses el
+callback solo porque recibiste ese token: verifica el estado contra Flow desde
+tu backend antes de marcar una orden como pagada.
+
+```typescript
+const result = await flow.webhooks.verifyPaymentConfirmation(
+  { token: req.body.token },
+  {
+    expectedCommerceOrder: '123456',
+    expectedAmount: 10000,
+    expectedCurrency: 'CLP',
+  },
+);
+
+if (!result.valid) {
+  // Responde 200 si quieres evitar reintentos de Flow, pero no proceses la orden.
+  return;
+}
+
+// result.payment fue confirmado con Flow y status 2 (Pagada) por defecto.
+```
+
 ## Funcionalidades principales
 
 ### 1. Pagos

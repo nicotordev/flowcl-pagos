@@ -60,7 +60,7 @@ Si el reporte está fuera de alcance, te lo indicaremos y, cuando aplique, te or
 
 - Nunca expongas `secretKey` en frontend, repositorios, logs ni variables de entorno del cliente
 - Usa variables de entorno o un gestor de secretos en el servidor
-- Valida en tu backend los callbacks y confirmaciones de pago; no confíes solo en datos del cliente
+- Valida en tu backend los callbacks y confirmaciones de pago con `flow.webhooks.verifyPaymentConfirmation`; no confíes solo en el `token` recibido
 - Mantén actualizadas las dependencias y la versión del paquete
 - Usa `sandbox` para pruebas y separa credenciales de producción
 - Revisa periódicamente [Dependabot](https://github.com/nicotordev/flowcl-pagos/security/dependabot) y actualiza cuando publiquemos parches
