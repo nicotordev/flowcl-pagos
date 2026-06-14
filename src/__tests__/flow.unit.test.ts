@@ -53,6 +53,39 @@ describe('Flow SDK (unit)', () => {
     expect(formData.s).toBeDefined();
     expect(formData.commerceOrder).toBe('1');
     expect(formData.apiKey).toBe('key');
+    expect(formData.timestamp).toMatch(/^\d+$/);
+    expect(formData.nonce).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    );
+  });
+
+  it('genera nonce distinto en cada firma para mitigar replay', () => {
+    const formDataA = generateFormData(
+      { commerceOrder: '1', apiKey: 'key' },
+      'secret',
+    );
+    const formDataB = generateFormData(
+      { commerceOrder: '1', apiKey: 'key' },
+      'secret',
+    );
+
+    expect(formDataA.nonce).not.toBe(formDataB.nonce);
+    expect(formDataA.s).not.toBe(formDataB.s);
+  });
+
+  it('serializa optional como JSON string para la firma', () => {
+    const formData = generateFormData(
+      {
+        commerceOrder: '1',
+        optional: { orderId: 'abc' },
+        amount: 1000,
+        apiKey: 'key',
+      },
+      'secret',
+    );
+
+    expect(formData.optional).toBe('{"orderId":"abc"}');
+    expect(formData.amount).toBe('1000');
   });
 
   it('valida y normaliza fechas para consultas por día', () => {

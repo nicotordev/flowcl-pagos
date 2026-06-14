@@ -2,6 +2,7 @@ import flowConstants from '../constants/flow.constants';
 import { FlowPaymentMethods, FlowPaymentStatus } from '../types/flow';
 import { parse, isValid, format } from 'date-fns';
 import CryptoJS from 'crypto-js';
+import { randomUUID } from 'crypto';
 
 /**
  * Obtiene el código de metodo de pago en Flow.
@@ -47,6 +48,31 @@ function isValidPaymentReceivedByDate(
 }
 
 /**
+ * Normaliza parámetros de request a strings para firmar y enviar a Flow.
+ * Flow firma concatenando key+value; objetos deben serializarse (p. ej. optional).
+ */
+function serializeFlowParams(
+  data: Record<string, unknown>,
+): Record<string, string> {
+  const normalized: Record<string, string> = {};
+
+  for (const [key, value] of Object.entries(data)) {
+    if (value === undefined || value === null) {
+      continue;
+    }
+
+    if (key === 'optional' && typeof value === 'object') {
+      normalized[key] = JSON.stringify(value);
+      continue;
+    }
+
+    normalized[key] = String(value);
+  }
+
+  return normalized;
+}
+
+/**
  * Genera una firma HMAC-SHA256 para asegurar la autenticidad de los datos enviados a Flow.
  * @param params Parámetros a firmar.
  * @returns Firma generada.
@@ -69,15 +95,22 @@ function generateSignature(
  * @param secretKey Recibe la clave secreta para firmar los datos
  * @returns Retorna un objeto con los datos y la firma
  */
-function generateFormData<T extends Record<string, string>>(
+function generateFormData<T extends Record<string, unknown>>(
   data: T,
   secretKey: string,
-) {
-  const signature = generateSignature(data, secretKey); // Generar firma
+): Record<string, string> & { s: string } {
+  const antiReplayData = {
+    ...data,
+    timestamp: data.timestamp ?? Math.floor(Date.now() / 1000),
+    nonce: data.nonce ?? randomUUID(),
+  };
+
+  const normalized = serializeFlowParams(antiReplayData);
+  const signature = generateSignature(normalized, secretKey);
 
   return {
-    ...data,
-    s: signature, // Agregar firma a los datos enviados
+    ...normalized,
+    s: signature,
   };
 }
 
@@ -87,4 +120,5 @@ export {
   isValidPaymentReceivedByDate,
   generateSignature,
   generateFormData,
+  serializeFlowParams,
 };
