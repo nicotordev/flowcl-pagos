@@ -4,7 +4,6 @@ import qs from 'qs';
 import {
   FlowAddDiscountToSubscriptionError,
   FlowAddItemToSubscriptionError,
-  FlowAPIError,
   FlowAuthenticationError,
   FlowCancelScheduledPlanChangeError,
   FlowCancelSubscriptionError,
@@ -16,6 +15,8 @@ import {
   FlowRemoveDiscountFromSubscriptionError,
   FlowRemoveItemFromSubscriptionError,
   FlowUpdateSubscriptionTrialDaysError,
+  FlowClientOptions,
+  createFlowAPIError,
 } from '../errors';
 import {
   FlowAddDiscountToSubscriptionResponse,
@@ -44,6 +45,7 @@ export default class FlowSubscriptions {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
+  private options?: FlowClientOptions;
   /**
    * Este servicio permite crear una nueva suscripción de un cliente a un Plan. Para crear una nueva suscripción, basta con enviar los parámetros planId y customerId
    * @param {FlowCreateSubscriptionToPlanRequest} data Datos para crear la suscripción.
@@ -211,13 +213,19 @@ export default class FlowSubscriptions {
    * @param {string} baseURL URL base de la API de Flow.
    * @throws {FlowAuthenticationError} Si no se proporciona apiKey o secretKey.
    */
-  constructor(apiKey: string, secretKey: string, baseURL: string) {
+  constructor(
+    apiKey: string,
+    secretKey: string,
+    baseURL: string,
+    options?: FlowClientOptions,
+  ) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
     this.secretKey = secretKey;
+    this.options = options;
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
@@ -263,8 +271,14 @@ export default class FlowSubscriptions {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.error(JSON.stringify(err.response?.data, null, 2));
-        throw new FlowAPIError(err.response?.status || 500, err.message);
+        throw createFlowAPIError({
+          statusCode: err.response?.status || 500,
+          message: err.message,
+          body: err.response?.data,
+          endpoint,
+          method,
+          options: this.options,
+        });
       }
       error(err);
     }

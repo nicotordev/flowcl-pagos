@@ -1,12 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
 import {
-  FlowAPIError,
   FlowAuthenticationError,
   FlowCreateAdditionalSubscriptionItemError,
   FlowDeleteAdditionalSubscriptionItemError,
   FlowEditAdditionalSubscriptionItemError,
   FlowGetAdditionalSubscriptionItemError,
   FlowListAdditionalSubscriptionItemError,
+  FlowClientOptions,
+  createFlowAPIError,
 } from '../errors';
 import { generateFormData } from '../utils/flow.utils';
 import {
@@ -27,6 +28,7 @@ export default class FlowSubscriptionsItems {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
+  private options?: FlowClientOptions;
   /**
    * Este servicio permite obtener los datos de un item adicional de suscripción
    * @param {string} itemId ID del item adicional de suscripción.
@@ -94,13 +96,19 @@ export default class FlowSubscriptionsItems {
    * @param {string} baseURL URL base de la API de Flow.
    * @throws {FlowAuthenticationError} Si no se proporciona apiKey o secretKey.
    */
-  constructor(apiKey: string, secretKey: string, baseURL: string) {
+  constructor(
+    apiKey: string,
+    secretKey: string,
+    baseURL: string,
+    options?: FlowClientOptions,
+  ) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
     this.secretKey = secretKey;
+    this.options = options;
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
@@ -146,8 +154,14 @@ export default class FlowSubscriptionsItems {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.error(JSON.stringify(err.response?.data, null, 2));
-        throw new FlowAPIError(err.response?.status || 500, err.message);
+        throw createFlowAPIError({
+          statusCode: err.response?.status || 500,
+          message: err.message,
+          body: err.response?.data,
+          endpoint,
+          method,
+          options: this.options,
+        });
       }
       error(err);
     }

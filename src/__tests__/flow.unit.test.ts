@@ -1,7 +1,7 @@
 import Flow from '../clients/flow';
 import FlowMerchants from '../clients/flow.merchants';
 import FlowPayments from '../clients/flow.payments';
-import { FlowAuthenticationError } from '../errors';
+import { FlowAuthenticationError, createFlowAPIError } from '../errors';
 import {
   generateFormData,
   generateSignature,
@@ -91,5 +91,57 @@ describe('Flow SDK (unit)', () => {
   it('valida y normaliza fechas para consultas por día', () => {
     expect(isValidPaymentReceivedByDate('2026-06-02')).toBe('2026-06-02');
     expect(isValidPaymentReceivedByDate('invalid')).toBeNull();
+  });
+
+  it('emite logs sanitizados sin payload crudo de Flow', () => {
+    const logger = { error: jest.fn() };
+
+    const error = createFlowAPIError({
+      statusCode: 400,
+      message: 'Request failed with status code 400',
+      endpoint: '/create',
+      method: 'post',
+      body: {
+        code: 101,
+        message: 'Solicitud inválida',
+        token: 'secret-token',
+        rut: '11111111-1',
+        amount: 1000,
+      },
+      options: { logging: true, logger },
+    });
+
+    expect(error.flowCode).toBe(101);
+    expect(error.flowMessage).toBe('Solicitud inválida');
+    expect(logger.error).toHaveBeenCalledWith({
+      type: 'flow_api_error',
+      endpoint: '/create',
+      method: 'post',
+      statusCode: 400,
+      message: 'Request failed with status code 400',
+      flowCode: 101,
+    });
+    expect(logger.error).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        token: expect.any(String),
+        rut: expect.any(String),
+        amount: expect.any(Number),
+      }),
+    );
+  });
+
+  it('no emite logs cuando logging es false', () => {
+    const logger = { error: jest.fn() };
+
+    createFlowAPIError({
+      statusCode: 400,
+      message: 'Request failed with status code 400',
+      endpoint: '/create',
+      method: 'post',
+      body: { code: 101, message: 'Solicitud inválida' },
+      options: { logging: false, logger },
+    });
+
+    expect(logger.error).not.toHaveBeenCalled();
   });
 });

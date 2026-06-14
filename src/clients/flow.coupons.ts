@@ -1,11 +1,12 @@
 import {
-  FlowAPIError,
   FlowAuthenticationError,
   FlowCreateDiscountCouponError,
   FlowDeleteDiscountCouponError,
   FlowEditDiscountCouponError,
   FlowGetDiscountCouponError,
   FlowListDiscountCouponsError,
+  FlowClientOptions,
+  createFlowAPIError,
 } from '../errors';
 import axios, { AxiosInstance } from 'axios';
 import { generateFormData } from '../utils/flow.utils';
@@ -29,6 +30,7 @@ export default class FlowCoupons {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
+  private options?: FlowClientOptions;
   /**
    * Este servicio permite crear un cupón de descuento
    * @param {FlowCreateDiscountCouponRequest} data Datos para crear el cupón de descuento
@@ -91,13 +93,19 @@ export default class FlowCoupons {
    * @param baseURL URL base de la API de Flow.
    * @throws FlowAuthenticationError Si no se proporciona apiKey o secretKey.
    */
-  constructor(apiKey: string, secretKey: string, baseURL: string) {
+  constructor(
+    apiKey: string,
+    secretKey: string,
+    baseURL: string,
+    options?: FlowClientOptions,
+  ) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
     this.secretKey = secretKey;
+    this.options = options;
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
@@ -144,8 +152,14 @@ export default class FlowCoupons {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.error(JSON.stringify(err.response?.data, null, 2));
-        throw new FlowAPIError(err.response?.status || 500, err.message);
+        throw createFlowAPIError({
+          statusCode: err.response?.status || 500,
+          message: err.message,
+          body: err.response?.data,
+          endpoint,
+          method,
+          options: this.options,
+        });
       }
       error(err);
     }

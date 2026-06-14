@@ -13,7 +13,6 @@ import {
 } from '../types/flow.payments';
 
 import {
-  FlowAPIError,
   FlowAuthenticationError,
   FlowCreatePaymentByEmailError,
   FlowCreatePaymentError,
@@ -21,6 +20,8 @@ import {
   FlowPaymentsReceivedByDateError,
   FlowStatusExtendedError,
   FlowTransactionsReceivedByDateError,
+  FlowClientOptions,
+  createFlowAPIError,
 } from '../errors';
 import {
   generateFormData,
@@ -40,6 +41,7 @@ export default class FlowPayments {
   private apiKey: string;
   private secretKey: string;
   private axiosInstance: AxiosInstance;
+  private options?: FlowClientOptions;
 
   /**
    * Objeto que proporciona métodos para interactuar con los pagos en Flow.
@@ -133,13 +135,19 @@ export default class FlowPayments {
    * @param  {string}baseURL URL base de la API de Flow.
    * @throws {FlowAuthenticationError} Si no se proporciona apiKey o secretKey.
    */
-  constructor(apiKey: string, secretKey: string, baseURL: string) {
+  constructor(
+    apiKey: string,
+    secretKey: string,
+    baseURL: string,
+    options?: FlowClientOptions,
+  ) {
     if (!apiKey || !secretKey) {
       throw new FlowAuthenticationError();
     }
 
     this.apiKey = apiKey;
     this.secretKey = secretKey;
+    this.options = options;
 
     // Crear una instancia de Axios con la configuración base
     this.axiosInstance = axios.create({
@@ -191,14 +199,14 @@ export default class FlowPayments {
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        const flowBody = err.response?.data as
-          | { code?: number; message?: string }
-          | undefined;
-        throw new FlowAPIError(
-          err.response?.status || 500,
-          err.message,
-          flowBody,
-        );
+        throw createFlowAPIError({
+          statusCode: err.response?.status || 500,
+          message: err.message,
+          body: err.response?.data,
+          endpoint,
+          method,
+          options: this.options,
+        });
       }
       error(err);
     }
