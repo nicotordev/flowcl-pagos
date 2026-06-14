@@ -86,6 +86,14 @@ export type FlowClientOptions = {
   logger?: FlowLogger;
 };
 
+function emitFlowAPIErrorLog(emit: () => void): void {
+  try {
+    emit();
+  } catch {
+    // Logging must never mask the original FlowAPIError.
+  }
+}
+
 export function getFlowErrorBody(
   data: unknown,
 ): { code?: number; message?: string } | undefined {
@@ -124,23 +132,27 @@ export function createFlowAPIError({
   }
 
   if (options?.logger) {
-    options.logger.error({
-      type: 'flow_api_error',
-      endpoint,
-      method,
-      statusCode,
-      message,
-      flowCode: flowBody?.code,
+    emitFlowAPIErrorLog(() => {
+      options.logger?.error({
+        type: 'flow_api_error',
+        endpoint,
+        method,
+        statusCode,
+        message,
+        flowCode: flowBody?.code,
+      });
     });
   } else if (options?.logging) {
     const logger = globalThis.console;
-    logger.error('[flowcl-pagos]', {
-      type: 'flow_api_error',
-      endpoint,
-      method,
-      statusCode,
-      message,
-      flowCode: flowBody?.code,
+    emitFlowAPIErrorLog(() => {
+      logger.error('[flowcl-pagos]', {
+        type: 'flow_api_error',
+        endpoint,
+        method,
+        statusCode,
+        message,
+        flowCode: flowBody?.code,
+      });
     });
   }
 

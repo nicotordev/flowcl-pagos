@@ -144,4 +144,65 @@ describe('Flow SDK (unit)', () => {
 
     expect(logger.error).not.toHaveBeenCalled();
   });
+
+  it('mantiene FlowAPIError aunque el logger falle', () => {
+    const logger = {
+      error: jest.fn(() => {
+        throw new Error('logger unavailable');
+      }),
+    };
+
+    const error = createFlowAPIError({
+      statusCode: 400,
+      message: 'Request failed with status code 400',
+      endpoint: '/create',
+      method: 'post',
+      body: { code: 101, message: 'Solicitud inválida' },
+      options: { logger },
+    });
+
+    expect(error.flowCode).toBe(101);
+    expect(error.flowMessage).toBe('Solicitud inválida');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+  });
+
+  it('emite console.error sanitizado cuando logging es true', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    createFlowAPIError({
+      statusCode: 400,
+      message: 'Request failed with status code 400',
+      endpoint: '/create',
+      method: 'post',
+      body: {
+        code: 101,
+        message: 'Solicitud inválida',
+        token: 'secret-token',
+        rut: '11111111-1',
+        amount: 1000,
+      },
+      options: { logging: true },
+    });
+
+    expect(consoleError).toHaveBeenCalledWith('[flowcl-pagos]', {
+      type: 'flow_api_error',
+      endpoint: '/create',
+      method: 'post',
+      statusCode: 400,
+      message: 'Request failed with status code 400',
+      flowCode: 101,
+    });
+    expect(consoleError).not.toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        token: expect.any(String),
+        rut: expect.any(String),
+        amount: expect.any(Number),
+      }),
+    );
+
+    consoleError.mockRestore();
+  });
 });
