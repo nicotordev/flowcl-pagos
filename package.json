@@ -48,6 +48,7 @@
   "author": "Nicolas Torres <nicotordev@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^25.9.3",
