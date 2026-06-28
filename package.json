@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --config ./src/jest.config.cjs",
-    "test:unit": "jest --config ./src/jest.config.cjs --testPathPattern=flow.unit.test",
+    "test:unit": "jest --config ./src/jest.config.cjs --testPathPatterns=flow.unit.test",
     "test:integration": "jest --config ./src/jest.config.cjs --testPathIgnorePatterns=flow.unit.test",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
