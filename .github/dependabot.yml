@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/" # Ubicación del package.json en la raíz
     schedule:
       interval: "weekly" # Verifica actualizaciones cada semana
